@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Golf Ranger</string>
+    <string name="map_key">@string/MAP_KEY_NOT_VERSIONED</string>
+</resources>
