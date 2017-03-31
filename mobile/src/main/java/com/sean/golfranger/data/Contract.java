@@ -93,24 +93,32 @@ public class Contract {
         public static final String PLAYER1_FIRST_NAME = "playerOneFirstName";
         /** Type: TEXT*/
         public static final String PLAYER1_LAST_NAME = "playerOneLastName";
+        /** Type: TEXT*/
+        public static final String PLAYER1_HANDICAP = "playerOneHandicap";
         /** Type: INT */
         public static final String PLAYER2_ID= "playerTwoId";
         /** Type: TEXT*/
         public static final String PLAYER2_FIRST_NAME = "playerTwoFirstName";
         /** Type: TEXT*/
         public static final String PLAYER2_LAST_NAME = "playerTwoLastName";
+        /** Type: TEXT*/
+        public static final String PLAYER2_HANDICAP = "playerTwoHandicap";
         /** Type: INT */
         public static final String PLAYER3_ID = "playerThreeId";
         /** Type: TEXT*/
         public static final String PLAYER3_FIRST_NAME = "playerThreeFirstName";
         /** Type: TEXT*/
         public static final String PLAYER3_LAST_NAME = "playerThreeLastName";
+        /** Type: TEXT*/
+        public static final String PLAYER3_HANDICAP = "playerThreeHandicap";
         /** Type: INT */
         public static final String PLAYER4_ID = "playerFourId";
         /** Type: TEXT*/
         public static final String PLAYER4_FIRST_NAME = "playerFourFirstName";
         /** TEXT */
         public static final String PLAYER4_LAST_NAME = "playerFourLastName";
+        /** Type: TEXT*/
+        public static final String PLAYER4_HANDICAP = "playerFourHandicap";
         /** Type: INT NOT NULL */
         public static final String COURSE_ID = "clubId";
         /** TEXT */

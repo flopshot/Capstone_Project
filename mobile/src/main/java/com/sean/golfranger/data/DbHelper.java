@@ -9,8 +9,7 @@ import static com.sean.golfranger.data.Contract.DB_NAME;
 /**
  * DbHelper Class used by Content Provider
  */
-
-public class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
     private static DbHelper sInstance;
 
     /**
@@ -19,7 +18,7 @@ public class DbHelper extends SQLiteOpenHelper {
      * precaution. More info at
      * http://stackoverflow.com/questions/2493331/what-are-the-best-practices-for-sqlite-on-android
      */
-    public static synchronized DbHelper getHelper(Context context) {
+    static synchronized DbHelper getHelper(Context context) {
         if (sInstance == null)
             sInstance = new DbHelper(context);
 
@@ -27,7 +26,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private static final int DATABASE_VERSION = 3;
-    static final String DATABASE_NAME = DB_NAME + ".db";
+    private static final String DATABASE_NAME = DB_NAME + ".db";
 
     private DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -60,21 +59,25 @@ public class DbHelper extends SQLiteOpenHelper {
               Contract.Rounds.PLAYER1_ID + " INTEGER ," +
               Contract.Rounds.PLAYER1_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER1_LAST_NAME + " TEXT," +
+              Contract.Rounds.PLAYER1_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER2_ID + " INTEGER," +
               Contract.Rounds.PLAYER2_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER2_LAST_NAME + " TEXT," +
+              Contract.Rounds.PLAYER2_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER3_ID + " INTEGER," +
               Contract.Rounds.PLAYER3_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER3_LAST_NAME + " TEXT," +
+              Contract.Rounds.PLAYER3_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER4_ID + " INTEGER," +
               Contract.Rounds.PLAYER4_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER4_LAST_NAME + " TEXT," +
+              Contract.Rounds.PLAYER4_HANDICAP + " INTEGER," +
               Contract.Rounds.DATE + " TEXT NOT NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + "), " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + "), " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + "), " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + "), " +
-              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Courses._ID + ") " +
+              " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
+              " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
+              " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
+              " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
+              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
               ");";
 
         final String SQL_CREATE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -108,7 +111,7 @@ public class DbHelper extends SQLiteOpenHelper {
               Contract.Holes.P4_FIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_FIR +" IN (0,1))," +
               Contract.Holes.P4_GIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_GIR +" IN (0,1))," +
               Contract.Holes.P4_SAND + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_SAND +" IN (0,1))," +
-              " FOREIGN KEY (" + Contract.Holes.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + "), " +
+              " FOREIGN KEY (" + Contract.Holes.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON DELETE CASCADE, " +
               " UNIQUE (" + Contract.Holes.ROUND_ID + "," + Contract.Holes.HOLE_NUMBER + ") ON CONFLICT FAIL" +
               ");";
 
