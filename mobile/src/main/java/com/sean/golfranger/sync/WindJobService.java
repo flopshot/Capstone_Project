@@ -2,6 +2,7 @@ package com.sean.golfranger.sync;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
+import android.content.Intent;
 
 import com.sean.golfranger.utils.SharedPrefUtils;
 
@@ -11,11 +12,15 @@ import zh.wang.android.yweathergetter4a.YahooWeatherInfoListener;
 
 /**
  * Job Service to get wind metrics every X minutes, depending on the job build schedule
+ * Implements YahooWeather Listener interface callback, which passes back wind data
  */
 //TODO: Consider Putting user-sync function in map frag, separate from the JobService Logic
 public class WindJobService extends JobService implements YahooWeatherInfoListener {
     JobParameters mJobParams;
     private static final int CONNECTION_TIMEOUT = 10000;
+    private static final String ACTION_WIND_UPDATED = "com.sean.golfranger.ACTION_WIND_UPDATED";
+    private static final String EXTRA_WIND_SPEED = "WindJobService.EXTRA_WIND_SPEED";
+    private static final String EXTRA_WIND_DIRECTION = "WindJobService.EXTRA_WIND_SPEED";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -50,8 +55,14 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
             weatherInfo.getWindDirection();
             weatherInfo.getWindSpeed();
 
-            //TODO: Broadcast Receiver to Map Fragment
+            //Broadcast Results to Map Fragment
+            Intent windToMapBroadcast = new Intent(ACTION_WIND_UPDATED);
+            windToMapBroadcast.putExtra(EXTRA_WIND_SPEED, weatherInfo.getWindSpeed());
+            windToMapBroadcast.putExtra(EXTRA_WIND_DIRECTION, weatherInfo.getWindDirection());
+            sendBroadcast(windToMapBroadcast);
+
             jobFinished(mJobParams, false);
+
         } else {
             //TODO: Exit with wind task error
             jobFinished(mJobParams, false);
