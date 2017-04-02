@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import com.sean.golfranger.utils.SharedPrefUtils;
 
+import timber.log.Timber;
 import zh.wang.android.yweathergetter4a.WeatherInfo;
 import zh.wang.android.yweathergetter4a.YahooWeather;
 import zh.wang.android.yweathergetter4a.YahooWeatherInfoListener;
@@ -24,28 +25,30 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
+        Timber.d("Starting Wind Sync Job");
         mJobParams = jobParameters;
 
         boolean isOnMapScreen = SharedPrefUtils.isOnMapScreen(getApplicationContext());
         if (isOnMapScreen) {
+            Timber.d("Map Screen is in Forefront, Starting Weather Api Call");
             Double[] latLon = SharedPrefUtils.getUserLatLonDouble(getApplicationContext());
 
             if (latLon[0] == 0.) {
-                //TODO: end task, try again, warn user, set default, etc.
-                //TODO: Remove debug boolean in getInstance
+                Timber.d("User had bad Coordinates, ending Wind Job");
+            } else {
+                YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
+                yahooWeather.setNeedDownloadIcons(false);
+                yahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
+                yahooWeather.queryYahooWeatherByLatLon(getApplicationContext(), latLon[0], latLon[1], this);
             }
-            YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
-            yahooWeather.setNeedDownloadIcons(false);
-            yahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
-            yahooWeather.queryYahooWeatherByLatLon(getApplicationContext(),latLon[0], latLon[1], this);
         }
-
+        Timber.d("Wind Sync Job Finished OK");
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        //TODO: Set Logic for the job finishing prematurely
+        Timber.d("Wind Sync Job Finished UNEXPECTEDLY");
         return false;
     }
 
@@ -60,11 +63,11 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
             windToMapBroadcast.putExtra(EXTRA_WIND_SPEED, weatherInfo.getWindSpeed());
             windToMapBroadcast.putExtra(EXTRA_WIND_DIRECTION, weatherInfo.getWindDirection());
             sendBroadcast(windToMapBroadcast);
-
+            Timber.d("Wind Broadcast Sent to Map");
             jobFinished(mJobParams, false);
 
         } else {
-            //TODO: Exit with wind task error
+            Timber.w("Weather Info was NULL, no broadcast performed");
             jobFinished(mJobParams, false);
         }
     }

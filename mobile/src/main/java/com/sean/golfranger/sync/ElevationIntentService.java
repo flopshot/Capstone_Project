@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
+import timber.log.Timber;
+
 /**
  * Intent Service Used to Spin Up background thread for Elevation Api Call task
  */
@@ -15,6 +17,8 @@ public class ElevationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        Timber.d("Elevation IntentService Started");
         ElevationJobInfo.getElevation(getApplicationContext());
+        Timber.d("Elevation IntentService Finished");
     }
 }

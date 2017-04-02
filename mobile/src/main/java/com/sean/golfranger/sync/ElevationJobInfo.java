@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 
 import com.sean.golfranger.sync.elevationapi.ApiContract;
 import com.sean.golfranger.sync.elevationapi.ApiJsonParser;
@@ -18,6 +19,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Set;
 
+import timber.log.Timber;
+
 /**
  * Job Service to get Elevation metrics of markers
  * every X minutes, depending on the job build schedule
@@ -26,7 +29,7 @@ import java.util.Set;
 // TODO: call cancelAll() on process destroyed
 // jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE );
 // jobScheduler.cancelAll();
-public class ElevationJobInfo {
+class ElevationJobInfo {
     //Job Scheduling constants. Get elevation data from api every
     private static final int PERIOD = 6000; //Every 6sec
     private static final int INITIAL_BACKOFF = 1000;
@@ -35,11 +38,13 @@ public class ElevationJobInfo {
     private static final int MAX_WAIT = 900;
     private static final int CONNECTION_TIMEOUT = 10000;
 
+    private static final String ACTION_ELEVATION_RETRIEVED = "com.sean.golfranger.ACTION_ELEVATION_RETRIEVED";
+
     static void getElevation(Context context) {
 
         //If there is no network connectivity, return the appropriate message and end task
         if(!NetworkUtils.isNetworkAvailable(context)) {
-            //TODO: Account for no network connection
+            Timber.d("Elevation Task Ended: NO CONNECTION");
             return ;
         }
 
@@ -48,6 +53,7 @@ public class ElevationJobInfo {
 
         // If there are no pending and no established marker hashes, then end task
         if(establishedHashesCount == 0 & pendingHashes.size() == 0) {
+            Timber.d("no pending and no established marker hashes, end getElevation()");
             return;
         }
         //Get User LatLon from Shared Prefs to make Elevation API call and save elevation in SP
@@ -56,11 +62,15 @@ public class ElevationJobInfo {
         String jsonUserElevationData = apiCallOverHTTP(userRequestQuery);
         String userElevationString = ApiJsonParser.getElevation(jsonUserElevationData);
         if (userElevationString != null) {
+
             SharedPrefUtils.setUserElevation(context, Float.valueOf(userElevationString));
+        } else {
+            Timber.d("JSON string returned from User Elevation NULL, storing in SP and continuing");
         }
 
         // If there are no pending marker hashes, then end task
         if(pendingHashes.size() == 0) {
+            Timber.d("There are established, but no pending marker hashes, task done");
             return;
         }
 
@@ -73,7 +83,13 @@ public class ElevationJobInfo {
             String jsonMarkerElevationData = apiCallOverHTTP(markerRequestQuery);
             String markerElevationString = ApiJsonParser.getElevation(jsonMarkerElevationData);
             if (markerElevationString != null) {
-                //TODO: Send Broadcast
+                //Broadcast Results to Map Fragment
+                Intent elevationToMapBroadcast = new Intent(ACTION_ELEVATION_RETRIEVED);
+                elevationToMapBroadcast.putExtra(hash, markerElevationString);
+                context.sendBroadcast(elevationToMapBroadcast);
+                Timber.d("Sent " + hash + " Elevation of " + markerElevationString + " to Map");
+            } else {
+                Timber.d("Elevation String was null for hash " + hash);
             }
         }
     }
@@ -119,6 +135,7 @@ public class ElevationJobInfo {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
+                Timber.d("Input Stream was Null, ending connection");
                 // Nothing to do.
                 urlConnection.disconnect();
                 return null;
@@ -134,6 +151,7 @@ public class ElevationJobInfo {
             }
 
             if (buffer.length() == 0) {
+                Timber.d("Nothing was Read to the buffer string, ending connection");
                 urlConnection.disconnect();
                 reader.close();
                 // Stream was empty.  No point in parsing.
@@ -141,6 +159,7 @@ public class ElevationJobInfo {
             }
             return buffer.toString(); //Return JSON String of elevation for LatLon
         } catch (IOException e) {
+            e.printStackTrace();
             // If the code didn't successfully get the elevation data, there's no point in attempting
             // to parse it.
             return null;

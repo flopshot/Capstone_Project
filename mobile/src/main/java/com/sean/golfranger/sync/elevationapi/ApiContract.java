@@ -22,7 +22,7 @@ public class ApiContract {
     /**
      * Method used to build the Request Elevation String for our api
      */
-    public static String buildRequestUrl(float[] latlon, String units, String outputType) {
+    public static String buildRequestUrl(Float[] latlon, String units, String outputType) {
 
         // Build up the request URL piece by piece
         // "http://ned.usgs.gov"
