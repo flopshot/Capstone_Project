@@ -21,7 +21,7 @@
         <!--ADD YOUR GOOGLE MAP API KEY HERE-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/map_key"/>
+            android:value="@string/MAP_KEY_NOT_VERSIONED"/>
 
         <activity android:name=".HomeActivity">
             <intent-filter>
