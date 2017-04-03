@@ -21,7 +21,7 @@ public class Extended4TimberApplication extends Application {
                 //Adds line numbers to tag, used to filter out only Sourcecode Logs
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
-                    return super.createStackElementTag(element) + ":" + element.getLineNumber();
+                    return super.createStackElementTag(element) + "(" + element.getLineNumber() + ")";
                 }
             });
         } else {
@@ -35,7 +35,7 @@ public class Extended4TimberApplication extends Application {
                 //Adds line numbers to tag, used to filter out only Sourcecode Logs
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
-                    return super.createStackElementTag(element) + ":" + element.getLineNumber();
+                    return super.createStackElementTag(element) + "(" + element.getLineNumber() + ")";
                 }
             });
         }

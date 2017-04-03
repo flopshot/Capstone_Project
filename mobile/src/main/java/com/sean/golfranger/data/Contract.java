@@ -169,7 +169,7 @@ public class Contract {
         /** Type: INT */
         public static final String P2_SCORE = "p2Score";
         /** Type: INT */
-        public static final String P3_SCORE = "p2Score";
+        public static final String P3_SCORE = "p3Score";
         /** Type: INT */
         public static final String P4_SCORE = "p4Score";
         /** Type: INT */
@@ -177,7 +177,7 @@ public class Contract {
         /** Type: INT */
         public static final String P2_PUTTS = "p2Putts";
         /** Type: INT NOT NULL */
-        public static final String P3_PUTTS = "p2Putts";
+        public static final String P3_PUTTS = "p3Putts";
         /** Type: INT */
         public static final String P4_PUTTS = "p4Putts";
         /** Type: INT */
@@ -185,7 +185,7 @@ public class Contract {
         /** Type: INT */
         public static final String P2_PENALTIES = "p2Penalties";
         /** Type: INT  */
-        public static final String P3_PENALTIES = "p2Penalties";
+        public static final String P3_PENALTIES = "p3Penalties";
         /** Type: INT */
         public static final String P4_PENALTIES = "p4Penalties";
         /** Type: BOOLEAN */
@@ -193,7 +193,7 @@ public class Contract {
         /** Type: BOOLEAN */
         public static final String P2_GIR = "p2Gir";
         /** Type: BOOLEAN NOT NULL */
-        public static final String P3_GIR = "p2Gir";
+        public static final String P3_GIR = "p3Gir";
         /** Type: BOOLEAN */
         public static final String P4_GIR = "p4Gir";
         /** Type: BOOLEAN */
@@ -201,7 +201,7 @@ public class Contract {
         /** Type: BOOLEAN */
         public static final String P2_FIR = "p2Fir";
         /** Type: BOOLEAN NOT NULL */
-        public static final String P3_FIR = "p2Fir";
+        public static final String P3_FIR = "p3Fir";
         /** Type: BOOLEAN */
         public static final String P4_FIR = "p4Fir";
         /** Type: BOOLEAN */
@@ -209,7 +209,7 @@ public class Contract {
         /** Type: BOOLEAN */
         public static final String P2_SAND = "p2Sand";
         /** Type: BOOLEAN NOT NULL */
-        public static final String P3_SAND = "p2Sand";
+        public static final String P3_SAND = "p3Sand";
         /** Type: BOOLEAN */
         public static final String P4_SAND = "p4Sand";
 
