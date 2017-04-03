@@ -1,8 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        app:srcCompat="@drawable/icon"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/startNewRound"
+        style="@style/AppTheme.HomeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginBottom="10dp"
+        android:drawableBottom="@android:drawable/ic_menu_add"
+        android:gravity="center"
+        android:text="New Round"
+        android:onClick="startNewRound"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:id="@+id/viewOldRound"
+        style="@style/AppTheme.HomeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginBottom="10dp"
+        android:drawableBottom="?android:attr/actionModeFindDrawable"
+        android:gravity="center"
+        android:text="Old Round"
+        android:onClick="viewOldRound"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:id="@+id/viewPlayers"
+        style="@style/AppTheme.HomeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginBottom="10dp"
+        android:drawableBottom="@android:drawable/ic_menu_myplaces"
+        android:gravity="center"
+        android:text="The Players"
+        android:onClick="viewPlayers"
+        android:clickable="true"/>
+
+    <TextView
+        android:id="@+id/viewCourses"
+        style="@style/AppTheme.HomeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_marginBottom="10dp"
+        android:drawableBottom="@android:drawable/ic_menu_gallery"
+        android:gravity="center"
+        android:text="The Courses"
+        android:onClick="viewCourses"
+        android:clickable="true"/>
+</LinearLayout>
