@@ -11,7 +11,13 @@
     <style name="AppTheme.HomeButtons">
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/maroon</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <style name="HoleViewHeader">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/lt_gray</item>
+        <item name="android:textStyle">bold|italic</item>
     </style>
 
 </resources>

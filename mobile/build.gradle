@@ -40,7 +40,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:10.2.1'
     compile 'zh.wang.android:yweathergetter4a:1.3.0'
     compile 'com.jakewharton.timber:timber:4.5.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
 }

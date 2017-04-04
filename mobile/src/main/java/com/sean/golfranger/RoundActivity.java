@@ -3,6 +3,7 @@ package com.sean.golfranger;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -40,13 +41,15 @@ public class RoundActivity extends FragmentActivity
         setContentView(R.layout.activity_round);
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
-//        LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        mMarkerStats = inflater.inflate(R.layout.marker_stats, null);
 
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mHoleFragment = getFragmentManager().findFragmentById(R.id.holeFrag);
         mScorecardFragment = getFragmentManager().findFragmentById(R.id.scorecardFrag);
         mMarkerStats = findViewById(R.id.markerStats);
+
+        if (savedInstanceState == null) {
+            setFragmentViewState(SCORECARD_STATE);
+        }
         mMapFragment.getMapAsync(this);
     }
 
@@ -97,12 +100,18 @@ public class RoundActivity extends FragmentActivity
         }
     }
 
+    @Override
+    protected void onResume() {
+        SystemClock.sleep(1000);
+        super.onResume();
+    }
+
     private void setFragmentViewState(int fragViewState) {
         FragmentManager fm = getFragmentManager();
         switch (fragViewState) {
             case SCORECARD_STATE:
                 fm.beginTransaction()
-                      .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .hide(mHoleFragment)
                       .show(mScorecardFragment)
                       .hide(mMapFragment)
@@ -112,7 +121,7 @@ public class RoundActivity extends FragmentActivity
                 break;
             case HOLE_STATE:
                 fm.beginTransaction()
-                      .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .show(mHoleFragment)
                       .hide(mScorecardFragment)
                       .hide(mMapFragment)
@@ -122,7 +131,7 @@ public class RoundActivity extends FragmentActivity
                 break;
             case MAP_STATE:
                 fm.beginTransaction()
-                      .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .hide(mHoleFragment)
                       .hide(mScorecardFragment)
                       .show(mMapFragment)

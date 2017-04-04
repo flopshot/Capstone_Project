@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/holeLabel"
+        android:layout_width="88dp"
+        android:layout_height="99dp"
+        android:text="Hole"
+        app:layout_constraintRight_toLeftOf="@+id/holeValue"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/holeValue"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+        android:id="@+id/holeValue"
+        android:layout_width="0dp"
+        android:layout_height="99dp"
+        android:text="9"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginStart="90dp"
+        android:layout_marginEnd="90dp"
+        app:layout_constraintRight_toRightOf="@+id/distanceLabel"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="164dp"
+        android:layout_marginTop="0dp"/>
+
+    <TextView
+        android:id="@+id/distanceLabel"
+        android:layout_width="90dp"
+        android:layout_height="99dp"
+        android:text="Distance (y)"
+        android:layout_marginStart="128dp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/holeValue"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/holeValue"/>
+
+    <TextView
+        android:id="@+id/distanceValue"
+        android:layout_width="38dp"
+        android:layout_height="99dp"
+        android:text="430"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginStart="128dp"
+        android:layout_marginEnd="128dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/distanceLabel"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/holeValue"/>
+
+
+
+    <TextView
+        android:id="@+id/parLabel"
+        android:layout_width="0dp"
+        android:layout_height="99dp"
+        android:text="Par"
+        app:layout_constraintRight_toLeftOf="@+id/parValue"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/distanceValue"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toRightOf="@+id/distanceValue"/>
+
+    <TextView
+        android:id="@+id/parValue"
+        android:layout_width="48dp"
+        android:layout_height="99dp"
+        android:text="4"
+        tools:layout_constraintRight_creator="1"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/parLabel"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        />
+
+    <TextView
+        android:id="@+id/p1Name"
+        android:layout_width="46dp"
+        android:layout_height="54dp"
+        android:text="Sean"
+        tools:layout_editor_absoluteX="198dp"
+        tools:layout_editor_absoluteY="107dp"/>
+
+    <TextView
+        android:id="@+id/p2Name"
+        android:layout_width="46dp"
+        android:layout_height="54dp"
+        android:text="Matt"
+        tools:layout_editor_absoluteX="336dp"
+        tools:layout_editor_absoluteY="107dp"/>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="46dp"
+        android:layout_height="54dp"
+        android:text="Matt"
+        tools:layout_editor_absoluteX="290dp"
+        tools:layout_editor_absoluteY="107dp"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="46dp"
+        android:layout_height="54dp"
+        android:text="Matt"
+        tools:layout_editor_absoluteX="244dp"
+        tools:layout_editor_absoluteY="107dp"/>
+
+</android.support.constraint.ConstraintLayout>
