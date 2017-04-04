@@ -53,7 +53,7 @@ public class HoleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
+        textView.setText(R.string.hello_blank1_fragment);
         return textView;
     }
 
