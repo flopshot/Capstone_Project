@@ -20,6 +20,7 @@ public class SharedPrefUtils {
     private static final String PENDING_MARKER_HASHES_KEY = "SharedPrefUtilsPMH";
     private static final String KEY_LAT = "lat";
     private static final String KEY_LON = "lon";
+    private static final String KEY_RESTART_MAP_FROM_ROTATION = "restartMapFromRotation";
 
     //Stores Current Lat Lon of Device
     public static void setUserLatLon(Context context, float lat, float lon) {
@@ -209,6 +210,18 @@ public class SharedPrefUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putStringSet(ESTABLISHED_MARKER_HASHES_KEY, establishedMarkerHashes);
+        editor.apply();
+    }
+
+    public static boolean restartMapFromRotation(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(KEY_RESTART_MAP_FROM_ROTATION, false);
+    }
+
+    public static void setRestartMapFromRotation(Context context, boolean restart) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(KEY_RESTART_MAP_FROM_ROTATION, restart);
         editor.apply();
     }
 }

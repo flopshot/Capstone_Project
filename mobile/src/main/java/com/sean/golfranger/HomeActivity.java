@@ -18,7 +18,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void startNewRound(View v) {
         Intent intent = new Intent();
-        //intent.setClass(getApplicationContext(), RoundActivity.class);
+        intent.setClass(getApplicationContext(), RoundActivity.class);
         startActivity(intent);
     }
 

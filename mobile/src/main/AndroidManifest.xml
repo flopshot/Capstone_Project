@@ -22,11 +22,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/MAP_KEY_NOT_VERSIONED"/>
 
-        <activity
-            android:name=".HomeActivity">
-
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -53,6 +52,8 @@
         <activity
             android:name=".RoundActivity"
             android:exported="true">
+        </activity>
+        <activity android:name=".CoursesActivity">
         </activity>
     </application>
 

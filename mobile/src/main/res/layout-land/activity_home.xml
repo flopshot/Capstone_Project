@@ -2,16 +2,23 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
         app:srcCompat="@drawable/icon"/>
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/startNewRound"
@@ -19,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
         android:drawableBottom="@android:drawable/ic_menu_add"
         android:gravity="center"
         android:text="New Round"
@@ -62,4 +70,5 @@
         android:text="The Courses"
         android:onClick="viewCourses"
         android:clickable="true"/>
+    </LinearLayout>
 </LinearLayout>
