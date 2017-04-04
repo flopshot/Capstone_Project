@@ -35,26 +35,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:map="http://schemas.android.com/apk/res-auto"
-                  android:name="com.google.android.gms.maps.MapFragment"
-                  android:id="@+id/map"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  map:cameraBearing="112.5"
-                  map:cameraZoom="16"
-                  map:mapType="satellite"/>
+        <fragment
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            map:mapType="satellite"/>
+
+        <fragment
+            class ="com.sean.golfranger.HoleFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/holeFrag"/>
 
         <fragment
             class ="com.sean.golfranger.ScorecardFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/scorecardFrag"/>
-        <fragment
-            class ="com.sean.golfranger.HoleFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/holeFrag"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      xmlns:tools="http://schemas.android.com/tools"
+                      android:id="@+id/markerStats"
+                      android:orientation="vertical"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/distanceView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="130y"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                tools:text="130y"/>
+            <TextView
+                android:id="@+id/windSpeedView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="@android:color/white"
+                android:text="5mph SSW"
+                tools:text="5mph SSW"/>
+            <TextView
+                android:id="@+id/elevationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textColor="@android:color/white"
+                android:text="-5ft Bellow"
+                tools:text="-5ft Bellow"/>
+        </LinearLayout>
 
     </FrameLayout>
 </LinearLayout>

@@ -212,16 +212,4 @@ public class SharedPrefUtils {
         editor.putStringSet(ESTABLISHED_MARKER_HASHES_KEY, establishedMarkerHashes);
         editor.apply();
     }
-
-    public static boolean restartMapFromRotation(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(KEY_RESTART_MAP_FROM_ROTATION, false);
-    }
-
-    public static void setRestartMapFromRotation(Context context, boolean restart) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(KEY_RESTART_MAP_FROM_ROTATION, restart);
-        editor.apply();
-    }
 }
