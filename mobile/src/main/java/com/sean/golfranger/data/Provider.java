@@ -454,7 +454,6 @@ public class Provider extends ContentProvider {
         for (String[] record: records) {
             values.put(Contract.Rounds.PLAYER1_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER1_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER1_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -466,7 +465,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER2_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER2_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER2_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -478,7 +476,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER3_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER3_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER3_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -490,7 +487,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER4_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER4_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER4_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,

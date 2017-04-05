@@ -3,7 +3,6 @@ package com.sean.golfranger;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -98,12 +97,6 @@ public class RoundActivity extends FragmentActivity
         if (savedInstanceState != null) {
             setFragmentViewState(savedInstanceState.getInt(FRAG_VISIBILITY_STATE));
         }
-    }
-
-    @Override
-    protected void onResume() {
-        SystemClock.sleep(1000);
-        super.onResume();
     }
 
     private void setFragmentViewState(int fragViewState) {

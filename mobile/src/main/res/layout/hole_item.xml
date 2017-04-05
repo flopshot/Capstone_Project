@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="end">
+
+    <TextView
+        android:id="@+id/holeValue"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="18"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+    <TextView
+        android:id="@+id/parValue"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="4"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+    <TextView
+        android:id="@+id/p1HoleScore"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="6"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+    <TextView
+        android:id="@+id/p2HoleScore"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="5"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+    <TextView
+        android:id="@+id/p3HoleScore"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="4"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+    <TextView
+        android:id="@+id/p4HoleScore"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:text="3"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+</LinearLayout>

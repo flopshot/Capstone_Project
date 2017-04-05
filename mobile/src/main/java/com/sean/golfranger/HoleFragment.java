@@ -1,11 +1,19 @@
 package com.sean.golfranger;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import timber.log.Timber;
 
 
 /**
@@ -51,7 +59,10 @@ public class HoleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hole, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_hole, container, false);
+        Button b = (Button) rootView.findViewById(R.id.holeValue);
+        b.setOnClickListener(mButtonClickListener);
+        return rootView;
     }
 
     @Override
@@ -64,4 +75,30 @@ public class HoleFragment extends Fragment {
         super.onDetach();
     }
 
+    private OnClickListener mButtonClickListener = new OnClickListener() {
+        public void onClick(View v) {
+            // custom dialog
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.radio_button_holes);
+            RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group_hole);
+
+            dialog.show();
+
+            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int childCount = group.getChildCount();
+                    for (int x = 0; x < childCount; x++) {
+                        RadioButton btn = (RadioButton) group.getChildAt(x);
+                        if (btn.getId() == checkedId) {
+                            Timber.d("selected RadioButton-> " + btn.getText().toString());
+                        }
+                    }
+                    dialog.dismiss();
+                }
+            });
+        }
+    };
 }

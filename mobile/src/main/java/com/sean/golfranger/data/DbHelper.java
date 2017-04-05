@@ -46,8 +46,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Players.TABLE_NAME + " (" +
               Contract.Players._ID + " INTEGER PRIMARY KEY," +
               Contract.Players.FIRST_NAME + " TEXT NOT NULL," +
-              Contract.Players.LAST_NAME + " TEXT NOT NULL," +
-              Contract.Players.HANDICAP + " TEXT);";
+              Contract.Players.LAST_NAME + " TEXT NOT NULL);";
 
         // String to create a table to hold round data
         final String SQL_CREATE_ROUNDS_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -59,19 +58,15 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Rounds.PLAYER1_ID + " INTEGER ," +
               Contract.Rounds.PLAYER1_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER1_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER1_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER2_ID + " INTEGER," +
               Contract.Rounds.PLAYER2_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER2_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER2_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER3_ID + " INTEGER," +
               Contract.Rounds.PLAYER3_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER3_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER3_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER4_ID + " INTEGER," +
               Contract.Rounds.PLAYER4_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER4_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER4_HANDICAP + " INTEGER," +
               Contract.Rounds.DATE + " TEXT NOT NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
@@ -87,6 +82,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Holes.HOLE_NUMBER + " INTEGER NOT NULL," +
               Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.HOLE_DISTANCE + " INTEGER," +
+              Contract.Holes.HOLE_SI + " INTEGER," +
               Contract.Holes.P1_SCORE + " INTEGER," +
               Contract.Holes.P1_PUTTS + " INTEGER," +
               Contract.Holes.P1_PENALTIES + " INTEGER," +
