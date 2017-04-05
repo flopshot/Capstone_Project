@@ -30,13 +30,13 @@ public class HomeActivity extends AppCompatActivity {
 
     public void viewPlayers(View v) {
         Intent intent = new Intent();
-        //intent.setClass(getApplicationContext(), PlayersActivity.class);
+        intent.setClass(getApplicationContext(), PlayerActivity.class);
         startActivity(intent);
     }
 
     public void viewCourses(View v) {
         Intent intent = new Intent();
-        //intent.setClass(getApplicationContext(), CoursesActivity.class);
+        intent.setClass(getApplicationContext(), CoursesActivity.class);
         startActivity(intent);
     }
 }

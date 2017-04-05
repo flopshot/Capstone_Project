@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -84,7 +85,7 @@ public class HoleFragment extends Fragment {
             RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group_hole);
 
             dialog.show();
-
+            doKeepDialog(dialog);
             rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                 @Override
@@ -101,4 +102,13 @@ public class HoleFragment extends Fragment {
             });
         }
     };
+
+    // Prevent dialog dismiss when orientation changes
+    private static void doKeepDialog(Dialog dialog){
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(lp);
+    }
 }

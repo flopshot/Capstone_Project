@@ -24,8 +24,8 @@ import com.sean.golfranger.data.Contract;
 
 import timber.log.Timber;
 
-public class CoursesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
-    private CourseAdapter mCourseAdapter;
+public class PlayerActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+    private PlayerAdapter mPlayerAdapter;
     private ContentObserver mMyObserver;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
@@ -33,34 +33,35 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_courses);
+        setContentView(R.layout.activity_player);
 
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
         getContentResolver()
-              .registerContentObserver(Contract.Courses.buildDirUri(), true, mMyObserver);
+              .registerContentObserver(Contract.Players.buildDirUri(), true, mMyObserver);
         sLoaderCallback = this;
         sLoaderManager.initLoader(0, null, sLoaderCallback);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_courses);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_players);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mCourseAdapter = new CourseAdapter(this, new CourseAdapter.CourseAdapterOnClickHandler() {
+        mPlayerAdapter = new PlayerAdapter(this, new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
-            public void onClick(Long courseId, String clubName, String courseName) {
+            public void onClick(Long playerId, String firstName, String lastName) {
                 if (getCallingActivity() == null) {
                     Timber.d("No Activity Called This Intent");
                 } else {
                     Timber.d("Some Activity DID call this activity");
                 }
             }
-            }, new CourseAdapter.CourseAdapterLongClickHandler() {
+        }, new PlayerAdapter.PlayerAdapterLongClickHandler() {
             @Override
-            public void onLongClick(Long courseId, String clubName, String courseName) {
-                showEditCourseDialog(courseId, clubName, courseName);
+            public void onLongClick(Long playerId, String firstName, String lastName) {
+                showEditPlayerDialog(playerId, firstName, lastName);
             }
         });
-        recyclerView.setAdapter(mCourseAdapter);
+        recyclerView.setAdapter(mPlayerAdapter);
     }
+
 
     @Override
     public void onDestroy() {
@@ -71,7 +72,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getApplicationContext(),
-              Contract.Courses.buildDirUri(),
+              Contract.Players.buildDirUri(),
               null,
               null,
               null,
@@ -80,12 +81,12 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mCourseAdapter.swapCursor(cursor);
+        mPlayerAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCourseAdapter.swapCursor(null);
+        mPlayerAdapter.swapCursor(null);
     }
 
     private class MyObserver extends ContentObserver {
@@ -105,38 +106,38 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    public void addCourse(View v){
+    public void addPlayer(View v){
         //TODO ADD STRINGS to strings.xml
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CoursesActivity.this);
-        alertDialog.setTitle("Add Course");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
+        alertDialog.setTitle("Add Player");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        final EditText clubInput = new EditText(this);
-        clubInput.setHint("Club Name");
-        layout.addView(clubInput);
+        final EditText firstInput = new EditText(this);
+        firstInput.setHint("First Name");
+        layout.addView(firstInput);
 
-        final EditText courseInput = new EditText(this);
-        courseInput.setHint("Course Name");
-        layout.addView(courseInput);
+        final EditText lastInput = new EditText(this);
+        lastInput.setHint("Last Name");
+        layout.addView(lastInput);
         alertDialog.setView(layout);
 
         alertDialog.setPositiveButton("ADD",
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String courseName = courseInput.getText().toString();
-                      String clubName = clubInput.getText().toString();
-                      if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
-                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
+                      String firstName =firstInput.getText().toString();
+                      String lastName = lastInput.getText().toString();
+                      if (!firstName.equals("") & firstName.matches("[a-zA-Z 0-9]+") &
+                            !lastName.equals("") & lastName.matches("[a-zA-Z 0-9]+") ) {
 
                           ContentValues values = new ContentValues();
                           ContentResolver resolver = getContentResolver();
-                          values.put(Contract.Courses.CLUB_NAME, clubName);
-                          values.put(Contract.Courses.COURSE_NAME, courseName);
-                          resolver.insert(Contract.Courses.buildDirUri(), values);
+                          values.put(Contract.Players.FIRST_NAME, firstName);
+                          values.put(Contract.Players.LAST_NAME, lastName);
+                          resolver.insert(Contract.Players.buildDirUri(), values);
                           dialog.dismiss();
-                          Timber.d("Course Row Entered");
+                          Timber.d("Player Row Entered");
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
@@ -156,42 +157,42 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         alertDialog.show();
     }
 
-    private void showEditCourseDialog(final long courseId, String club, String course){
+    private void showEditPlayerDialog(final long playerId, String first, String last){
         //TODO ADD STRINGS to strings.xml
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(CoursesActivity.this);
-        alertDialog.setTitle("Edit Course");
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
+        alertDialog.setTitle("Edit Player");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        final EditText clubInput = new EditText(this);
-        clubInput.setText(club);
-        layout.addView(clubInput);
+        final EditText firstInput = new EditText(this);
+        firstInput.setText(first);
+        layout.addView(firstInput);
 
-        final EditText courseInput = new EditText(this);
-        courseInput.setText(course);
-        layout.addView(courseInput);
+        final EditText lastInput = new EditText(this);
+        lastInput.setText(last);
+        layout.addView(lastInput);
         alertDialog.setView(layout);
 
         alertDialog.setNegativeButton("OK",
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String courseName = courseInput.getText().toString();
-                      String clubName = clubInput.getText().toString();
-                      if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
-                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
+                      String lastName = lastInput.getText().toString();
+                      String firstName = firstInput.getText().toString();
+                      if (!lastName.equals("") & lastName.matches("[a-zA-Z 0-9]+") &
+                            !firstName.equals("") & firstName.matches("[a-zA-Z 0-9]+") ) {
 
                           ContentValues values = new ContentValues();
                           ContentResolver resolver = getContentResolver();
-                          values.put(Contract.Courses.CLUB_NAME, clubName);
-                          values.put(Contract.Courses.COURSE_NAME, courseName);
+                          values.put(Contract.Players.FIRST_NAME, firstName);
+                          values.put(Contract.Players.LAST_NAME, lastName);
                           resolver.update(
-                                Contract.Courses.buildDirUri(),
+                                Contract.Players.buildDirUri(),
                                 values,
-                                Contract.Courses._ID + "=?",
-                                new String[] {String.valueOf(courseId)});
+                                Contract.Players._ID + "=?",
+                                new String[] {String.valueOf(playerId)});
                           dialog.dismiss();
-                          Timber.d("Course Row CHANGED");
+                          Timber.d("Player Row CHANGED");
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
@@ -208,12 +209,11 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
                   public void onClick(DialogInterface dialog, int which) {
                       ContentResolver resolver = getContentResolver();
                       resolver.delete(
-                            Contract.Courses.buildDirUri(),
-                            Contract.Courses._ID + "=?",
-                            new String[] {String.valueOf(courseId)});
+                            Contract.Players.buildDirUri(),
+                            Contract.Players._ID + "=?",
+                            new String[] {String.valueOf(playerId)});
                       dialog.cancel();
                   }});
         alertDialog.show();
     }
-    
 }

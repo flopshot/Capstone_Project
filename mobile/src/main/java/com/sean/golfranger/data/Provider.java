@@ -436,7 +436,6 @@ public class Provider extends ContentProvider {
                       String.valueOf(updatedPlayersCursor.getLong(0)), //_id
                       updatedPlayersCursor.getString(1), //First Name
                       updatedPlayersCursor.getString(2), //Last Name
-                      String.valueOf(updatedPlayersCursor.getLong(4)) //Handicap
                       // TODO: Reference hardcoded column indices from constants in Contract
                 });
             } while (updatedPlayersCursor.moveToNext());

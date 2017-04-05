@@ -4,4 +4,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello Dumb fragment</string>
     <string name="hello_blank1_fragment">Hello Stupid fragment</string>
+    <string name="course_add">Add Course</string>
 </resources>

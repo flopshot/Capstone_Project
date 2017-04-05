@@ -231,4 +231,15 @@ public class Contract {
     private Contract() {
     }
 
+    public static class CourseColumnPosition {
+        public static int ID = 0;
+        public static int CLUB_NAME = 1;
+        public static int COURSE_NAME = 2;
+    }
+
+    public static class PlayerColumnPosition {
+        public static int ID = 0;
+        public static int FIRST_NAME = 1;
+        public static int LAST_NAME = 2;
+    }
 }
