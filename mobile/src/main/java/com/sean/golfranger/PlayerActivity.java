@@ -48,7 +48,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(Long playerId, String firstName, String lastName) {
                 if (getCallingActivity() == null) {
-                    Timber.d("No Activity Called This Intent");
+                    Timber.d("No Activity Called This Intent"); //TODO: Send info to Matches Activity
                 } else {
                     Timber.d("Some Activity DID call this activity");
                 }

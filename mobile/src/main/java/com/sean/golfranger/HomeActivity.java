@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
 
     public void viewOldRound(View v) {
         Intent intent = new Intent();
-        //intent.setClass(getApplicationContext(), RoundsActivity.class);
+        intent.setClass(getApplicationContext(), MatchesActivity.class);
         startActivity(intent);
     }
 

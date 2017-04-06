@@ -115,7 +115,7 @@ public class Contract {
         public static final String CLUB_NAME = "clubName";
         /** TEXT */
         public static final String COURSE_NAME = "courseName";
-        /** Type: TEXT NOT NULL*/
+        /** Type: INTEGER NOT NULL*/
         public static final String DATE = "date";
 
         /** "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>" */
@@ -241,5 +241,16 @@ public class Contract {
         public static int ID = 0;
         public static int FIRST_NAME = 1;
         public static int LAST_NAME = 2;
+    }
+
+    public static class RoundColumnPosition {
+        public static int ID = 0;
+        public static int CLUB_NAME = 2;
+        public static int COURSE_NAME = 3;
+        public static int P1_FIRST_NAME = 5;
+        public static int P2_FIRST_NAME = 8;
+        public static int P3_FIRST_NAME = 11;
+        public static int P4_FIRST_NAME = 14;
+        public static int DATE = 16;
     }
 }

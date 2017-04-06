@@ -67,7 +67,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Rounds.PLAYER4_ID + " INTEGER," +
               Contract.Rounds.PLAYER4_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER4_LAST_NAME + " TEXT," +
-              Contract.Rounds.DATE + " TEXT NOT NULL, " +
+              Contract.Rounds.DATE + " INTEGER NOT NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
