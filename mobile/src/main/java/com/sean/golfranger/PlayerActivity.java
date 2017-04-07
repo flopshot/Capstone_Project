@@ -3,6 +3,7 @@ package com.sean.golfranger;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -48,8 +49,14 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(Long playerId, String firstName, String lastName) {
                 if (getCallingActivity() == null) {
-                    Timber.d("No Activity Called This Intent"); //TODO: Send info to Matches Activity
+                    Timber.d("No Activity called this activity");
                 } else {
+                    Intent intent = new Intent();
+                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_ID, String.valueOf(playerId));
+                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_FIRST_ITEM, firstName);
+                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_SECOND_ITEM, lastName);
+                    setResult(RESULT_OK, intent);
+                    finish();
                     Timber.d("Some Activity DID call this activity");
                 }
             }

@@ -72,7 +72,7 @@ class DbHelper extends SQLiteOpenHelper {
               " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
+              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
               ");";
 
         final String SQL_CREATE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -82,7 +82,6 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Holes.HOLE_NUMBER + " INTEGER NOT NULL," +
               Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.HOLE_DISTANCE + " INTEGER," +
-              Contract.Holes.HOLE_SI + " INTEGER," +
               Contract.Holes.P1_SCORE + " INTEGER," +
               Contract.Holes.P1_PUTTS + " INTEGER," +
               Contract.Holes.P1_PENALTIES + " INTEGER," +
@@ -111,10 +110,38 @@ class DbHelper extends SQLiteOpenHelper {
               " UNIQUE (" + Contract.Holes.ROUND_ID + "," + Contract.Holes.HOLE_NUMBER + ") ON CONFLICT FAIL" +
               ");";
 
+        //TODO: If there were a hell, it would be me copying and pasting all
+        // the column names in the contract to these hardcoded strings
+        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW roundPlayerCourse AS " +
+        "SELECT " +
+        "r._id AS _id, " +
+        "CASE WHEN c._id IS NULL THEN r.clubName ELSE c.clubName END AS clubName, " +
+        "CASE WHEN c._id IS NULL THEN r.courseName ELSE c.courseName END AS courseName, " +
+        "CASE WHEN p1._id IS NULL THEN r.playerOneFirstName ELSE p1.firstName END AS p1FirstName, " +
+        "CASE WHEN p1._id IS NULL THEN r.playerOneLastName ELSE p1.lastName END AS p1LastName, " +
+        "CASE WHEN p2._id IS NULL THEN r.playerTwoFirstName ELSE p2.firstName END AS p2FirstName, " +
+        "CASE WHEN p2._id IS NULL THEN r.playerTwoLastName ELSE p2.lastName END AS p2LastName, " +
+        "CASE WHEN p3._id IS NULL THEN r.playerThreeFirstName ELSE p3.firstName END AS p3FirstName, " +
+        "CASE WHEN p3._id IS NULL THEN r.playerThreeLastName ELSE p3.lastName END AS p3LastName, " +
+        "CASE WHEN p4._id IS NULL THEN r.playerFourFirstName ELSE p4.firstName END AS p4FirstName, " +
+        "CASE WHEN p4._id IS NULL THEN r.playerFourLastName ELSE p4.lastName END AS p4LastName " +
+        "FROM rounds AS r " +
+        "LEFT JOIN courses AS c " +
+        "ON r.courseId = c._id " +
+        "LEFT JOIN players AS p1 " +
+        "ON r.playerOneId = p1._id " +
+        "LEFT JOIN players AS p2 " +
+        "ON r.playerTwoId = p2._id " +
+        "LEFT JOIN players AS p3 " +
+        "ON r.playerThreeId = p3._id " +
+        "LEFT JOIN players AS p4 " +
+        "ON r.playerFourId = p4._id;";
+
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUNDS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLES_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_COURSE_ROUND_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

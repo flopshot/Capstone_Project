@@ -4,19 +4,19 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:orientation="vertical"
 android:layout_width="match_parent"
-android:layout_height="wrap_content"
+android:layout_height="200dp"
 android:gravity="center">
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center">
 
         <TextView
             android:id="@+id/clubName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             tools:text="Angel Park"/>
@@ -39,12 +39,12 @@ android:gravity="center">
 
     </LinearLayout>
 
-<TextView
-    android:id="@+id/roundDate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-    tools:text="04/01/17"/>
+    <TextView
+        android:id="@+id/roundDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        tools:text="04/01/17"/>
 
     <FrameLayout
         android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.sean.golfranger;
 
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -83,7 +84,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
     }
 
     public void startNewRound(View v) {
-        //TODO: go to launch round activity
+        Intent intent = new Intent(getApplicationContext(), StartRoundActivity.class);
+        startActivity(intent);
     }
-
 }

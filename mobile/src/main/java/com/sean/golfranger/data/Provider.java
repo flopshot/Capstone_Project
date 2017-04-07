@@ -30,6 +30,7 @@ public class Provider extends ContentProvider {
     private static final int ROUND = 102;
     private static final int HOLE = 103;
     private static final int ROUND_HOLE = 104;
+    private static final int ROUND_COURSES_PLAYERS = 105;
 
 
     // START: implement table JOIN logic on Holes and Rounds tables for Content Provider
@@ -39,9 +40,9 @@ public class Provider extends ContentProvider {
         sHoleAndRoundQueryBuilder = new SQLiteQueryBuilder();
 
         //This is an inner join which looks like
-        //rounds INNER JOIN holes ON rounds._id = holes.roundId
+        //rounds LEFT JOIN holes ON rounds._id = holes.roundId
         sHoleAndRoundQueryBuilder.setTables(
-              Contract.Rounds.TABLE_NAME + " INNER JOIN " +
+              Contract.Rounds.TABLE_NAME + " LEFT JOIN " +
                     Contract.Holes.TABLE_NAME +
                     " ON " + Contract.Rounds.TABLE_NAME +
                     "." + Contract.Rounds._ID +
@@ -50,7 +51,8 @@ public class Provider extends ContentProvider {
     }
 
     private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String sortOrder) {
-        return sHoleAndRoundQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+        return sHoleAndRoundQueryBuilder.query(
+              mOpenHelper.getReadableDatabase(),
               columns,
               whereClause,
               null,
@@ -59,6 +61,72 @@ public class Provider extends ContentProvider {
               sortOrder
         );
     }
+    // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
+
+    // START: implement table JOIN logic on PLAYERS,COURSES and ROUNDS tables for Content Provider
+//    private static final SQLiteQueryBuilder sPlayersCoursesAndRoundQueryBuilder;
+//
+//    static{
+//        sPlayersCoursesAndRoundQueryBuilder = new SQLiteQueryBuilder();
+//
+//        //This is an inner join which looks like
+////        FROM rounds AS r
+////        LEFT JOIN courses AS c
+////        ON r.courseId = c._id
+////        LEFT JOIN players AS p1
+////        ON r.playerOneId = p1._id
+////        LEFT JOIN players AS p2
+////        ON r.playerTwoId = p2._id
+////        LEFT JOIN players AS p3
+////        ON r.playerThreeId = p3._id
+////        LEFT JOIN players AS p4
+////        ON r.playerFourId = p4._id
+//        sPlayersCoursesAndRoundQueryBuilder.setTables(
+//              Contract.Rounds.TABLE_NAME + " AS r" +
+//                    " LEFT JOIN " +
+//                    Contract.Courses.TABLE_NAME + " AS c" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.COURSE_ID +
+//                    " = " + "c" +
+//                    "." + Contract.Courses._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p1" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER1_ID +
+//                    " = " + "p1" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p2" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER2_ID +
+//                    " = " + "p2" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p3" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER3_ID +
+//                    " = " + "p3" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p4" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER4_ID +
+//                    " = " + "p4" +
+//                    "." + Contract.Players._ID
+//        );
+//    }
+//
+//    private Cursor getRoundWithPlayersCoursesCursor(String[] columns, String whereClause, String sortOrder) {
+//        return sPlayersCoursesAndRoundQueryBuilder.query(
+//              mOpenHelper.getReadableDatabase(),
+//              columns,
+//              whereClause,
+//              null,
+//              null,
+//              null,
+//              sortOrder
+//        );
+//    }
     // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
 
     private static UriMatcher buildUriMatcher() {
@@ -76,6 +144,9 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority,
               Contract.Rounds.TABLE_NAME + "/" + Contract.Holes.TABLE_NAME,
               ROUND_HOLE);
+        matcher.addURI(authority,
+              Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/" + Contract.Players.TABLE_NAME,
+              ROUND_COURSES_PLAYERS);
         return matcher;
     }
 
@@ -117,6 +188,13 @@ public class Provider extends ContentProvider {
                 );
             case ROUND_HOLE:
                 return getRoundWithHoleCursor(columns, whereClause, sortOrder);
+
+            case ROUND_COURSES_PLAYERS:
+                return mDb.query(
+                      "roundPlayerCourse", columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
+                //return getRoundWithPlayersCoursesCursor(columns, whereClause, sortOrder);
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

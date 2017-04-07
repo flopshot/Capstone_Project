@@ -1,6 +1,8 @@
 package com.sean.golfranger;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,7 +41,8 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
         return mCursor.getCount();
     }
 
-    class MatchAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class MatchAdapterViewHolder extends RecyclerView.ViewHolder
+          implements View.OnClickListener, View.OnLongClickListener{
         TextView p1First, p2First, p3First, p4First, courseName, clubName, date;
 
         public MatchAdapterViewHolder(View view) {
@@ -52,6 +55,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
             this.clubName = (TextView) view.findViewById(R.id.clubName);
             this.date = (TextView) view.findViewById(R.id.roundDate);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
         }
 
         @Override
@@ -59,7 +63,23 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
-            //TODO: Send this to start round activity
+            Intent intent = new Intent(mContext, StartRoundActivity.class);
+            intent.putExtra(StartRoundActivity.EXTRA_ROUND_ID, String.valueOf(roundId));
+            mContext.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
+
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.delete(
+                  Contract.Rounds.buildDirUri(),
+                  Contract.Rounds._ID + "=?",
+                  new String[]{String.valueOf(roundId)});
+            return true;
         }
     }
 
@@ -86,7 +106,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
               ));
         customViewHolder.date.setText(
               getReadableDate(
-                    mCursor.getLong(Contract.RoundColumnPosition.P1_FIRST_NAME
+                mCursor.getLong(Contract.RoundColumnPosition.DATE
                     )));
 
     }
@@ -101,7 +121,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
     }
 
     private String getReadableDate(long unixtime) {
-        SimpleDateFormat formatter = new SimpleDateFormat("mm/dd/yy", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy", Locale.getDefault());
 
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         Calendar calendar = Calendar.getInstance();
