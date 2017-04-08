@@ -13,6 +13,7 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.sean.golfranger.utils.PermissionUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
 /**
@@ -86,6 +87,12 @@ public class RoundActivity extends FragmentActivity
         if (savedInstanceState != null) {
             setFragmentViewState(savedInstanceState.getInt(FRAG_VISIBILITY_STATE));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        PermissionUtils.checkLocationPermission(getApplicationContext());
+        super.onResume();
     }
 
     public void getScorecardView(View view) {

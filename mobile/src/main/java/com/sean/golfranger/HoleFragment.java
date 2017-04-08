@@ -197,6 +197,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onDestroyView();
     }
 
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         Context context = getActivity().getApplicationContext();

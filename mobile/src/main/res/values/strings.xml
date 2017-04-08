@@ -5,4 +5,21 @@
     <string name="hello_blank_fragment">Hello Dumb fragment</string>
     <string name="hello_blank1_fragment">Hello Stupid fragment</string>
     <string name="course_add">Add Course</string>
+
+    <!--DIALOG STRINGS-->
+    <string name="ok">ALLOW LOCATION</string>
+    <string name="permission_location_rationale">
+        Golf Ranger Cannot Work Without Your Location
+    </string>
+    <string name="permission_available_location">
+        Golf Ranger can now map your distance!
+    </string>
+    <string name="permission_not_granted">
+        WARNING! Golf Ranger will not be able to map distances. \n
+        To enable distance mapping, please turn on your location.
+    </string>
+    <string name="settings">
+        CLICK HERE To Go To Settings and Enable Location.
+    </string>
 </resources>
+
