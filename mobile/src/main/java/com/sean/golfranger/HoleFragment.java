@@ -11,8 +11,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,8 +36,6 @@ import timber.log.Timber;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * Use the {@link HoleFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class HoleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     EditText[] editTexts;
@@ -73,15 +69,8 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                 Contract.Holes.P3_GIR, Contract.Holes.P4_GIR, Contract.Holes.P1_SAND,
                 Contract.Holes.P2_SAND, Contract.Holes.P3_SAND, Contract.Holes.P4_SAND};
 
-
-
     public HoleFragment() {
         // Required empty public constructor
-    }
-
-    public static HoleFragment newInstance(/*String param1, String param2*/) {
-        HoleFragment fragment = new HoleFragment();
-        return fragment;
     }
 
     @Override
@@ -131,6 +120,21 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         String rawNumber = holeButton.getText().toString();
         String number = rawNumber.substring(0, rawNumber.length()-1);
         outState.putString(HOLE_NUMBER_EXTRA, number);
+
+        if (mFocusedEditTextIndex != null){
+            ContentValues values = new ContentValues();
+            values.put(EDIT_TEXT_DB_COLUMNS[mFocusedEditTextIndex],
+                  editTexts[mFocusedEditTextIndex].getText().toString().trim());
+            String roundId = SharedPrefUtils.getCurrentRoundId(getActivity());
+            Timber.d("HoleNumber: " + number);
+            ContentResolver resolver = getActivity().getContentResolver();
+            resolver.update(
+                  Contract.Holes.buildDirUri(),
+                  values,
+                  Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
+                  new String[] {roundId, number}
+            );
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -168,15 +172,12 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                     return false;
                 }
             });
-
         }
 
         for (int l = 0; l < CHECKBOX_IDS.length; l++) {
             checkBoxes[l] = (CheckBox) rootView.findViewById(CHECKBOX_IDS[l]);
         }
-
         setCheckBoxAndEditTextListeners(holeNumber);
-
         return rootView;
     }
 
@@ -188,10 +189,8 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         Bundle loaderBundle = new Bundle();
               loaderBundle.putString(HOLE_NUMBER_EXTRA, holeNum);
         sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
-
         super.onResume();
     }
-
 
     @Override
     public void onDestroyView() {
@@ -272,15 +271,12 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
             default:
                 break;
         }
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
-    
-    
 
     private OnClickListener mButtonClickListener = new OnClickListener() {
         public void onClick(View v) {
@@ -386,41 +382,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
 //                    );
 //                }
             });
-        }
-    }
-
-    private class IGetWhyCodersAreSoMadAllTheTime implements TextWatcher{
-        private int k;
-        private String holeNumber;
-        IGetWhyCodersAreSoMadAllTheTime(int editTextIndex, String holeNumber) {
-            this.k = editTextIndex;
-            this.holeNumber = holeNumber;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            ContentValues values = new ContentValues();
-            values.put(EDIT_TEXT_DB_COLUMNS[k], editable.toString().trim());
-            String roundId = SharedPrefUtils.getCurrentRoundId(getActivity());
-            Timber.d("HoleNumber: " + holeNumber);
-            ContentResolver resolver = getActivity().getContentResolver();
-            resolver.update(
-                  Contract.Holes.buildDirUri(),
-                  values,
-                  Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                  new String[] {roundId, holeNumber}
-            );
-            values.clear();
         }
     }
 }
