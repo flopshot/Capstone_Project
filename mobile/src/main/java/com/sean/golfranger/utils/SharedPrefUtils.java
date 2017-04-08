@@ -21,6 +21,7 @@ public class SharedPrefUtils {
     private static final String KEY_LAT = "lat";
     private static final String KEY_LON = "lon";
     private static final String KEY_RESTART_MAP_FROM_ROTATION = "restartMapFromRotation";
+    private static final String CURRENT_ROUNDID_KEY = "SharedPrefUtilsRoundIdCur";
 
     //Stores Current Lat Lon of Device
     public static void setUserLatLon(Context context, float lat, float lon) {
@@ -211,5 +212,25 @@ public class SharedPrefUtils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putStringSet(ESTABLISHED_MARKER_HASHES_KEY, establishedMarkerHashes);
         editor.apply();
+    }
+
+    /**
+     * Method will only be called when use presses the "Let's Play" Button in the Start Round
+     * Activity. This will save the current round indefinitely; until user launches another round
+     * to be played.
+     */
+    public static void setCurrentRoundId(Context context, String roundId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(CURRENT_ROUNDID_KEY, roundId);
+        editor.apply();
+    }
+
+    /**
+     * Getter Method for getting Current RoundId
+     */
+    public static String getCurrentRoundId(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(CURRENT_ROUNDID_KEY, String.valueOf(0));
     }
 }

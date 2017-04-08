@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/gray_400"
+    android:id="@+id/layout_fragment_hole">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".15"
+        android:background="@color/maroon"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/holeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            style="@style/HoleViewHeader"
+            android:text="Hole:"/>
+
+        <Button
+            android:id="@+id/holeValue"
+            android:layout_width="55dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/rounded_textbox"
+            android:gravity="center"
+            android:text="1▼"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <TextView
+            android:id="@+id/distanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            style="@style/HoleViewHeader"
+            android:text="Distance (y):"/>
+
+        <EditText
+            android:id="@+id/distanceValue"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_textbox"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="480"/>
+
+        <TextView
+            android:id="@+id/parLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            style="@style/HoleViewHeader"
+            android:text="Par:"/>
+
+        <EditText
+            android:id="@+id/parValue"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            android:background="@drawable/rounded_textbox"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="4"/>
+
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".85"
+        android:columnCount="7"
+        android:paddingTop="10dp"
+        android:rowCount="8">
+
+        <!--TODO: Change margin bottom to 20dp in landscape mode-->
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:layout_marginBottom="0dp"
+            android:gravity="center"
+            android:text="The Players"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <TextView
+            android:id="@+id/p1Name"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Sean"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <TextView
+            android:id="@+id/p2Name"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Matt"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <TextView
+            android:id="@+id/p3Name"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Matt"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <TextView
+            android:id="@+id/p4Name"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:text="Matt"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+        <TextView
+            android:id="@+id/scoreLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="The Scores"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <EditText
+            android:id="@+id/p1Score"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p2Score"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p3Score"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p4Score"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/puttLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="The Putts"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <EditText
+            android:id="@+id/p1Putts"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p2Putts"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p3Putts"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p4Putts"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/penaltyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="The Penalties"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <EditText
+            android:id="@+id/p1Penalties"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p2Penalties"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p3Penalties"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+        <EditText
+            android:id="@+id/p4Penalties"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:cursorVisible="false"
+            android:imeOptions="actionDone"
+            android:inputType="number"/>
+
+
+        <TextView
+            android:id="@+id/girLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="Green in Reg."
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <CheckBox
+            android:id="@+id/p1Gir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p2Gir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p3Gir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p4Gir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+        <TextView
+            android:id="@+id/firLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="Fwy in Reg."
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <CheckBox
+            android:id="@+id/p1Fir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p2Fir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p3Fir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p4Fir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+        <TextView
+            android:id="@+id/sandLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="Sand"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+        <CheckBox
+            android:id="@+id/p1Sand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p2Sand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p3Sand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+        <CheckBox
+            android:id="@+id/p4Sand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+        <Space
+            android:id="@+id/space1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="3"
+            android:layout_columnWeight="1"/>
+
+        <android.support.v4.widget.Space
+            android:id="@+id/space2"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="3"
+            android:layout_columnWeight="1"/>
+
+
+    </GridLayout>
+
+</LinearLayout>

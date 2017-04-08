@@ -46,8 +46,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Players.TABLE_NAME + " (" +
               Contract.Players._ID + " INTEGER PRIMARY KEY," +
               Contract.Players.FIRST_NAME + " TEXT NOT NULL," +
-              Contract.Players.LAST_NAME + " TEXT NOT NULL," +
-              Contract.Players.HANDICAP + " TEXT);";
+              Contract.Players.LAST_NAME + " TEXT NOT NULL);";
 
         // String to create a table to hold round data
         final String SQL_CREATE_ROUNDS_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -59,25 +58,21 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Rounds.PLAYER1_ID + " INTEGER ," +
               Contract.Rounds.PLAYER1_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER1_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER1_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER2_ID + " INTEGER," +
               Contract.Rounds.PLAYER2_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER2_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER2_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER3_ID + " INTEGER," +
               Contract.Rounds.PLAYER3_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER3_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER3_HANDICAP + " INTEGER," +
               Contract.Rounds.PLAYER4_ID + " INTEGER," +
               Contract.Rounds.PLAYER4_FIRST_NAME + " TEXT," +
               Contract.Rounds.PLAYER4_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER4_HANDICAP + " INTEGER," +
-              Contract.Rounds.DATE + " TEXT NOT NULL, " +
+              Contract.Rounds.DATE + " INTEGER NOT NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
+              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
               ");";
 
         final String SQL_CREATE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -85,8 +80,8 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Holes._ID + " INTEGER PRIMARY KEY," +
               Contract.Holes.ROUND_ID + " INTEGER NOT NULL," +
               Contract.Holes.HOLE_NUMBER + " INTEGER NOT NULL," +
-              Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.HOLE_DISTANCE + " INTEGER," +
+              Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.P1_SCORE + " INTEGER," +
               Contract.Holes.P1_PUTTS + " INTEGER," +
               Contract.Holes.P1_PENALTIES + " INTEGER," +
@@ -115,10 +110,57 @@ class DbHelper extends SQLiteOpenHelper {
               " UNIQUE (" + Contract.Holes.ROUND_ID + "," + Contract.Holes.HOLE_NUMBER + ") ON CONFLICT FAIL" +
               ");";
 
+        //TODO: If there were a hell, it would be me copying and pasting all
+        // the column names in the contract to these hardcoded strings
+        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
+        Contract.RoundCoursesPlayers.TABLE_NAME +
+        " AS SELECT " +
+        "r._id AS _id, " +
+        "CASE WHEN c._id IS NULL THEN r.clubName ELSE c.clubName END AS clubName, " +
+        "CASE WHEN c._id IS NULL THEN r.courseName ELSE c.courseName END AS courseName, " +
+        "CASE WHEN p1._id IS NULL THEN r.playerOneFirstName ELSE p1.firstName END AS p1FirstName, " +
+        "CASE WHEN p1._id IS NULL THEN r.playerOneLastName ELSE p1.lastName END AS p1LastName, " +
+        "CASE WHEN p2._id IS NULL THEN r.playerTwoFirstName ELSE p2.firstName END AS p2FirstName, " +
+        "CASE WHEN p2._id IS NULL THEN r.playerTwoLastName ELSE p2.lastName END AS p2LastName, " +
+        "CASE WHEN p3._id IS NULL THEN r.playerThreeFirstName ELSE p3.firstName END AS p3FirstName, " +
+        "CASE WHEN p3._id IS NULL THEN r.playerThreeLastName ELSE p3.lastName END AS p3LastName, " +
+        "CASE WHEN p4._id IS NULL THEN r.playerFourFirstName ELSE p4.firstName END AS p4FirstName, " +
+        "CASE WHEN p4._id IS NULL THEN r.playerFourLastName ELSE p4.lastName END AS p4LastName " +
+        "FROM rounds AS r " +
+        "LEFT JOIN courses AS c " +
+        "ON r.courseId = c._id " +
+        "LEFT JOIN players AS p1 " +
+        "ON r.playerOneId = p1._id " +
+        "LEFT JOIN players AS p2 " +
+        "ON r.playerTwoId = p2._id " +
+        "LEFT JOIN players AS p3 " +
+        "ON r.playerThreeId = p3._id " +
+        "LEFT JOIN players AS p4 " +
+        "ON r.playerFourId = p4._id;";
+
+        final String SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW ="CREATE VIEW " +
+              Contract.PlayerRoundTotals.TABLE_NAME + " AS " +
+              "SELECT "+
+                "roundId, " +
+                "SUM(p1Score) AS p1Total, "+
+                "SUM(p2Score) AS p2Total, "+
+                "SUM(p3Score) AS p3Total, "+
+                "SUM(p4Score) AS P4Total, "+
+                "COUNT(DISTINCT playerOneFirstName) AS p1Exists, " +
+                "COUNT(DISTINCT playerTwoFirstName) AS p2Exists, " +
+                "COUNT(DISTINCT playerThreeFirstName) AS p3Exists, " +
+                "COUNT(DISTINCT playerFourFirstName) AS p4Exists " +
+
+              "FROM holes "+
+              "LEFT JOIN rounds ON rounds._id = holes.roundId " +
+              "GROUP BY roundId ";
+
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUNDS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLES_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_COURSE_ROUND_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

@@ -49,11 +49,15 @@
             android:name=".sync.ElevationIntentService"
             android:exported="false"/>
 
-        <activity
-            android:name=".RoundActivity"
-            android:exported="true">
+        <activity android:name=".RoundActivity">
         </activity>
         <activity android:name=".CoursesActivity">
+        </activity>
+        <activity android:name=".PlayerActivity">
+        </activity>
+        <activity android:name=".MatchesActivity">
+        </activity>
+        <activity android:name=".StartRoundActivity">
         </activity>
     </application>
 

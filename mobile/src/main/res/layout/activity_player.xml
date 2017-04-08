@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_courses"
+        android:id="@+id/recycler_view_players"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -44,7 +44,7 @@
                 android:layout_gravity="center|start"
                 android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="Courses"/>
+                android:text="Players"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -61,8 +61,8 @@
                 android:drawableStart="@drawable/ic_menu_add"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:clickable="true"
-                android:onClick="addCourse"
-                android:text="Add Course"/>
+                android:onClick="addPlayer"
+                android:text="Add Player"/>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

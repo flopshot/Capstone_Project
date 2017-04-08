@@ -30,6 +30,8 @@ public class Provider extends ContentProvider {
     private static final int ROUND = 102;
     private static final int HOLE = 103;
     private static final int ROUND_HOLE = 104;
+    private static final int ROUND_COURSES_PLAYERS = 105;
+    private static final int PLAYERS_ROUND_TOTALS = 106;
 
 
     // START: implement table JOIN logic on Holes and Rounds tables for Content Provider
@@ -39,26 +41,93 @@ public class Provider extends ContentProvider {
         sHoleAndRoundQueryBuilder = new SQLiteQueryBuilder();
 
         //This is an inner join which looks like
-        //rounds INNER JOIN holes ON rounds._id = holes.roundId
+        //rounds LEFT JOIN holes ON rounds._id = holes.roundId
         sHoleAndRoundQueryBuilder.setTables(
-              Contract.Rounds.TABLE_NAME + " INNER JOIN " +
-                    Contract.Holes.TABLE_NAME +
+              Contract.Holes.TABLE_NAME + " LEFT JOIN " +
+                    Contract.Rounds.TABLE_NAME +
                     " ON " + Contract.Rounds.TABLE_NAME +
                     "." + Contract.Rounds._ID +
                     " = " + Contract.Holes.TABLE_NAME +
                     "." + Contract.Holes.ROUND_ID);
     }
 
-    private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String sortOrder) {
-        return sHoleAndRoundQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+    private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String[] whereArgs, String sortOrder) {
+        return sHoleAndRoundQueryBuilder.query(
+              mOpenHelper.getReadableDatabase(),
               columns,
               whereClause,
-              null,
+              whereArgs,
               null,
               null,
               sortOrder
         );
     }
+    // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
+
+    // START: implement table JOIN logic on PLAYERS,COURSES and ROUNDS tables for Content Provider
+//    private static final SQLiteQueryBuilder sPlayersCoursesAndRoundQueryBuilder;
+//
+//    static{
+//        sPlayersCoursesAndRoundQueryBuilder = new SQLiteQueryBuilder();
+//
+//        //This is an inner join which looks like
+////        FROM rounds AS r
+////        LEFT JOIN courses AS c
+////        ON r.courseId = c._id
+////        LEFT JOIN players AS p1
+////        ON r.playerOneId = p1._id
+////        LEFT JOIN players AS p2
+////        ON r.playerTwoId = p2._id
+////        LEFT JOIN players AS p3
+////        ON r.playerThreeId = p3._id
+////        LEFT JOIN players AS p4
+////        ON r.playerFourId = p4._id
+//        sPlayersCoursesAndRoundQueryBuilder.setTables(
+//              Contract.Rounds.TABLE_NAME + " AS r" +
+//                    " LEFT JOIN " +
+//                    Contract.Courses.TABLE_NAME + " AS c" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.COURSE_ID +
+//                    " = " + "c" +
+//                    "." + Contract.Courses._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p1" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER1_ID +
+//                    " = " + "p1" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p2" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER2_ID +
+//                    " = " + "p2" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p3" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER3_ID +
+//                    " = " + "p3" +
+//                    "." + Contract.Players._ID +
+//                    " LEFT JOIN " +
+//                    Contract.Players.TABLE_NAME + " AS p4" +
+//                    " ON " + "r" +
+//                    "." + Contract.Rounds.PLAYER4_ID +
+//                    " = " + "p4" +
+//                    "." + Contract.Players._ID
+//        );
+//    }
+//
+//    private Cursor getRoundWithPlayersCoursesCursor(String[] columns, String whereClause, String sortOrder) {
+//        return sPlayersCoursesAndRoundQueryBuilder.query(
+//              mOpenHelper.getReadableDatabase(),
+//              columns,
+//              whereClause,
+//              null,
+//              null,
+//              null,
+//              sortOrder
+//        );
+//    }
     // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
 
     private static UriMatcher buildUriMatcher() {
@@ -76,6 +145,10 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority,
               Contract.Rounds.TABLE_NAME + "/" + Contract.Holes.TABLE_NAME,
               ROUND_HOLE);
+        matcher.addURI(authority,
+              Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/" + Contract.Players.TABLE_NAME,
+              ROUND_COURSES_PLAYERS);
+        matcher.addURI(authority, Contract.PlayerRoundTotals.TABLE_NAME,PLAYERS_ROUND_TOTALS);
         return matcher;
     }
 
@@ -116,7 +189,19 @@ public class Provider extends ContentProvider {
                       whereClause, whereArgs, null, null, sortOrder
                 );
             case ROUND_HOLE:
-                return getRoundWithHoleCursor(columns, whereClause, sortOrder);
+                return getRoundWithHoleCursor(columns, whereClause, whereArgs, sortOrder);
+
+            case ROUND_COURSES_PLAYERS:
+                return mDb.query(
+                      Contract.RoundCoursesPlayers.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
+                //return getRoundWithPlayersCoursesCursor(columns, whereClause, sortOrder);
+            case PLAYERS_ROUND_TOTALS:
+                return mDb.query(
+                      Contract.PlayerRoundTotals.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -170,7 +255,7 @@ public class Provider extends ContentProvider {
             case ROUND: {
                 mDb.beginTransaction();
                 long _id = mDb.insert(Contract.Rounds.TABLE_NAME, null, contentValues);
-                if ( _id == 0) {
+                if ( _id < 1) {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
                 }
                 int holesCountInserted = bulkInsert18HolesForNewRound(_id);
@@ -436,7 +521,6 @@ public class Provider extends ContentProvider {
                       String.valueOf(updatedPlayersCursor.getLong(0)), //_id
                       updatedPlayersCursor.getString(1), //First Name
                       updatedPlayersCursor.getString(2), //Last Name
-                      String.valueOf(updatedPlayersCursor.getLong(4)) //Handicap
                       // TODO: Reference hardcoded column indices from constants in Contract
                 });
             } while (updatedPlayersCursor.moveToNext());
@@ -454,7 +538,6 @@ public class Provider extends ContentProvider {
         for (String[] record: records) {
             values.put(Contract.Rounds.PLAYER1_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER1_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER1_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -466,7 +549,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER2_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER2_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER2_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -478,7 +560,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER3_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER3_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER3_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
@@ -490,7 +571,6 @@ public class Provider extends ContentProvider {
 
             values.put(Contract.Rounds.PLAYER4_FIRST_NAME, record[1]);
             values.put(Contract.Rounds.PLAYER4_LAST_NAME, record[2]);
-            values.put(Contract.Rounds.PLAYER4_HANDICAP, record[3]);
 
             mDb.update(
                   Contract.Rounds.TABLE_NAME,
