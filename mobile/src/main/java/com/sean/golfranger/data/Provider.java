@@ -31,6 +31,7 @@ public class Provider extends ContentProvider {
     private static final int HOLE = 103;
     private static final int ROUND_HOLE = 104;
     private static final int ROUND_COURSES_PLAYERS = 105;
+    private static final int PLAYERS_ROUND_TOTALS = 106;
 
 
     // START: implement table JOIN logic on Holes and Rounds tables for Content Provider
@@ -42,20 +43,20 @@ public class Provider extends ContentProvider {
         //This is an inner join which looks like
         //rounds LEFT JOIN holes ON rounds._id = holes.roundId
         sHoleAndRoundQueryBuilder.setTables(
-              Contract.Rounds.TABLE_NAME + " LEFT JOIN " +
-                    Contract.Holes.TABLE_NAME +
+              Contract.Holes.TABLE_NAME + " LEFT JOIN " +
+                    Contract.Rounds.TABLE_NAME +
                     " ON " + Contract.Rounds.TABLE_NAME +
                     "." + Contract.Rounds._ID +
                     " = " + Contract.Holes.TABLE_NAME +
                     "." + Contract.Holes.ROUND_ID);
     }
 
-    private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String sortOrder) {
+    private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String[] whereArgs, String sortOrder) {
         return sHoleAndRoundQueryBuilder.query(
               mOpenHelper.getReadableDatabase(),
               columns,
               whereClause,
-              null,
+              whereArgs,
               null,
               null,
               sortOrder
@@ -147,6 +148,7 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority,
               Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/" + Contract.Players.TABLE_NAME,
               ROUND_COURSES_PLAYERS);
+        matcher.addURI(authority, Contract.PlayerRoundTotals.TABLE_NAME,PLAYERS_ROUND_TOTALS);
         return matcher;
     }
 
@@ -187,14 +189,19 @@ public class Provider extends ContentProvider {
                       whereClause, whereArgs, null, null, sortOrder
                 );
             case ROUND_HOLE:
-                return getRoundWithHoleCursor(columns, whereClause, sortOrder);
+                return getRoundWithHoleCursor(columns, whereClause, whereArgs, sortOrder);
 
             case ROUND_COURSES_PLAYERS:
                 return mDb.query(
-                      "roundPlayerCourse", columns,
+                      Contract.RoundCoursesPlayers.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
                 //return getRoundWithPlayersCoursesCursor(columns, whereClause, sortOrder);
+            case PLAYERS_ROUND_TOTALS:
+                return mDb.query(
+                      Contract.PlayerRoundTotals.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -248,7 +255,7 @@ public class Provider extends ContentProvider {
             case ROUND: {
                 mDb.beginTransaction();
                 long _id = mDb.insert(Contract.Rounds.TABLE_NAME, null, contentValues);
-                if ( _id == 0) {
+                if ( _id < 1) {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
                 }
                 int holesCountInserted = bulkInsert18HolesForNewRound(_id);

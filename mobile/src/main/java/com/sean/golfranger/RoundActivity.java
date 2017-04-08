@@ -40,28 +40,17 @@ public class RoundActivity extends FragmentActivity
         setContentView(R.layout.activity_round);
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
-
-        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mHoleFragment = getFragmentManager().findFragmentById(R.id.holeFrag);
-        mScorecardFragment = getFragmentManager().findFragmentById(R.id.scorecardFrag);
         mMarkerStats = findViewById(R.id.markerStats);
-
+        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mMapFragment.setRetainInstance(true);
+        mHoleFragment = getFragmentManager().findFragmentById(R.id.holeFrag);
+        mHoleFragment.setRetainInstance(true);
+        mScorecardFragment = getFragmentManager().findFragmentById(R.id.scorecardFrag);
+        mScorecardFragment.setRetainInstance(true);
         if (savedInstanceState == null) {
             setFragmentViewState(SCORECARD_STATE);
         }
         mMapFragment.getMapAsync(this);
-    }
-
-    public void getScorecardView(View view) {
-        setFragmentViewState(SCORECARD_STATE);
-    }
-
-    public void getHoleView(View view) {
-        setFragmentViewState(HOLE_STATE);
-    }
-
-    public void getMapView(View view) {
-        setFragmentViewState(MAP_STATE);
     }
 
     @Override
@@ -99,14 +88,26 @@ public class RoundActivity extends FragmentActivity
         }
     }
 
+    public void getScorecardView(View view) {
+        setFragmentViewState(SCORECARD_STATE);
+    }
+
+    public void getHoleView(View view) {
+        setFragmentViewState(HOLE_STATE);
+    }
+
+    public void getMapView(View view) {
+        setFragmentViewState(MAP_STATE);
+    }
+
     private void setFragmentViewState(int fragViewState) {
         FragmentManager fm = getFragmentManager();
         switch (fragViewState) {
             case SCORECARD_STATE:
                 fm.beginTransaction()
                       //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                      .hide(mHoleFragment)
                       .show(mScorecardFragment)
+                      .hide(mHoleFragment)
                       .hide(mMapFragment)
                       .commit();
                 SharedPrefUtils.setIsOnMapScreen(getApplicationContext(), false);
@@ -125,9 +126,9 @@ public class RoundActivity extends FragmentActivity
             case MAP_STATE:
                 fm.beginTransaction()
                       //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                      .show(mMapFragment)
                       .hide(mHoleFragment)
                       .hide(mScorecardFragment)
-                      .show(mMapFragment)
                       .commit();
                 SharedPrefUtils.setIsOnMapScreen(getApplicationContext(), false);
                 mMarkerStats.setVisibility(View.VISIBLE);

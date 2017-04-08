@@ -80,8 +80,8 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Holes._ID + " INTEGER PRIMARY KEY," +
               Contract.Holes.ROUND_ID + " INTEGER NOT NULL," +
               Contract.Holes.HOLE_NUMBER + " INTEGER NOT NULL," +
-              Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.HOLE_DISTANCE + " INTEGER," +
+              Contract.Holes.HOLE_PAR + " INTEGER," +
               Contract.Holes.P1_SCORE + " INTEGER," +
               Contract.Holes.P1_PUTTS + " INTEGER," +
               Contract.Holes.P1_PENALTIES + " INTEGER," +
@@ -112,8 +112,9 @@ class DbHelper extends SQLiteOpenHelper {
 
         //TODO: If there were a hell, it would be me copying and pasting all
         // the column names in the contract to these hardcoded strings
-        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW roundPlayerCourse AS " +
-        "SELECT " +
+        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
+        Contract.RoundCoursesPlayers.TABLE_NAME +
+        " AS SELECT " +
         "r._id AS _id, " +
         "CASE WHEN c._id IS NULL THEN r.clubName ELSE c.clubName END AS clubName, " +
         "CASE WHEN c._id IS NULL THEN r.courseName ELSE c.courseName END AS courseName, " +
@@ -137,11 +138,29 @@ class DbHelper extends SQLiteOpenHelper {
         "LEFT JOIN players AS p4 " +
         "ON r.playerFourId = p4._id;";
 
+        final String SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW ="CREATE VIEW " +
+              Contract.PlayerRoundTotals.TABLE_NAME + " AS " +
+              "SELECT "+
+                "roundId, " +
+                "SUM(p1Score) AS p1Total, "+
+                "SUM(p2Score) AS p2Total, "+
+                "SUM(p3Score) AS p3Total, "+
+                "SUM(p4Score) AS P4Total, "+
+                "COUNT(DISTINCT playerOneFirstName) AS p1Exists, " +
+                "COUNT(DISTINCT playerTwoFirstName) AS p2Exists, " +
+                "COUNT(DISTINCT playerThreeFirstName) AS p3Exists, " +
+                "COUNT(DISTINCT playerFourFirstName) AS p4Exists " +
+
+              "FROM holes "+
+              "LEFT JOIN rounds ON rounds._id = holes.roundId " +
+              "GROUP BY roundId ";
+
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUNDS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_COURSE_ROUND_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

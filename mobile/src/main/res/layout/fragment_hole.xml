@@ -10,7 +10,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".1"
+        android:layout_weight=".15"
         android:background="@color/maroon"
         android:gravity="center">
         <TextView
@@ -24,13 +24,13 @@
 
         <Button
             android:id="@+id/holeValue"
-            android:layout_width="35dp"
+            android:layout_width="55dp"
             android:layout_height="45dp"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:background="@drawable/rounded_textbox"
             android:gravity="center"
-            android:text="2▼"
+            android:text="1▼"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <TextView
@@ -82,7 +82,7 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".90"
+        android:layout_weight=".85"
         android:columnCount="7"
         android:paddingTop="10dp"
         android:rowCount="8">

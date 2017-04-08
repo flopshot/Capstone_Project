@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
 
@@ -138,7 +139,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         }
         roundId = new String[]{mRoundId};
         return new CursorLoader(getApplicationContext(),
-              Contract.roundCoursesPlayersUri(),
+              Contract.RoundCoursesPlayers.roundCoursesPlayersUri(),
               null,
               roundWhereClause,
               roundId,
@@ -151,42 +152,71 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             String str = cursor.getString(1);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
+            } else {
+                club.setText("Add Course");
             }
             str = cursor.getString(2);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 course.setText(str);
+                course.setVisibility(View.VISIBLE);
+            } else {
+                course.setVisibility(View.INVISIBLE);
             }
             str = cursor.getString(3);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
+                Timber.d("First Name of P1: " + str);
                 p1First.setText(str);
+            } else {
+                p1First.setText("Add Player");
             }
             str = cursor.getString(4);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p1Last.setText(str);
+                p1Last.setVisibility(View.VISIBLE);
+
+            } else {
+                p1Last.setVisibility(View.INVISIBLE);
             }
             str = cursor.getString(5);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2First.setText(str);
+            } else {
+                p2First.setText("Add Player");
             }
             str = cursor.getString(6);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2Last.setText(str);
+                p2Last.setVisibility(View.VISIBLE);
+
+            } else {
+                p2Last.setVisibility(View.INVISIBLE);
             }
             str = cursor.getString(7);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3First.setText(str);
+            } else {
+                p3First.setText("Add Player");
             }
             str = cursor.getString(8);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3Last.setText(str);
+                p3Last.setVisibility(View.VISIBLE);
+
+            } else {
+                p3Last.setVisibility(View.INVISIBLE);
             }
             str = cursor.getString(9);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4First.setText(str);
+            } else {
+                p4First.setText("Add Player");
             }
             str = cursor.getString(10);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4Last.setText(str);
+                p4Last.setVisibility(View.VISIBLE);
+            } else {
+                p4Last.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -209,6 +239,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
+            Timber.d("Observed Change in Rounds Table");
             sLoaderManager.restartLoader(0, null, sLoaderCallback);
         }
     }
@@ -239,8 +270,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(StartRoundActivity.this);
         alertDialog.setTitle("Change");
         String buttonMsg;
-
-        if (text.equals("Add Player") | text.equals("Add Course") | text.equals("")) {
+        Timber.d(text);
+        if (text.equals("Add Player") | text.equals("Add Course") | text.isEmpty()) {
             buttonMsg = "ADD";
         } else {
             buttonMsg = "EDIT";
@@ -263,37 +294,34 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         alertDialog.setPositiveButton("DELETE",
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
+                      Timber.d(String.valueOf(requestCode));
                       ContentValues values = new ContentValues();
                       switch (requestCode) {
                           case REQUEST_CODE_COURSE:
                               values.putNull(Contract.Rounds.COURSE_ID);
                               values.putNull(Contract.Rounds.COURSE_NAME);
                               values.putNull(Contract.Rounds.CLUB_NAME);
-                              values.clear();
                               break;
                           case REQUEST_CODE_P1:
+                              Timber.d("Putting Null Values in Player 1 Round Info");
                               values.putNull(Contract.Rounds.PLAYER1_ID);
                               values.putNull(Contract.Rounds.PLAYER1_FIRST_NAME);
                               values.putNull(Contract.Rounds.PLAYER1_LAST_NAME);
-                              values.clear();
                               break;
                           case REQUEST_CODE_P2:
                               values.putNull(Contract.Rounds.PLAYER2_ID);
                               values.putNull(Contract.Rounds.PLAYER2_FIRST_NAME);
                               values.putNull(Contract.Rounds.PLAYER2_LAST_NAME);
-                              values.clear();
                               break;
                           case REQUEST_CODE_P3:
                               values.putNull(Contract.Rounds.PLAYER3_ID);
                               values.putNull(Contract.Rounds.PLAYER3_FIRST_NAME);
                               values.putNull(Contract.Rounds.PLAYER3_LAST_NAME);
-                              values.clear();
                               break;
                           case REQUEST_CODE_P4:
                               values.putNull(Contract.Rounds.PLAYER4_ID);
                               values.putNull(Contract.Rounds.PLAYER4_FIRST_NAME);
                               values.putNull(Contract.Rounds.PLAYER4_LAST_NAME);
-                              values.clear();
                               break;
                       }
 
@@ -302,7 +330,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                             Contract.Rounds.buildDirUri(),
                             values,
                             Contract.Rounds._ID + "=?",
-                            new String[] {mRoundId});
+                            new String[]{mRoundId});
+                      values.clear();
                       dialog.cancel();
 
                   }});
@@ -421,6 +450,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             Toast.makeText(this, "You Must Add A First Player Before We Begin", Toast.LENGTH_LONG).show();
             return;
         }
+
+        SharedPrefUtils.setCurrentRoundId(getApplicationContext(), mRoundId);
 
         Intent intent = new Intent(getApplicationContext(), RoundActivity.class);
         intent.putExtra(EXTRA_ROUND_ID, mRoundId);

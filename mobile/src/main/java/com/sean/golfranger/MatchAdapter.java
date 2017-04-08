@@ -30,7 +30,9 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
 
     @Override
     public MatchAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.match_list_item, null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.match_list_item, null, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
         MatchAdapterViewHolder viewHolder = new MatchAdapterViewHolder(view);
         return viewHolder;
     }

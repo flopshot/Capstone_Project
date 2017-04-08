@@ -22,7 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="Sean"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:background="@color/gray_900"
             android:textColor="@color/lt_gray"/>
@@ -33,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:background="@color/gray_900"
             android:textColor="@color/lt_gray"/>
@@ -44,7 +42,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:background="@color/gray_900"
             android:textColor="@color/lt_gray"/>
@@ -55,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:background="@color/gray_900"
             android:textColor="@color/lt_gray"/>
@@ -74,7 +70,7 @@
             android:id="@+id/holeLabel"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="Hole"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
@@ -85,7 +81,7 @@
             android:id="@+id/parLabel"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="Par"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
@@ -96,7 +92,7 @@
             android:id="@+id/p1Total"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="100"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
@@ -105,7 +101,7 @@
             android:id="@+id/p2Total"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="90"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
@@ -114,7 +110,7 @@
             android:id="@+id/p3Total"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="90"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
@@ -123,13 +119,14 @@
             android:id="@+id/p4Total"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="2dp"
             android:gravity="center"
             android:text="90"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_holes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginEnd="15dp"
