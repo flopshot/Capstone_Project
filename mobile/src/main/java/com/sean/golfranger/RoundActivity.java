@@ -18,6 +18,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,6 +43,7 @@ import com.sean.golfranger.utils.SharedPrefUtils;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -61,23 +64,31 @@ public class RoundActivity extends FragmentActivity
     private static final String ACTION_WIND_UPDATED = "com.sean.golfranger.ACTION_WIND_UPDATED";
     private static final String ACTION_ELEVATION_RETRIEVED = "com.sean.golfranger.ACTION_ELEVATION_RETRIEVED";
     private static final String EXTRA_ELEVATION_HASH = "com.sean.golfranger.EXTRA_ELEVATION_HASH";
+    private static final String MAP_FIRST_CENTERED_KEY = "mapFirstCenteredState";
+    private static final String MAP_MARKER_INFO_KEY = "maMarkerInfoKey";
     public static final int MAP_STATE = 2;
     public static final int HOLE_STATE = 1;
     public static final int SCORECARD_STATE = 0;
+    public static final String CURRENT_MARKER_KEY = "CURRENTmARKERhaSHkEY";
 
-//    Button mScorecardViewButton, mHoleViewButton, mMapViewButton;
+    //    Button mScorecardViewButton, mHoleViewButton, mMapViewButton;
     Boolean mLocationEnabled;
     FrameLayout mFragmentContainer;
     View mMarkerStats;
     MapFragment mMapFragment;
     Fragment mScorecardFragment, mHoleFragment;
+    TextView yardageView, windView, elevationView;
+    String elevationPrefix, yardagePrefix, windPrefix, elevationDefault, yardageDefault, windDefault;
+    ImageView windArrow;
 
-    //Location member vaiables
+    //Location member variables
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
     GoogleMap gMap;
     Boolean mapReady;
-    HashMap<String, GolfMarker> golfMarkersMap = new HashMap<>();
+    HashMap<String, GolfMarker> golfMarkersInfo = new HashMap<>();
+    Boolean mapFirstCentered = false;
+    String currentMarkerHash;
 
     WindReceiver windReceiver = new WindReceiver();
     ElevationReceiver elevationReceiver = new ElevationReceiver();
@@ -86,6 +97,16 @@ public class RoundActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_round);
+        elevationView = (TextView) findViewById(R.id.elevationView);
+        yardageView = (TextView) findViewById(R.id.yardageView);
+        windView = (TextView) findViewById(R.id.windView);
+        yardagePrefix = getString(R.string.yardage_prefix);
+        windPrefix = getString(R.string.wind_prefix);
+        elevationPrefix = getString(R.string.elevation_prefix);
+        yardageDefault = getString(R.string.yardage_default);
+        windDefault = getString(R.string.wind_default);
+        elevationDefault = getString(R.string.elevation_default);
+        windArrow = (ImageView)findViewById(R.id.windArrow);
 
         //Check Location Status
         LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -120,39 +141,46 @@ public class RoundActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapReady = true;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.setMinZoomPreference(16.3f);
         gMap = googleMap;
+
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 String hash = new BigInteger(35, new SecureRandom()).toString(32);
-                Marker golferMarker = gMap.addMarker(new MarkerOptions()
+                Marker distanceMarker = gMap.addMarker(new MarkerOptions()
                       .position(latLng));
-                golferMarker.setTag(hash);
+                distanceMarker.setTag(hash);
+
                 Double[] markerLatLng = new Double[] {latLng.latitude, latLng.longitude};
-                golfMarkersMap.put(hash, new GolfMarker(markerLatLng));
+                golfMarkersInfo.put(hash, new GolfMarker(markerLatLng));
 
                 SharedPrefUtils.setPendingMarkerLatLon(getApplicationContext(), hash, markerLatLng);
                 SharedPrefUtils.addPendingMarkerHash(getApplicationContext(), hash);
+
+                currentMarkerHash = hash;
+                setMarkerInfoView();
             }
         });
 
         gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+
+                currentMarkerHash = marker.getTag().toString();
+                setMarkerInfoView();
                 return false;
             }
         });
 
+        //Remove All Markers and References to GolfMarker objects
         gMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                Set<String> hashes = SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext());
-                for (String hash : hashes) {
-                    SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
-                    Timber.d("Marker " + hash + "Removed");
-                }
+                clearEstablishedMarkerHashes();
                 gMap.clear();
+                golfMarkersInfo = new HashMap<>();
+                currentMarkerHash = null;
             }
         });
     }
@@ -168,6 +196,10 @@ public class RoundActivity extends FragmentActivity
         } else {
             outState.putInt(FRAG_VISIBILITY_STATE, SCORECARD_STATE);
         }
+
+        outState.putString(CURRENT_MARKER_KEY, currentMarkerHash);
+        outState.putBoolean(MAP_FIRST_CENTERED_KEY, mapFirstCentered);
+        outState.putSerializable(MAP_MARKER_INFO_KEY, golfMarkersInfo);
     }
 
     @Override
@@ -176,6 +208,9 @@ public class RoundActivity extends FragmentActivity
 
         if (savedInstanceState != null) {
             setFragmentViewState(savedInstanceState.getInt(FRAG_VISIBILITY_STATE));
+            mapFirstCentered = savedInstanceState.getBoolean(MAP_FIRST_CENTERED_KEY);
+            golfMarkersInfo = (HashMap<String, GolfMarker>) savedInstanceState.getSerializable(MAP_MARKER_INFO_KEY);
+            currentMarkerHash = savedInstanceState.getString(CURRENT_MARKER_KEY);
         }
     }
 
@@ -211,6 +246,14 @@ public class RoundActivity extends FragmentActivity
         unregisterReceiver(elevationReceiver);
         unregisterReceiver(windReceiver);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (isFinishing()) {
+            clearEstablishedMarkerHashes();
+        }
+        super.onDestroy();
     }
 
     public void getScorecardView(View view) {
@@ -280,6 +323,7 @@ public class RoundActivity extends FragmentActivity
             LocationServices
                   .FusedLocationApi
                   .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            gMap.setMyLocationEnabled(true);
         }
     }
 
@@ -302,14 +346,34 @@ public class RoundActivity extends FragmentActivity
 
         SharedPrefUtils.setUserLatLon(getApplicationContext(), lat, lng);
 
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-              .target(new LatLng(lat, lng))      // Sets the center of the map to location user
-              .zoom(16.9f)
-              .build();
+        //On map first created, center over user
+        if (!mapFirstCentered) {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                  .target(new LatLng(lat, lng))      // Sets the center of the map to location user
+                  .build();
 
-        if (mapReady) {
-            gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            if (mapReady) {
+                gMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+            mapFirstCentered = true;
         }
+
+        //Update all established markers
+        Set<String> establishedMarkers
+              = SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext());
+
+        for (String hash : establishedMarkers) {
+            //Set Marker Distance from current user location
+            double[] markerLatLng = golfMarkersInfo.get(hash).getLatLon();
+            golfMarkersInfo.get(hash).setDistance(
+                  distance(lat, lng, markerLatLng[0], markerLatLng[1]));
+            //Set Marker Elevation Delta from current user elevation
+            Double markerElevation = golfMarkersInfo.get(hash).getElevation();
+            float userElevation = SharedPrefUtils.getUserElevation(getApplicationContext());
+            golfMarkersInfo.get(hash).setElevationDelta(markerElevation - userElevation);
+        }
+        //Update Marker Info View with fresh data
+        setMarkerInfoView();
     }
 
     private class WindReceiver extends BroadcastReceiver {
@@ -327,17 +391,94 @@ public class RoundActivity extends FragmentActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             String[] elevationHash = intent.getStringArrayExtra(EXTRA_ELEVATION_HASH);
-
+            Timber.d("Elevation Receiver - Hash: " +elevationHash[0] + " Elevation: "+ elevationHash[1]);
             SharedPrefUtils.removePendingMarkerHash(context, elevationHash[0]);
             SharedPrefUtils.removePendingMarkerLatLon(context, elevationHash[0]);
 
-            SharedPrefUtils.addEstablishedMarkerHash(context, elevationHash[0]);
-
-            Timber.d("Elevation Receiver - Hash: " +elevationHash[0] + " Elevation: "+ elevationHash[1]);
-
-            //TODO: when we set elevation, check if marker is still there
+            //Check if marker has not been cleared from map
+            if (golfMarkersInfo != null) {
+                SharedPrefUtils.addEstablishedMarkerHash(context, elevationHash[0]);
+                golfMarkersInfo.get(elevationHash[0]).setElevation(Double.valueOf(elevationHash[1]));
+            }
         }
     }
 
+    /**
+     * Distance Formula used to get level surface distance between two coordinates in yards
+     */
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Radius of the earth
 
+        Double latDistance = Math.toRadians(lat2 - lat1);
+        Double lonDistance = Math.toRadians(lon2 - lon1);
+        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+              + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+              * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c * 1000 * 1.09361; // convert to meters, then yards
+    }
+
+    private String viewFormatter(Double metric) {
+        return String.valueOf(Math.round(metric));
+    }
+
+    /**
+     * This method is called in onLocationChanged to update marker info view with new user data
+     * Will update the currently selected marker with info
+     */
+    public void setMarkerInfoView() {
+        String yardageViewString, elevationViewString, windViewString;
+        if (currentMarkerHash != null) {
+            GolfMarker currentMarker = golfMarkersInfo.get(currentMarkerHash);
+            Double curMarkerDistance = currentMarker.getDistance();
+            Double curMarkerElevationDelta = currentMarker.getElevationDelta();
+            if (curMarkerDistance != null) {
+                yardageViewString = yardagePrefix + " " + viewFormatter(curMarkerDistance);
+                yardageView.setText(yardageViewString);
+            } else {
+                yardageViewString = yardagePrefix + yardageDefault;
+                yardageView.setText(yardageViewString);
+            }
+            if (curMarkerElevationDelta != null) {
+                elevationViewString = elevationPrefix + " " + viewFormatter(curMarkerElevationDelta);
+                elevationView.setText(elevationViewString);
+                if (curMarkerElevationDelta <= -1) {
+                    elevationView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_float, 0);
+                } else if (curMarkerElevationDelta >= 1) {
+                    elevationView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_up_float, 0);
+                }
+            } else {
+                elevationViewString = elevationPrefix + elevationDefault;
+                elevationView.setText(elevationViewString);
+            }
+        } else {
+            elevationView.setText(elevationPrefix);
+            elevationView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            yardageView.setText(yardagePrefix);
+        }
+        String curWindSpeed = SharedPrefUtils.getCurrentWindSpeed(getApplicationContext());
+        Float curWindDir = SharedPrefUtils.getCurrentWindDirection(getApplicationContext());
+        if (curWindSpeed != null) {
+            windViewString = windPrefix + " " + viewFormatter(Double.valueOf(curWindSpeed));
+            windView.setText(windViewString);
+            if (curWindDir >= 0) {
+                windArrow.setRotation(curWindDir + 90f);
+                windArrow.setVisibility(View.VISIBLE);
+            } else {
+                windArrow.setVisibility(View.INVISIBLE);
+            }
+        } else {
+            windView.setText(windPrefix);
+            windArrow.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void clearEstablishedMarkerHashes() {
+        Set<String> hashTemp =
+              new HashSet<>(SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext()));
+        for (String hash : hashTemp) {
+            SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
+            Timber.d("Marker " + hash + "Removed");
+        }
+    }
 }

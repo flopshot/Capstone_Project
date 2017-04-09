@@ -37,7 +37,7 @@ public class ApiContract {
         // "?x=<latitude>"
         builder.appendQueryParameter(PARAM[0], String.valueOf(latlon[1]));
         // "?y=<longitude>"
-        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[2 ]));
+        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[0]));
         // "?units=<FT/METERS>"
         builder.appendQueryParameter(PARAM[2], units);
         // "?output=<JSON/XML>"
@@ -62,9 +62,9 @@ public class ApiContract {
         }
 
         // "?x=<latitude>"
-        builder.appendQueryParameter(PARAM[0], String.valueOf(latlon[0]));
+        builder.appendQueryParameter(PARAM[0], String.valueOf(latlon[1]));
         // "?y=<longitude>"
-        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[1]));
+        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[0]));
         // "?units=<FT/METERS>"
         builder.appendQueryParameter(PARAM[2], DEFAULT_UNITS);
         // "?output=<JSON/XML>"
