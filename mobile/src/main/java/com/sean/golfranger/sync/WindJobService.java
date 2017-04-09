@@ -18,31 +18,25 @@ import zh.wang.android.yweathergetter4a.YahooWeatherInfoListener;
 //TODO: Consider Putting user-sync function in map frag, separate from the JobService Logic
 public class WindJobService extends JobService implements YahooWeatherInfoListener {
     JobParameters mJobParams;
-    private static final int CONNECTION_TIMEOUT = 10000;
+    private static final int CONNECTION_TIMEOUT = 5000;
     private static final String ACTION_WIND_UPDATED = "com.sean.golfranger.ACTION_WIND_UPDATED";
-    private static final String EXTRA_WIND_SPEED = "WindJobService.EXTRA_WIND_SPEED";
-    private static final String EXTRA_WIND_DIRECTION = "WindJobService.EXTRA_WIND_SPEED";
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Timber.d("Starting Wind Sync Job");
         mJobParams = jobParameters;
 
-        boolean isOnMapScreen = SharedPrefUtils.isOnMapScreen(getApplicationContext());
-        if (isOnMapScreen) {
-            Timber.d("Map Screen is in Forefront, Starting Weather Api Call");
-            Double[] latLon = SharedPrefUtils.getUserLatLonDouble(getApplicationContext());
+        Double[] latLon = SharedPrefUtils.getUserLatLonDouble(getApplicationContext());
 
-            if (latLon[0] == 0.) {
-                Timber.d("User had bad Coordinates, ending Wind Job");
-            } else {
-                YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
-                yahooWeather.setNeedDownloadIcons(false);
-                yahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
-                yahooWeather.queryYahooWeatherByLatLon(getApplicationContext(), latLon[0], latLon[1], this);
-            }
+        if (latLon[0] == 0.) {
+            Timber.d("User had bad Coordinates, ending Wind Job");
+        } else {
+            YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
+            yahooWeather.setNeedDownloadIcons(false);
+            yahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
+            yahooWeather.queryYahooWeatherByLatLon(getApplicationContext(), latLon[0], latLon[1], this);
         }
-        Timber.d("Wind Sync Job Finished OK");
+        Timber.d("Wind Sync Job Finished OK: ");
         return true;
     }
 
@@ -54,21 +48,22 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
 
     @Override
     public void gotWeatherInfo(final WeatherInfo weatherInfo, YahooWeather.ErrorType errorType) {
-        if (weatherInfo != null && errorType != null) {
-            weatherInfo.getWindDirection();
-            weatherInfo.getWindSpeed();
+        if (weatherInfo != null) {
+            Float dir = Float.valueOf(weatherInfo.getWindDirection());
+            String speed = weatherInfo.getWindSpeed();
+            Timber.d("Wind Dir: " + String.valueOf(dir));
+            Timber.d("Wind Speed: " + speed);
+            //Save Results to Shared Prefs
+            SharedPrefUtils.setCurrentWindSpeed(getApplicationContext(), speed);
+            SharedPrefUtils.setCurrentWindDirection(getApplicationContext(), dir);
 
-            //Broadcast Results to Map Fragment
-            Intent windToMapBroadcast = new Intent(ACTION_WIND_UPDATED);
-            windToMapBroadcast.putExtra(EXTRA_WIND_SPEED, weatherInfo.getWindSpeed());
-            windToMapBroadcast.putExtra(EXTRA_WIND_DIRECTION, weatherInfo.getWindDirection());
-            sendBroadcast(windToMapBroadcast);
-            Timber.d("Wind Broadcast Sent to Map");
+            Timber.d("Wind Saved to Shared Prefs");
             jobFinished(mJobParams, false);
-
         } else {
-            Timber.w("Weather Info was NULL, no broadcast performed");
+            Timber.w("Weather Info was NULL, Saved to Shared Prefs");
             jobFinished(mJobParams, false);
         }
+        // Update map of wind response
+        sendBroadcast(new Intent(ACTION_WIND_UPDATED));
     }
 }

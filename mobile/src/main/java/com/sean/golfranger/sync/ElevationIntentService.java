@@ -19,6 +19,5 @@ public class ElevationIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         Timber.d("Elevation IntentService Started");
         ElevationJobInfo.getElevation(getApplicationContext());
-        Timber.d("Elevation IntentService Finished");
     }
 }

@@ -9,13 +9,13 @@ import timber.log.Timber;
 /**
  * Holds the Job schedule logic and execution logic to get the elevation data through USGS API
  */
-public class ElevationJobService extends JobService {
-
+public class ElevationJobService extends JobService{
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
         Timber.d("Elevation Job Started");
-        Intent nowIntent = new Intent(getApplicationContext(), ElevationIntentService.class);
-        getApplicationContext().startService(nowIntent);
+        Intent intent = new Intent(getApplicationContext(), ElevationIntentService.class);
+        getApplicationContext().startService(intent);
+        jobFinished(jobParameters, false);
         Timber.d("Elevation Job Ended OK");
         return true;
     }

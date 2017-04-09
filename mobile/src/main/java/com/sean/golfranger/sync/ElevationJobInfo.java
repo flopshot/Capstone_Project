@@ -26,19 +26,14 @@ import timber.log.Timber;
  * every X minutes, depending on the job build schedule
  */
 
-// TODO: call cancelAll() on process destroyed
-// jobScheduler = (JobScheduler)this.getSystemService(Context.JOB_SCHEDULER_SERVICE );
-// jobScheduler.cancelAll();
-class ElevationJobInfo {
+public class ElevationJobInfo {
     //Job Scheduling constants. Get elevation data from api every
-    private static final int PERIOD = 6000; //Every 6sec
+    private static final int PERIOD = 5000; //Every 6sec
     private static final int INITIAL_BACKOFF = 1000;
     private static final int PERIODIC_ID = 1;
-    private static final int MIN_LATENCY = 500;
-    private static final int MAX_WAIT = 900;
-    private static final int CONNECTION_TIMEOUT = 10000;
 
     private static final String ACTION_ELEVATION_RETRIEVED = "com.sean.golfranger.ACTION_ELEVATION_RETRIEVED";
+    private static final String EXTRA_ELEVATION_HASH = "com.sean.golfranger.EXTRA_ELEVATION_HASH";
 
     static void getElevation(Context context) {
 
@@ -51,13 +46,14 @@ class ElevationJobInfo {
         int establishedHashesCount = SharedPrefUtils.getEstablishedMarkerHashes(context).size();
         Set<String> pendingHashes = SharedPrefUtils.getPendingMarkerHashes(context);
 
+        Timber.d("Established Hash Size: " + String.valueOf(establishedHashesCount) + " Pending Hash Size: " + String.valueOf(pendingHashes.size()));
         // If there are no pending and no established marker hashes, then end task
         if(establishedHashesCount == 0 & pendingHashes.size() == 0) {
             Timber.d("no pending and no established marker hashes, end getElevation()");
             return;
         }
         //Get User LatLon from Shared Prefs to make Elevation API call and save elevation in SP
-        Float[] userLatLon = SharedPrefUtils.getUserLatLonFloat(context);
+        Double[] userLatLon = SharedPrefUtils.getUserLatLonDouble(context);
         String userRequestQuery = ApiContract.buildRequestUrl(userLatLon);
         String jsonUserElevationData = apiCallOverHTTP(userRequestQuery);
         String userElevationString = ApiJsonParser.getElevation(jsonUserElevationData);
@@ -78,16 +74,19 @@ class ElevationJobInfo {
             //Iterate over marker hashes, pull latlon data from shared prefs for each marker hash,
             //make api call for marker elevation, send broadcast to map fragment on successful
             //api call. It is Map Fragment's job to update marker hash's status in appropriate SP
-            Float[] pendingMarkerLatLon = SharedPrefUtils.getPendingMarkerLatLon(context, hash);
+            Double[] pendingMarkerLatLon = SharedPrefUtils.getPendingMarkerLatLon(context, hash);
             String markerRequestQuery = ApiContract.buildRequestUrl(pendingMarkerLatLon);
+            Timber.d("Elevation URL: "+markerRequestQuery);
             String jsonMarkerElevationData = apiCallOverHTTP(markerRequestQuery);
             String markerElevationString = ApiJsonParser.getElevation(jsonMarkerElevationData);
             if (markerElevationString != null) {
                 //Broadcast Results to Map Fragment
                 Intent elevationToMapBroadcast = new Intent(ACTION_ELEVATION_RETRIEVED);
-                elevationToMapBroadcast.putExtra(hash, markerElevationString);
+                elevationToMapBroadcast
+                      .putExtra(EXTRA_ELEVATION_HASH, new String[]{hash,markerElevationString});
                 context.sendBroadcast(elevationToMapBroadcast);
                 Timber.d("Sent " + hash + " Elevation of " + markerElevationString + " to Map");
+
             } else {
                 Timber.d("Elevation String was null for hash " + hash);
             }
@@ -99,15 +98,14 @@ class ElevationJobInfo {
         schedulePeriodic(context);
     }
 
-    private static void schedulePeriodic(Context context) {
+    private static synchronized void schedulePeriodic(Context context) {
+        Timber.d("Scheduling Elevation Task");
         JobInfo.Builder builder = new JobInfo
               .Builder(PERIODIC_ID, new ComponentName(context, ElevationJobService.class));
 
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
               .setPeriodic(PERIOD)
-              .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL)
-              .setMinimumLatency(MIN_LATENCY)
-              .setOverrideDeadline(MAX_WAIT);
+              .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
 
         JobScheduler scheduler = (JobScheduler) context
               .getSystemService(Context.JOB_SCHEDULER_SERVICE);
@@ -127,8 +125,8 @@ class ElevationJobInfo {
             // Create the request to Server, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
-            urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
-            urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
+//            urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
+//            urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
             urlConnection.connect();
 
             // Read the input stream into a String

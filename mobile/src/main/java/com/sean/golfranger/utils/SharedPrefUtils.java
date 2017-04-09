@@ -22,6 +22,8 @@ public class SharedPrefUtils {
     private static final String KEY_LON = "lon";
     private static final String KEY_RESTART_MAP_FROM_ROTATION = "restartMapFromRotation";
     private static final String CURRENT_ROUNDID_KEY = "SharedPrefUtilsRoundIdCur";
+    private static final String KEY_WIND_SPEED = "WindJobService.EXTRA_WIND_SPEED";
+    private static final String KEY_WIND_DIRECTION = "WindJobService.EXTRA_WIND_DIRECTION";
 
     //Stores Current Lat Lon of Device
     public static void setUserLatLon(Context context, float lat, float lon) {
@@ -134,30 +136,36 @@ public class SharedPrefUtils {
      * After Marker Hash is written to Pending Marker hash set, map frag will then store a latlon
      * in SharedPrefs with hash corresponding to the marker hash
      */
-    public static void setPendingMarkerLatLon(Context context, String hash, float[] latlon) {
+    public static void setPendingMarkerLatLon(Context context, String hash, Double[] latlon) {
+        float lat = latlon[0].floatValue();
+        float lon = latlon[1].floatValue();
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putFloat(hash+KEY_LAT, latlon[0]);
-        editor.putFloat(hash+KEY_LON, latlon[1]);
+        editor.putFloat(hash+KEY_LAT, lat);
+        editor.putFloat(hash+KEY_LON, lon);
         editor.apply();
     }
 
     /**
      * Elevation Task will use Hash set to find latlon stored in SharedPrefs using this method
      */
-    public static Float[] getPendingMarkerLatLon(Context context, String hash) {
-        Float[] latlon = new Float[2];
+    public static Double[] getPendingMarkerLatLon(Context context, String hash) {
+        Double[] curLatLonD = new Double[2];
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        latlon[0] = prefs.getFloat(hash+KEY_LAT, 0f);
-        latlon[1] = prefs.getFloat(hash+KEY_LON, 0f);
-        return latlon;
+        Double latD = Double.valueOf(prefs.getFloat(hash+KEY_LAT,0f));
+        Double lonD = Double.valueOf(prefs.getFloat(hash+KEY_LON,0f));
+
+        curLatLonD[0] = latD;
+        curLatLonD[1] = lonD;
+        return curLatLonD;
     }
 
     /**
      * After the elevation has been successfully broadcast or the marker no longer exists,
      * the map fragment will remove its latlon store in shared prefs
      */
-    public static void removePendingMarkerLocation(Context context, String hash) {
+    public static void removePendingMarkerLatLon(Context context, String hash) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(hash);
@@ -232,5 +240,41 @@ public class SharedPrefUtils {
     public static String getCurrentRoundId(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(CURRENT_ROUNDID_KEY, String.valueOf(0));
+    }
+
+    /**
+     * Getter Method for Wind Speed
+     */
+    public static String getCurrentWindSpeed(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(KEY_WIND_SPEED, null);
+    }
+
+    /**
+     * Getter Method for Wind Direction
+     */
+    public static Float getCurrentWindDirection(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getFloat(KEY_WIND_DIRECTION, -1f);
+    }
+
+    /**
+     * Setter Method for wind Speed. To be set only on Completion of WindJobService
+     */
+    public static void setCurrentWindSpeed(Context context, String speed) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_WIND_SPEED, speed);
+        editor.apply();
+    }
+
+    /**
+     * Setter Method for wind Direction. To be set only on Completion of WindJobService
+     */
+    public static void setCurrentWindDirection(Context context, Float direction) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(KEY_WIND_DIRECTION, direction);
+        editor.apply();
     }
 }

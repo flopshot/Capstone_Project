@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity
             // Location permission has not been granted.
             requestLocationPermission();
         }
+
     }
 
     @Override
@@ -75,8 +76,6 @@ public class HomeActivity extends AppCompatActivity
      * permission, otherwise it is requested directly.
      */
     private void requestLocationPermission() {
-        Timber.i("Location permission has NOT been granted. Requesting permission.");
-
         // BEGIN_INCLUDE(location_permission_request)
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
               PERMISSION_LOCATION)) {
@@ -113,7 +112,7 @@ public class HomeActivity extends AppCompatActivity
             case PERMISSION_LOCATION_CODE:
                 if (grantResults.length > 0
                       && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                    return;
                 } else {
                     // permission was not granted
                     Timber.i("Displaying location permission rationale to provide additional context.");

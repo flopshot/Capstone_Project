@@ -22,7 +22,7 @@ public class ApiContract {
     /**
      * Method used to build the Request Elevation String for our api
      */
-    public static String buildRequestUrl(Float[] latlon, String units, String outputType) {
+    public static String buildRequestUrl(Double[] latlon, String units, String outputType) {
 
         // Build up the request URL piece by piece
         // "http://ned.usgs.gov"
@@ -35,9 +35,9 @@ public class ApiContract {
         }
 
         // "?x=<latitude>"
-        builder.appendQueryParameter(PARAM[0], String.valueOf(latlon[0]));
+        builder.appendQueryParameter(PARAM[0], String.valueOf(latlon[1]));
         // "?y=<longitude>"
-        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[1]));
+        builder.appendQueryParameter(PARAM[1], String.valueOf(latlon[2 ]));
         // "?units=<FT/METERS>"
         builder.appendQueryParameter(PARAM[2], units);
         // "?output=<JSON/XML>"
@@ -49,7 +49,7 @@ public class ApiContract {
     /**
      * Overloaded method to default to JSON output and units of FEET
      */
-    public static String buildRequestUrl(Float[] latlon) {
+    public static String buildRequestUrl(Double[] latlon) {
 
         // Build up the request URL piece by piece
         // "http://http://ned.usgs.gov"
