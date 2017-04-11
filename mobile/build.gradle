@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'golfranger'
             keyPassword 'babylonsisters'
-            storeFile file('C:/Users/snajera/KeyStore/seanKeyStore.jks')
+            storeFile file("$rootDir/seanKeyStore.jks")
             storePassword '91a18e40c639811d66d41774f800d0e6'
         }
     }
