@@ -22,5 +22,17 @@
     <string name="yardage_default">--</string>
     <string name="wind_default">--</string>
     <string name="elevation_default">--</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+    <!--WIDGET STRINGS-->
+    <string name="updated">updated\n</string>
+    <string name="never">never</string>
+    <string name="widget_last_update_pref_key" translatable="false">widgetUpdateStringKey</string>
+    <string name="widget_update_init_pref_key" translatable="false">widgetUpdateInitKey</string>
+    <string name="add_widget_content_description">Golf Ranger Widget</string>
+    <string name="empty_widget_list">Add Players</string>
+
 </resources>
 

@@ -32,6 +32,7 @@ public class Provider extends ContentProvider {
     private static final int ROUND_HOLE = 104;
     private static final int ROUND_COURSES_PLAYERS = 105;
     private static final int PLAYERS_ROUND_TOTALS = 106;
+    private static final int PLAYER_TOTALS = 107;
 
 
     // START: implement table JOIN logic on Holes and Rounds tables for Content Provider
@@ -62,73 +63,6 @@ public class Provider extends ContentProvider {
               sortOrder
         );
     }
-    // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
-
-    // START: implement table JOIN logic on PLAYERS,COURSES and ROUNDS tables for Content Provider
-//    private static final SQLiteQueryBuilder sPlayersCoursesAndRoundQueryBuilder;
-//
-//    static{
-//        sPlayersCoursesAndRoundQueryBuilder = new SQLiteQueryBuilder();
-//
-//        //This is an inner join which looks like
-////        FROM rounds AS r
-////        LEFT JOIN courses AS c
-////        ON r.courseId = c._id
-////        LEFT JOIN players AS p1
-////        ON r.playerOneId = p1._id
-////        LEFT JOIN players AS p2
-////        ON r.playerTwoId = p2._id
-////        LEFT JOIN players AS p3
-////        ON r.playerThreeId = p3._id
-////        LEFT JOIN players AS p4
-////        ON r.playerFourId = p4._id
-//        sPlayersCoursesAndRoundQueryBuilder.setTables(
-//              Contract.Rounds.TABLE_NAME + " AS r" +
-//                    " LEFT JOIN " +
-//                    Contract.Courses.TABLE_NAME + " AS c" +
-//                    " ON " + "r" +
-//                    "." + Contract.Rounds.COURSE_ID +
-//                    " = " + "c" +
-//                    "." + Contract.Courses._ID +
-//                    " LEFT JOIN " +
-//                    Contract.Players.TABLE_NAME + " AS p1" +
-//                    " ON " + "r" +
-//                    "." + Contract.Rounds.PLAYER1_ID +
-//                    " = " + "p1" +
-//                    "." + Contract.Players._ID +
-//                    " LEFT JOIN " +
-//                    Contract.Players.TABLE_NAME + " AS p2" +
-//                    " ON " + "r" +
-//                    "." + Contract.Rounds.PLAYER2_ID +
-//                    " = " + "p2" +
-//                    "." + Contract.Players._ID +
-//                    " LEFT JOIN " +
-//                    Contract.Players.TABLE_NAME + " AS p3" +
-//                    " ON " + "r" +
-//                    "." + Contract.Rounds.PLAYER3_ID +
-//                    " = " + "p3" +
-//                    "." + Contract.Players._ID +
-//                    " LEFT JOIN " +
-//                    Contract.Players.TABLE_NAME + " AS p4" +
-//                    " ON " + "r" +
-//                    "." + Contract.Rounds.PLAYER4_ID +
-//                    " = " + "p4" +
-//                    "." + Contract.Players._ID
-//        );
-//    }
-//
-//    private Cursor getRoundWithPlayersCoursesCursor(String[] columns, String whereClause, String sortOrder) {
-//        return sPlayersCoursesAndRoundQueryBuilder.query(
-//              mOpenHelper.getReadableDatabase(),
-//              columns,
-//              whereClause,
-//              null,
-//              null,
-//              null,
-//              sortOrder
-//        );
-//    }
-    // END: implement table JOIN logic on Holes and Rounds tables for Content Provider
 
     private static UriMatcher buildUriMatcher() {
         // All paths added to the UriMatcher have a corresponding code to return when a match is
@@ -146,9 +80,11 @@ public class Provider extends ContentProvider {
               Contract.Rounds.TABLE_NAME + "/" + Contract.Holes.TABLE_NAME,
               ROUND_HOLE);
         matcher.addURI(authority,
-              Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/" + Contract.Players.TABLE_NAME,
+              Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/"
+                    + Contract.Players.TABLE_NAME,
               ROUND_COURSES_PLAYERS);
         matcher.addURI(authority, Contract.PlayerRoundTotals.TABLE_NAME,PLAYERS_ROUND_TOTALS);
+        matcher.addURI(authority, Contract.PlayerTotals.TABLE_NAME, PLAYER_TOTALS);
         return matcher;
     }
 
@@ -200,6 +136,11 @@ public class Provider extends ContentProvider {
             case PLAYERS_ROUND_TOTALS:
                 return mDb.query(
                       Contract.PlayerRoundTotals.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
+            case PLAYER_TOTALS:
+                return mDb.query(
+                      Contract.PlayerTotals.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
             default:

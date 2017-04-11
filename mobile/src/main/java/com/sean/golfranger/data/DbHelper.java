@@ -72,7 +72,10 @@ class DbHelper extends SQLiteOpenHelper {
               " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
               " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL" +
+              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL," +
+              " CHECK ( " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER2_ID + " AND " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER3_ID +
+                    " AND " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER4_ID + " AND " + Contract.Rounds.PLAYER2_ID + "<>" + Contract.Rounds.PLAYER3_ID +
+                    " AND " + Contract.Rounds.PLAYER2_ID + "<>" + Contract.Rounds.PLAYER4_ID + " AND " + Contract.Rounds.PLAYER3_ID + "<>" + Contract.Rounds.PLAYER4_ID + ") " +
               ");";
 
         final String SQL_CREATE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
@@ -153,7 +156,87 @@ class DbHelper extends SQLiteOpenHelper {
 
               "FROM holes "+
               "LEFT JOIN rounds ON rounds._id = holes.roundId " +
-              "GROUP BY roundId ";
+              "GROUP BY roundId; ";
+
+        //For the freakin Widget
+        final String SQL_CREATE_PLAYER_TOTALS_VIEW="CREATE VIEW " +
+              Contract.PlayerTotals.TABLE_NAME + " AS " +
+              "SELECT p._id AS playerId "+
+              ",p.firstName AS firstName " +
+              ",p.lastName AS lastName " +
+              ",COUNT(DISTINCT playerScoreTotals.rID) AS gameCount "+
+              ",SUM(playerScoreTotals.score) / SUM(playerScoreTotals.completedHoles) AS meanScore "+
+              ",MIN(CASE  "+
+              "WHEN playerScoreTotals.completedGame = 1 "+
+              "THEN playerScoreTotals.score "+
+              "ELSE NULL "+
+              "END) AS lowScore "+
+              "FROM players as p" +
+              " LEFT JOIN" +
+              "( "+
+              "SELECT r._id AS rId "+
+              ",r.playerOneId AS playerId "+
+              ",ifNull(sum(ifNull(p1.p1Score, 0)), 0) AS score "+
+              ",COUNT(nullif(p1.p1Score, 0)) AS completedHoles "+
+              ",CASE  "+
+              "WHEN COUNT(nullif(p1.p1Score, 0)) = 18 "+
+              "THEN 1 "+
+              "ELSE 0 "+
+              "END AS completedGame "+
+              "FROM rounds AS r "+
+              "LEFT JOIN holes AS p1 "+
+              "ON r._id = p1.roundId "+
+              "GROUP BY r.playerOneId "+
+              ",r._id "+
+              "UNION ALL "+
+              "SELECT r._id AS rId "+
+              ",r.playerTwoId AS playerId "+
+              ",ifNull(sum(ifNull(p2.p2Score, 0)), 0) AS score "+
+              ",COUNT(nullif(p2.p2Score, 0)) AS completedHoles "+
+              ",CASE  "+
+              "WHEN COUNT(nullif(p2.p2Score, 0)) = 18 "+
+              "THEN 1 "+
+              "ELSE 0 "+
+              "END AS completedGame "+
+              "FROM rounds AS r "+
+              "LEFT JOIN holes AS p2 "+
+              "ON r._id = p2.roundId "+
+              "GROUP BY r.playerTwoId "+
+              ",r._id "+
+              "UNION ALL "+
+              "SELECT r._id AS rId "+
+              ",r.playerThreeId AS playerId "+
+              ",ifNull(sum(ifNull(p3.p3Score, 0)), 0) AS score "+
+              ",COUNT(nullif(p3.p3Score, 0)) AS completedHoles "+
+              ",CASE  "+
+              "WHEN COUNT(nullif(p3.p3Score, 0)) = 18 "+
+              "THEN 1 "+
+              "ELSE 0 "+
+              "END AS completedGame "+
+              "FROM rounds AS r "+
+              "LEFT JOIN holes AS p3 "+
+              "ON r._id = p3.roundId "+
+              "GROUP BY r.playerThreeId "+
+              ",r._id "+
+              "UNION ALL "+
+              "SELECT r._id AS rId "+
+              ",r.playerFourId AS playerId "+
+              ",ifNull(sum(ifNull(p4.p4Score, 0)), 0) AS score "+
+              ",COUNT(nullif(p4.p4Score, 0)) AS completedHoles "+
+              ",CASE  "+
+              "WHEN COUNT(nullif(p4.p4Score, 0)) = 18 "+
+              "THEN 1 "+
+              "ELSE 0 "+
+              "END AS completedGame "+
+              "FROM rounds AS r "+
+              "LEFT JOIN holes AS p4 "+
+              "ON r._id = p4.roundId "+
+              "GROUP BY r.playerFourId "+
+              ",r._id "+
+              ") AS playerScoreTotals "+
+              "ON p._id = playerScoreTotals.playerId " +
+              "GROUP BY p._id" +
+                ";";
 
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
@@ -161,6 +244,7 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_HOLES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_COURSE_ROUND_VIEW);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TOTALS_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

@@ -67,6 +67,11 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/hole11"
+            android:text="Hole 11" />
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/hole12"
             android:text="Hole 12" />
         <RadioButton

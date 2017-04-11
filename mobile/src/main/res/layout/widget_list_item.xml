@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/widget_child_view_height"
+              android:paddingStart="4dp"
+              android:paddingTop="4dp"
+              android:paddingBottom="4dp"
+              android:paddingEnd="4dp">
+
+    <TextView
+        android:id="@+id/widgetPlayerName"
+        android:layout_width="0dp"
+        android:layout_weight="60"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical|start"
+        android:gravity="center"
+        android:layout_marginStart="4dp"
+        style="@style/Base.TextAppearance.AppCompat.Title"
+        android:textColor="@color/maroon"
+        android:textStyle="bold"/>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="40"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top|start">
+            <TextView
+                android:id="@+id/widgetGames"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/maroon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textStyle="italic"
+                android:textColor="@color/maroon"
+                android:text=" :Game(s)"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start">
+            <TextView
+                android:id="@+id/widgetAvgScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/maroon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textStyle="italic"
+                android:textColor="@color/maroon"
+                android:text=" :Hole Avg"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom|start">
+            <TextView
+                android:id="@+id/widgetLowScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/maroon"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textStyle="italic"
+                android:textColor="@color/maroon"
+                android:text=" :Best Rd."/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -379,12 +380,18 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.Rounds.PLAYER1_ID, playerId);
                     values.put(Contract.Rounds.PLAYER1_FIRST_NAME, firstName);
                     values.put(Contract.Rounds.PLAYER1_LAST_NAME, lastName);
-                    resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.Rounds._ID + "=?",
-                          new String[]{mRoundId});
-                    values.clear();
+                    try {
+                        resolver.update(
+                              Contract.Rounds.buildDirUri(),
+                              values,
+                              Contract.Rounds._ID + "=?",
+                              new String[]{mRoundId});
+                    } catch (SQLiteConstraintException e) {
+                        Timber.e("Cannot Add Unique Player Multiple Times");
+                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                    } finally {
+                        values.clear();
+                    }
                     break;
                 case REQUEST_CODE_P2:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -395,12 +402,18 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.Rounds.PLAYER2_ID, playerId);
                     values.put(Contract.Rounds.PLAYER2_FIRST_NAME, firstName);
                     values.put(Contract.Rounds.PLAYER2_LAST_NAME, lastName);
-                    resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.Rounds._ID + "=?",
-                          new String[]{mRoundId});
-                    values.clear();
+                    try {
+                        resolver.update(
+                              Contract.Rounds.buildDirUri(),
+                              values,
+                              Contract.Rounds._ID + "=?",
+                              new String[]{mRoundId});
+                    } catch (SQLiteConstraintException e) {
+                        Timber.e("Cannot Add Unique Player Multiple Times");
+                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                    } finally {
+                        values.clear();
+                    }
                     break;
                 case REQUEST_CODE_P3:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -411,12 +424,18 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.Rounds.PLAYER3_ID, playerId);
                     values.put(Contract.Rounds.PLAYER3_FIRST_NAME, firstName);
                     values.put(Contract.Rounds.PLAYER3_LAST_NAME, lastName);
-                    resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.Rounds._ID + "=?",
-                          new String[]{mRoundId});
-                    values.clear();
+                    try {
+                        resolver.update(
+                              Contract.Rounds.buildDirUri(),
+                              values,
+                              Contract.Rounds._ID + "=?",
+                              new String[]{mRoundId});
+                    } catch (SQLiteConstraintException e) {
+                        Timber.e("Cannot Add Unique Player Multiple Times");
+                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                    } finally {
+                        values.clear();
+                    }
                     break;
                 case REQUEST_CODE_P4:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -427,12 +446,18 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.Rounds.PLAYER4_ID, playerId);
                     values.put(Contract.Rounds.PLAYER4_FIRST_NAME, firstName);
                     values.put(Contract.Rounds.PLAYER4_LAST_NAME, lastName);
-                    resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.Rounds._ID + "=?",
-                          new String[]{mRoundId});
-                    values.clear();
+                    try {
+                        resolver.update(
+                              Contract.Rounds.buildDirUri(),
+                              values,
+                              Contract.Rounds._ID + "=?",
+                              new String[]{mRoundId});
+                    } catch (SQLiteConstraintException e) {
+                        Timber.e("Cannot Add Unique Player Multiple Times");
+                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                    } finally {
+                        values.clear();
+                    }
                     break;
             }
         }

@@ -458,9 +458,27 @@ public class Contract {
         public static final int P4_EXISTS_COL_INDEX = 8;
 
         public static Uri buildDirUri() {
-            Timber.d("SomeOne Queried RoundTotals View");
+            Timber.v("SomeOne Queried RoundTotals View");
             return BASE_URI.buildUpon()
                   .appendPath(PlayerRoundTotals.TABLE_NAME)
+                  .build();
+        }
+    }
+
+    public static class PlayerTotals{
+        public static final String TABLE_NAME = "playerTotalsView";
+
+        public static final int PLAYER_ID = 0;
+        public static final int PLAYER_FIRST = 1;
+        public static final int PLAYER_LAST = 2;
+        public static final int PLAYER_GAME_COUNT = 3;
+        public static final int PLAYER_MEAN_SCORE = 4;
+        public static final int PLAYER_MIN_SCORE = 5;
+
+        public static Uri buildDirUri() {
+            Timber.v("SomeOne Queried PlayerTotals View");
+            return BASE_URI.buildUpon()
+                  .appendPath(PlayerTotals.TABLE_NAME)
                   .build();
         }
     }
