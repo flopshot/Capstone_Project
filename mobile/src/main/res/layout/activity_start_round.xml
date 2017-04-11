@@ -34,13 +34,13 @@
                 android:layout_gravity="center|start"
                 android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="Scorecard"/>
+                android:text="@string/startRoundTitle"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name"
                 android:src="@drawable/logo3"
+                android:contentDescription="@string/logoCD"
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
@@ -53,7 +53,8 @@
                 android:clickable="true"
                 android:layout_marginEnd="10dp"
                 android:onClick="startRound"
-                android:text="Let's Play"/>
+                android:contentDescription="@string/letsPlayContentDescription"
+                android:text="@string/letsPlay"/>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -65,14 +66,15 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:outlineProvider="paddedBounds"
-        android:paddingBottom="28dp"
+        android:paddingBottom="@dimen/recyclerViewPaddingBottom"
         android:paddingLeft="@dimen/list_side_margin"
         android:paddingRight="@dimen/list_side_margin"
-        android:paddingTop="75dp">
+        android:paddingTop="@dimen/recyclerViewPaddingTop">
 
         <LinearLayout
             android:id="@+id/courseHolder"
             android:clickable="true"
+            android:contentDescription="@string/addCourseContentDescription"
             android:onClick="getCourse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +87,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:gravity="center"
-                android:text="Course:"
+                android:text="@string/courseTitle"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 tools:drawableStart="@drawable/ic_menu_add"/>
 
@@ -94,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="Add Course"/>
+                android:text="@string/coursePlaceHolder"/>
 
             <TextView
                 android:id="@+id/hyphen"
@@ -103,7 +105,7 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:text="-"/>
+                android:text="@string/hyphen"/>
 
             <TextView
                 android:id="@+id/courseName"
@@ -130,8 +132,9 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:onClick="getP1"
+                android:contentDescription="@string/playerContentDescription"
                 tools:drawableStart="@drawable/ic_menu_add"
-                android:text="Player 1:"/>
+                android:text="@string/player1Title"/>
 
             <TextView
                 android:id="@+id/p1First"
@@ -141,7 +144,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:text="Add Player"/>
+                android:text="@string/playerPlaceHolder"/>
 
             <TextView
                 android:id="@+id/p1Last"
@@ -171,7 +174,8 @@
                 android:clickable="true"
                 android:onClick="getP2"
                 tools:drawableStart="@drawable/ic_menu_add"
-                android:text="Player 2:"/>
+                android:contentDescription="@string/playerContentDescription"
+                android:text="@string/player2Title"/>
 
             <TextView
                 android:id="@+id/p2First"
@@ -181,7 +185,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:text="Add Player"/>
+                android:text="@string/playerPlaceHolder"/>
 
             <TextView
                 android:id="@+id/p2Last"
@@ -210,8 +214,9 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:onClick="getP3"
+                android:contentDescription="@string/playerContentDescription"
                 tools:drawableStart="@drawable/ic_menu_add"
-                android:text="Player 3:"/>
+                android:text="@string/player3Title"/>
 
             <TextView
                 android:id="@+id/p3First"
@@ -221,7 +226,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:text="Add Player"/>
+                android:text="@string/playerPlaceHolder"/>
 
             <TextView
                 android:id="@+id/p3Last"
@@ -250,8 +255,9 @@
                 android:gravity="center"
                 android:clickable="true"
                 android:onClick="getP4"
+                android:contentDescription="@string/playerContentDescription"
                 tools:drawableStart="@drawable/ic_menu_edit"
-                android:text="Player 4:"/>
+                android:text="@string/player4Title"/>
 
             <TextView
                 android:id="@+id/p4First"
@@ -261,7 +267,7 @@
                 android:layout_marginStart="15dp"
                 android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:text="Add Player"/>
+                android:text="@string/playerPlaceHolder"/>
 
             <TextView
                 android:id="@+id/p4Last"
@@ -284,7 +290,8 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:background="@drawable/rounded_textbox_dark"
             android:textColor="@color/maroon"
-            android:text="Save Card For Later"
+            android:contentDescription="@string/saveRoundContentDescription"
+            android:text="@string/saveRound"
             android:onClick="onSave"/>
 
     </LinearLayout>

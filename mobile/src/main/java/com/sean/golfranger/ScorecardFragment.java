@@ -25,6 +25,8 @@ import timber.log.Timber;
 import static com.sean.golfranger.R.id.p4Total;
 
 /**
+ * Will Display the Round Overview. Will show all participating player names, scores, hole number,
+ * and hole par number
  */
 public class ScorecardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private  MyObserver myObserver;
@@ -40,7 +42,6 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static ScorecardFragment newInstance() {
         return new ScorecardFragment();
     }
@@ -75,7 +76,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mScoreCardAdapter = new ScorecardAdapter(getActivity().getApplicationContext());
+        mScoreCardAdapter = new ScorecardAdapter();
         View rootView = inflater.inflate(R.layout.fragmet_scorecard, container, false);
         p1TotalView = (TextView) rootView.findViewById(R.id.p1Total);
         p2TotalView = (TextView) rootView.findViewById(R.id.p2Total);
@@ -249,7 +250,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
         }
     }
 
-    public class MyObserver extends ContentObserver {
+    private class MyObserver extends ContentObserver {
         // Consider Refactor to new class
         MyObserver(Handler handler) {
             super(handler);

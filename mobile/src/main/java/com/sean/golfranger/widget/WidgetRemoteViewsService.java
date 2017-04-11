@@ -15,7 +15,6 @@ import timber.log.Timber;
 /**
  * Service for our Golf Ranger Widget. For binding data from cursor to views
  */
-
 public class WidgetRemoteViewsService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
@@ -59,7 +58,6 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 } else {
                     Timber.d("Data is null");
                 }
-
             }
 
             @Override
@@ -95,16 +93,6 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 views.setTextViewText(R.id.widgetGames, String.valueOf(gamesPlayed));
                 views.setTextViewText(R.id.widgetAvgScore, String.valueOf(Math.round(meanScore)));
                 views.setTextViewText(R.id.widgetLowScore, formattedMinScore);
-
-//                // Next, set a fill-intent, which will be used to fill in the pending intent template
-//                // that is set on the collection view in StackWidgetProvider.
-//                Bundle extras = new Bundle();
-//                extras.putString(Contract.Quote.COLUMN_SYMBOL, sym);
-//                Intent fillInIntent = new Intent();
-//                fillInIntent.putExtras(extras);
-//                // Make it possible to distinguish the individual on-click
-//                // action of a given item
-//                views.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
                 return views;
             }

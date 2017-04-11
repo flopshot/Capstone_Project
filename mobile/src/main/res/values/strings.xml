@@ -1,11 +1,6 @@
 <resources>
     <string name="app_name">Golf Ranger</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello Dumb fragment</string>
-    <string name="hello_blank1_fragment">Hello Stupid fragment</string>
-    <string name="course_add">Add Course</string>
-
     <!--DIALOG STRINGS-->
     <string name="ok">ALLOW LOCATION</string>
     <string name="permission_location_rationale">
@@ -33,6 +28,127 @@
     <string name="widget_update_init_pref_key" translatable="false">widgetUpdateInitKey</string>
     <string name="add_widget_content_description">Golf Ranger Widget</string>
     <string name="empty_widget_list">Add Players</string>
+    <string name="widgetTitleContentDescription">Pressing the title Refreshes the Widget</string>
+    <string name="gamesLabel">\u0020:Game(s)</string>
+    <string name="holeAVGLabel">\u0020:Hole Avg</string>
+    <string name="bestRoundLabel">\u0020:Best Rd.</string>
 
+    <!--HOME SCREEN-->
+    <string name="newRound">New Round</string>
+    <string name="newRoundContentDescription">Start New Round</string>
+    <string name="oldRound">Old Round</string>
+    <string name="oldRoundContentDescription">Start Old Round</string>
+    <string name="players_string">The Players</string>
+    <string name="the_playersContentDescription">View players and add players</string>
+    <string name="theCourses">The Courses</string>
+    <string name="theCoursesContentDescription"> View courses and add courses</string>
+    <string name="appIconCD">This is the app icon</string>
+    
+    <!--COURSES SCREEN-->
+    <string name="coursesTitle">Courses</string>
+    <string name="addCourseButton">Add Course</string>
+    <string name="addCourseContentDescription">This Button Adds a Course</string>
+    
+    <!--MATCHES SCREEN-->
+    <string name="roundTitle">Rounds</string>
+    <string name="newRoundButton">New Round</string>
+    <string name="roundContentDescription">This Button adds a new round</string>
+
+    <!--PLAYERS SCREEN-->
+    <string name="playerTitle">Players</string>
+    <string name="addPlayerButton">Add Player</string>
+    <string name="playerContentDescription">This button adds a Player</string>
+
+    <!--START ROUND SCREEN-->
+    <string name="startRoundTitle">Scorecard</string>
+    <string name="letsPlay">Let\'s Play</string>
+    <string name="letsPlayContentDescription">Starts your selected round to play</string>
+    <string name="courseTitle">Course</string>
+    <string name="coursePlaceHolder">Add Course</string>
+    <string name="hyphen">-</string>
+    <string name="logoCD">Title Image</string>
+    <string name="player1Title">Player 1:</string>
+    <string name="player2Title">Player 2:</string>
+    <string name="player3Title">Player 3:</string>
+    <string name="player4Title">Player 4:</string>
+    <string name="playerPlaceHolder">Add Player</string>
+    <string name="saveRound">Save Card For Later</string>
+    <string name="saveRoundContentDescription">This Button Saves the Round</string>
+
+    <!--ROUND ACTIVITY SCREEN-->
+    <string name="scorecardViewCD">This Button Switches the screen to the Scorecard</string>
+    <string name="holeViewCD">This Button Switches the screen to the HoleView</string>
+    <string name="mapViewCD">This Button Switches the screen to the Map</string>
+    <string name="arrowCD">This Arrow Point int the direction of the wind</string>
+
+    <!--COURSE LIST ITEM-->
+    <string name="courseIconCD">Clip Art of Course</string>
+
+    <!--HOLE FRAGMENT-->
+    <string name="thePlayersTitle">The Players</string>
+    <string name="initialHoleNumber" translatable="false">1▼</string>
+    <string name="dropDownIcon" translatable="false">▼</string>
+    <string name="holeTitle">Hole:</string>
+    <string name="holeValueCD">This Button Selects the Hole to View</string>
+    <string name="distanceLabel">Distance (y):</string>
+    <string name="parLabel">Par:</string>
+    <string name="thePuttsLabel">The Putts</string>
+    <string name="thePenaltiesLabel">The Penalties</string>
+    <string name="girLabel">Green in Reg.</string>
+    <string name="fwyInRegLabel">Fwy in Reg.</string>
+    <string name="sandLabel">Sand</string>
+    
+    <!--SCORECARD FRAGMENT-->
+    <string name="scorecardHoleLabel">Hole</string>
+    <string name="scorecardParLabel">Par</string>
+    
+    <!--HOLE# RADIO DIALOG-->
+    <string name="hole1Label">Hole 1</string>
+    <string name="hole2Label">Hole 2</string>
+    <string name="hole3Label">Hole 3</string>
+    <string name="hole4Label">Hole 4</string>
+    <string name="hole5Label">Hole 5</string>
+    <string name="hole6Label">Hole 6</string>
+    <string name="hole7Label">Hole 7</string>
+    <string name="hole8Label">Hole 8</string>
+    <string name="hole9Label">Hole 9</string>
+    <string name="hole10Label">Hole 10</string>
+    <string name="hole11Label">Hole 11</string>
+    <string name="hole12Label">Hole 12</string>
+    <string name="hole13Label">Hole 13</string>
+    <string name="hole14Label">Hole 14</string>
+    <string name="hole15Label">Hole 15</string>
+    <string name="hole16Label">Hole 16</string>
+    <string name="hole17Label">Hole 17</string>
+    <string name="hole18Label">Hole 18</string>
+    <string name="holeSelectCD">Select the hole from this group</string>
+
+    <!--LIST CONTENT DESCRIPTION-->
+    <string name="playerListCD">This Button Selects the Player</string>
+    <string name="playerIconCD">Clip Art of Player</string>
+
+
+    <!--DIALOG STRING-->
+    <string name="dialogAddButton">ADD</string>
+    <string name="dialogCancelButton">CANCEL</string>
+    <string name="dialogEditButton">EDIT</string>
+    <string name="dialogChange">CHANGE</string>
+    <string name="dialogClubNameHint">Club Name</string>
+    <string name="dialogCourseNameHint">Course Name</string>
+    <string name="dialogErrorMsg">All Fields Must Be Filled. Please Use Input Letters and Numbers Only</string>
+    <string name="dialogEditCourse">Edit Course</string>
+    <string name="dialogEditPlayer">Edit Player</string>
+    <string name="dialogOk">OK</string>
+    <string name="dialogDelete">DELETE</string>
+    <string name="dialogFirstNameHint">First Name</string>
+    <string name="dialogLastNameHint">Last Name</string>
+    <string name="playerAlreadyMsg">This Player is Already Added To the Round</string>
+
+    <!--DATE FORMAT-->
+    <string name="dateFormat" translatable="false">MM/dd/yy</string>
+
+    <!--START/SAVE ROUND-->
+    <string name="noPlayer1ErrorMsg">You Must Add A First Player Before We Begin</string>
+    <string name="noCourseErrorMsg">You Must Add A Course Before We Begin</string>
+    <string name="safeRound">Your Round Is Safe With Me</string>
 </resources>
-

@@ -12,6 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/appIconCD"
         android:layout_weight="1"
         app:srcCompat="@drawable/icon"/>
 
@@ -27,10 +28,10 @@
             style="@style/AppTheme.HomeButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
             android:drawableBottom="@drawable/ic_menu_add"
             android:gravity="center"
-            android:text="New Round"
+            android:text="@string/newRound"
+            android:contentDescription="@string/newRoundContentDescription"
             android:onClick="startNewRound"
             android:clickable="true"
             />
@@ -40,10 +41,10 @@
             style="@style/AppTheme.HomeButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
             android:drawableBottom="@drawable/ic_menu_find_holo_light"
             android:gravity="center"
-            android:text="Old Round"
+            android:text="@string/oldRound"
+            android:contentDescription="@string/oldRoundContentDescription"
             android:onClick="viewOldRound"
             android:clickable="true"
             />
@@ -53,22 +54,22 @@
             style="@style/AppTheme.HomeButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
             android:clickable="true"
             android:drawableBottom="@drawable/ic_menu_myplaces"
             android:gravity="center"
             android:onClick="viewPlayers"
-            android:text="The Players"/>
+            android:text="@string/players_string"
+            android:contentDescription="@string/the_playersContentDescription"/>
 
         <TextView
             android:id="@+id/viewCourses"
             style="@style/AppTheme.HomeButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
             android:drawableBottom="@drawable/ic_menu_gallery"
             android:gravity="center"
-            android:text="The Courses"
+            android:text="@string/theCourses"
+            android:contentDescription="@string/theCoursesContentDescription"
             android:onClick="viewCourses"
             android:clickable="true"/>
     </LinearLayout>

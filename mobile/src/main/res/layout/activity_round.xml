@@ -15,18 +15,21 @@
             android:id="@+id/scorecardView"
             android:layout_width="80dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/scorecardViewCD"
             android:onClick="getScorecardView"/>
 
         <Button
             android:id="@+id/holeView"
             android:layout_width="80dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/holeViewCD"
             android:onClick="getHoleView"/>
 
         <Button
             android:id="@+id/mapView"
             android:layout_width="80dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/mapViewCD"
             android:onClick="getMapView"/>
     </LinearLayout>
 
@@ -92,6 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/arrowCD"
                     android:src="@drawable/arrow_up_float"/>
 
             </LinearLayout>

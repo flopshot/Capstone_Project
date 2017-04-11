@@ -1,7 +1,6 @@
 package com.sean.golfranger;
 
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,17 +15,14 @@ import com.sean.golfranger.data.Contract;
  * Player Adapter For Player Activity Layout. Will be fed Data from Player Table
  */
 
-public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder>{
+class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder>{
     private Cursor mCursor;
-    private Context mContext;
     final private PlayerAdapterOnClickHandler mClickHandler;
     final private PlayerAdapterLongClickHandler mLongClickHandler;
 
-    public PlayerAdapter(
-          Context context,
+    PlayerAdapter(
           PlayerAdapterOnClickHandler clickHandler,
           PlayerAdapterLongClickHandler longClickHandler) {
-        this.mContext = context;
         this.mClickHandler = clickHandler;
         this.mLongClickHandler = longClickHandler;
     }
@@ -36,8 +32,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdap
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_list_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
-        PlayerAdapterViewHolder viewHolder = new PlayerAdapterViewHolder(view);
-        return viewHolder;
+        return new PlayerAdapterViewHolder(view);
     }
 
     @Override
@@ -59,10 +54,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdap
 
     class PlayerAdapterViewHolder extends RecyclerView.ViewHolder
           implements View.OnClickListener, View.OnLongClickListener{
-        protected TextView firstNameView;
-        protected TextView lastNameView;
+        TextView firstNameView;
+        TextView lastNameView;
 
-        public PlayerAdapterViewHolder(View view) {
+        PlayerAdapterViewHolder(View view) {
             super(view);
             this.firstNameView = (TextView) view.findViewById(R.id.firstNameLabel);
             this.lastNameView = (TextView) view.findViewById(R.id.lastNameLabel);
@@ -92,15 +87,15 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdap
         }
     }
 
-    public static interface PlayerAdapterOnClickHandler {
+    interface PlayerAdapterOnClickHandler {
         void onClick(Long courseId, String firstName, String lastName);
     }
 
-    public static interface PlayerAdapterLongClickHandler {
+    interface PlayerAdapterLongClickHandler {
         void onLongClick(Long courseId, String firstName, String lastName);
     }
 
-    public void swapCursor(Cursor newCursor) {
+    void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }

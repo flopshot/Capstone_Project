@@ -1,6 +1,5 @@
 package com.sean.golfranger;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,17 +13,14 @@ import com.sean.golfranger.data.Contract;
  * Course Adapter For Course Activity Layout. Will be fed Data from Course Table
  */
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterViewHolder> {
+class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterViewHolder> {
     private Cursor mCursor;
-    private Context mContext;
     final private CourseAdapterOnClickHandler mClickHandler;
     final private CourseAdapterLongClickHandler mLongClickHandler;
 
-    public CourseAdapter(
-          Context context,
+    CourseAdapter(
           CourseAdapterOnClickHandler clickHandler,
           CourseAdapterLongClickHandler longClickHandler) {
-        this.mContext = context;
         this.mClickHandler = clickHandler;
         this.mLongClickHandler = longClickHandler;
     }
@@ -34,8 +30,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdap
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_list_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
-        CourseAdapterViewHolder viewHolder = new CourseAdapterViewHolder(view);
-        return viewHolder;
+        return new CourseAdapterViewHolder(view);
     }
 
     @Override
@@ -57,10 +52,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdap
 
     class CourseAdapterViewHolder extends RecyclerView.ViewHolder
           implements View.OnClickListener, View.OnLongClickListener{
-        protected TextView clubNameView;
-        protected TextView courseNameView;
+        TextView clubNameView;
+        TextView courseNameView;
 
-        public CourseAdapterViewHolder(View view) {
+        CourseAdapterViewHolder(View view) {
             super(view);
             this.clubNameView = (TextView) view.findViewById(R.id.clubNameLabel);
             this.courseNameView = (TextView) view.findViewById(R.id.courseNameLabel);
@@ -90,15 +85,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdap
         }
     }
 
-    public static interface CourseAdapterOnClickHandler {
+    interface CourseAdapterOnClickHandler {
         void onClick(Long courseId, String clubName, String courseName);
     }
 
-    public static interface CourseAdapterLongClickHandler {
+    interface CourseAdapterLongClickHandler {
         void onLongClick(Long courseId, String clubName, String courseName);
     }
 
-    public void swapCursor(Cursor newCursor) {
+    void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }

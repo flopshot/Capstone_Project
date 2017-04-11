@@ -58,4 +58,3 @@ public class GolfWidget extends AppWidgetProvider {
               new Intent(context, WidgetRemoteViewsService.class));
     }
 }
-

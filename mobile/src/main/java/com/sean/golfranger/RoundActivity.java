@@ -273,32 +273,26 @@ public class RoundActivity extends FragmentActivity
         switch (fragViewState) {
             case SCORECARD_STATE:
                 fm.beginTransaction()
-                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .show(mScorecardFragment)
                       .hide(mHoleFragment)
                       .hide(mMapFragment)
                       .commit();
-                SharedPrefUtils.setIsOnMapScreen(getApplicationContext(), false);
                 mMarkerStats.setVisibility(View.INVISIBLE);
                 break;
             case HOLE_STATE:
                 fm.beginTransaction()
-                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .show(mHoleFragment)
                       .hide(mScorecardFragment)
                       .hide(mMapFragment)
                       .commit();
-                SharedPrefUtils.setIsOnMapScreen(getApplicationContext(), false);
                 mMarkerStats.setVisibility(View.INVISIBLE);
                 break;
             case MAP_STATE:
                 fm.beginTransaction()
-                      //.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                       .show(mMapFragment)
                       .hide(mHoleFragment)
                       .hide(mScorecardFragment)
                       .commit();
-                SharedPrefUtils.setIsOnMapScreen(getApplicationContext(), false);
                 mMarkerStats.setVisibility(View.VISIBLE);
                 break;
         }
@@ -308,7 +302,7 @@ public class RoundActivity extends FragmentActivity
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5000);
+        mLocationRequest.setInterval(2000); //Update user Location Every 2 seconds
 
         if ( Build.VERSION.SDK_INT >= 23 &&
               ContextCompat.checkSelfPermission(

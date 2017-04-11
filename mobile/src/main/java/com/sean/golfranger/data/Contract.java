@@ -12,13 +12,19 @@ import timber.log.Timber;
  */
 
 public class Contract {
-    public static final String CONTENT_AUTHORITY = "com.sean.golfranger";
-    public static final Uri BASE_URI = Uri.parse("content://com.sean.golfranger");
-    public static final String DB_NAME = "golf";
+    static final String CONTENT_AUTHORITY = "com.sean.golfranger";
+    private static final Uri BASE_URI = Uri.parse("content://com.sean.golfranger");
+    static final String DB_NAME = "golf";
 
     public static class Courses implements BaseColumns {
+        //COLUMN POSITION
+        static final int COURSEID_POS = 0;
+        static final int CLUBNAME_POS = 1;
+        static final int COURSENAME_POS = 2;
+
+
         // TABLE NAME
-        public static final String TABLE_NAME = "courses";
+        static final String TABLE_NAME = "courses";
 
         // COLUMN NAMES
         /**
@@ -33,7 +39,7 @@ public class Contract {
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.courses"
          */
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
         /**
          * "vnd.android.cursor.item/vnd.com.sean.golfranger.courses";
          */
@@ -51,7 +57,7 @@ public class Contract {
         /**
          * Matches: /courses/[_id]/
          */
-        public static Uri buildItemUri(long _id) {
+        static Uri buildItemUri(long _id) {
             return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
         }
 
@@ -64,8 +70,12 @@ public class Contract {
     }
 
     public static class Players implements BaseColumns {
+        static final int PLAYERID_POS = 0;
+        static final int PLAYERFIRST_POS = 1;
+        static final int PLAYERLAST_POS = 2;
+
         // TABLE NAME FOR DB
-        public static final String TABLE_NAME = "players";
+        static final String TABLE_NAME = "players";
 
         // COLUMN NAMES
         /**
@@ -80,7 +90,7 @@ public class Contract {
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
          */
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
         /**
          * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
          */
@@ -98,7 +108,7 @@ public class Contract {
         /**
          * Matches: /[TABLE_NAME]/[_id]/
          */
-        public static Uri buildItemUri(long _id) {
+        static Uri buildItemUri(long _id) {
             return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
         }
 
@@ -112,7 +122,7 @@ public class Contract {
 
     public static class Rounds implements BaseColumns {
         // TABLE NAME FOR DB
-        public static final String TABLE_NAME = "rounds";
+        static final String TABLE_NAME = "rounds";
 
         // COLUMN NAMES
         /**
@@ -183,7 +193,7 @@ public class Contract {
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
          */
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
         /**
          * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
          */
@@ -201,7 +211,7 @@ public class Contract {
         /**
          * Matches: /[TABLE_NAME]/[_id]/
          */
-        public static Uri buildItemUri(long _id) {
+        static Uri buildItemUri(long _id) {
             return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
         }
 
@@ -215,7 +225,7 @@ public class Contract {
 
     public static class Holes implements BaseColumns {
         // TABLE NAME FOR DB
-        public static final String TABLE_NAME = "holes";
+        static final String TABLE_NAME = "holes";
 
         // COLUMN NAMES
         /**
@@ -334,7 +344,7 @@ public class Contract {
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
          */
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
         /**
          * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
          */
@@ -427,7 +437,7 @@ public class Contract {
     }
 
     public static class RoundCoursesPlayers {
-        public static final String TABLE_NAME = "roundPlayerCourse";
+        static final String TABLE_NAME = "roundPlayerCourse";
         public static Uri roundCoursesPlayersUri() {
             return BASE_URI.buildUpon()
                   .appendPath(Rounds.TABLE_NAME)
@@ -446,7 +456,7 @@ public class Contract {
     }
 
     public static class PlayerRoundTotals {
-        public static final String TABLE_NAME = "playerRoundTotals";
+        static final String TABLE_NAME = "playerRoundTotals";
         public static final int ROUNDID_COL_INDEX = 0;
         public static final int P1_TOTAL_COL_INDEX = 1;
         public static final int P2_TOTAL_COL_INDEX = 2;
@@ -466,7 +476,7 @@ public class Contract {
     }
 
     public static class PlayerTotals{
-        public static final String TABLE_NAME = "playerTotalsView";
+        static final String TABLE_NAME = "playerTotalsView";
 
         public static final int PLAYER_ID = 0;
         public static final int PLAYER_FIRST = 1;

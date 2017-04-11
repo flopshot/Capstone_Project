@@ -28,7 +28,7 @@ import timber.log.Timber;
 
 public class ElevationJobInfo {
     //Job Scheduling constants. Get elevation data from api every
-    private static final int PERIOD = 5000; //Every 6sec
+    private static final int PERIOD = 2000; //Every 5sec
     private static final int INITIAL_BACKOFF = 1000;
     private static final int PERIODIC_ID = 1;
 
@@ -56,7 +56,13 @@ public class ElevationJobInfo {
         Double[] userLatLon = SharedPrefUtils.getUserLatLonDouble(context);
         String userRequestQuery = ApiContract.buildRequestUrl(userLatLon);
         String jsonUserElevationData = apiCallOverHTTP(userRequestQuery);
-        String userElevationString = ApiJsonParser.getElevation(jsonUserElevationData);
+        String userElevationString = null;
+        try {
+              userElevationString= ApiJsonParser.getElevation(jsonUserElevationData);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         if (userElevationString != null) {
 
             SharedPrefUtils.setUserElevation(context, Float.valueOf(userElevationString));

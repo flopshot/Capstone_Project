@@ -73,7 +73,6 @@ public class GolfMarker implements Parcelable {
         parcel.writeDouble(distance);
         parcel.writeDouble(elevation);
         parcel.writeDouble(elevationDelta);
-        //   parcel.writeString(movieCat);
         parcel.writeDouble(lat);
         parcel.writeDouble(lon);
     }

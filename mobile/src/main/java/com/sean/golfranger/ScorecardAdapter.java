@@ -1,6 +1,5 @@
 package com.sean.golfranger;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,19 +12,18 @@ import com.sean.golfranger.data.Contract;
 /**
  * Scorecard Adapter For Scorecard Fragment Layout. Will be fed Data from Holes Table
  */
-public class ScorecardAdapter
+class ScorecardAdapter
       extends RecyclerView.Adapter<ScorecardAdapter.ScorecardAdapterViewHolder> {
     private Cursor mCursor;
-    private Context mContext;
 
-    public ScorecardAdapter(Context context) {
-        this.mContext = context;
+    ScorecardAdapter() {
+
     }
 
     class ScorecardAdapterViewHolder extends RecyclerView.ViewHolder {
         TextView holeNumber, parNumber, p1HoleScore, p2HoleScore, p3HoleScore, p4HoleScore;
 
-        public ScorecardAdapterViewHolder(View view) {
+        ScorecardAdapterViewHolder(View view) {
             super(view);
             this.holeNumber = (TextView) view.findViewById(R.id.holeNumber);
             this.parNumber = (TextView) view.findViewById(R.id.parNumber);
@@ -45,8 +43,7 @@ public class ScorecardAdapter
               ViewGroup.LayoutParams.MATCH_PARENT,
               ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
-        ScorecardAdapterViewHolder viewHolder = new ScorecardAdapterViewHolder(view);
-        return viewHolder;
+        return new ScorecardAdapterViewHolder(view);
     }
 
     @Override
@@ -96,7 +93,7 @@ public class ScorecardAdapter
         return mCursor.getCount();
     }
 
-    public void swapCursor(Cursor newCursor) {
+    void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }

@@ -15,7 +15,7 @@ import com.sean.golfranger.HomeActivity;
 
 public class PermissionUtils {
     private static final String PERMISSION_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    public static final String FINISH_EXTRA = "PermissionUtilsFinishExtra";
+    private static final String FINISH_EXTRA = "PermissionUtilsFinishExtra";
 
     public static void checkLocationPermission(Context context) {
         if (ActivityCompat.checkSelfPermission(context, PERMISSION_LOCATION)

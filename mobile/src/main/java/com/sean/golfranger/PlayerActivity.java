@@ -45,7 +45,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_players);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mPlayerAdapter = new PlayerAdapter(this, new PlayerAdapter.PlayerAdapterOnClickHandler() {
+        mPlayerAdapter = new PlayerAdapter(new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
             public void onClick(Long playerId, String firstName, String lastName) {
                 if (getCallingActivity() == null) {
@@ -114,23 +114,22 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     public void addPlayer(View v){
-        //TODO ADD STRINGS to strings.xml
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
-        alertDialog.setTitle("Add Player");
+        alertDialog.setTitle(getString(R.string.playerPlaceHolder));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText firstInput = new EditText(this);
-        firstInput.setHint("First Name");
+        firstInput.setHint(getString(R.string.dialogFirstNameHint));
         layout.addView(firstInput);
 
         final EditText lastInput = new EditText(this);
-        lastInput.setHint("Last Name");
+        lastInput.setHint(getString(R.string.dialogLastNameHint));
         layout.addView(lastInput);
         alertDialog.setView(layout);
 
-        alertDialog.setPositiveButton("ADD",
+        alertDialog.setPositiveButton(getString(R.string.dialogAddButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String firstName =firstInput.getText().toString();
@@ -148,7 +147,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
-                                "All Fields Must Be Filled. \n Please Use Input Letters and Numbers Only",
+                                getString(R.string.dialogErrorMsg),
                                 Toast.LENGTH_SHORT
                           ).show();
                       }
@@ -156,7 +155,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
               }
         );
 
-        alertDialog.setNegativeButton("CANCEL",
+        alertDialog.setNegativeButton(getString(R.string.dialogCancelButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();
@@ -165,9 +164,8 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void showEditPlayerDialog(final long playerId, String first, String last){
-        //TODO ADD STRINGS to strings.xml
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
-        alertDialog.setTitle("Edit Player");
+        alertDialog.setTitle(getString(R.string.dialogEditPlayer));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -181,7 +179,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         layout.addView(lastInput);
         alertDialog.setView(layout);
 
-        alertDialog.setNegativeButton("OK",
+        alertDialog.setNegativeButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String lastName = lastInput.getText().toString();
@@ -203,7 +201,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
-                                "All Fields Must Be Filled. \n Please Use Input Letters and Numbers Only",
+                                getString(R.string.dialogErrorMsg),
                                 Toast.LENGTH_SHORT
                           ).show();
                       }
@@ -211,7 +209,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
               }
         );
 
-        alertDialog.setPositiveButton("DELETE",
+        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       ContentResolver resolver = getContentResolver();

@@ -147,7 +147,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
         final String holeNumber = savedInstanceState.getString(HOLE_NUMBER_EXTRA);
-        String holeNumberViewText = holeNumber + "▼";
+        String holeNumberViewText = holeNumber + getString(R.string.dropDownIcon);
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_hole, container, false);
@@ -196,7 +196,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onDestroyView() {
         super.onDestroyView();
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -302,7 +301,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                             Timber.d("selected Hole-> " + holeNum);
                             Bundle loaderBundle = new Bundle();
                             loaderBundle.putString(HOLE_NUMBER_EXTRA, holeNum);
-                            String holeNumViewText = (holeNum + "▼").trim();
+                            String holeNumViewText = (holeNum + getString(R.string.dropDownIcon)).trim();
                             holeButton.setText(holeNumViewText);
                             sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
 

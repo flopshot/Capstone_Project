@@ -113,8 +113,6 @@ class DbHelper extends SQLiteOpenHelper {
               " UNIQUE (" + Contract.Holes.ROUND_ID + "," + Contract.Holes.HOLE_NUMBER + ") ON CONFLICT FAIL" +
               ");";
 
-        //TODO: If there were a hell, it would be me copying and pasting all
-        // the column names in the contract to these hardcoded strings
         final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
         Contract.RoundCoursesPlayers.TABLE_NAME +
         " AS SELECT " +

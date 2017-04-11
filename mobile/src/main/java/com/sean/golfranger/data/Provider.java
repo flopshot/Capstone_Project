@@ -409,10 +409,9 @@ public class Provider extends ContentProvider {
         if (updatedCoursesCursor.moveToFirst()) {
             do {
                 courseRecords.add(new String[] {
-                      String.valueOf(updatedCoursesCursor.getLong(0)), //_id
-                      updatedCoursesCursor.getString(1), //Club Name
-                      updatedCoursesCursor.getString(2), //Course Name
-                      // TODO: Reference hardcoded column indices from constants in Contract
+                      String.valueOf(updatedCoursesCursor.getLong(Contract.Courses.COURSEID_POS)),
+                      updatedCoursesCursor.getString(Contract.Courses.CLUBNAME_POS),
+                      updatedCoursesCursor.getString(Contract.Courses.COURSENAME_POS),
                 });
             } while (updatedCoursesCursor.moveToNext());
         }
@@ -459,10 +458,9 @@ public class Provider extends ContentProvider {
         if (updatedPlayersCursor.moveToFirst()) {
             do {
                 playerRecords.add(new String[] {
-                      String.valueOf(updatedPlayersCursor.getLong(0)), //_id
-                      updatedPlayersCursor.getString(1), //First Name
-                      updatedPlayersCursor.getString(2), //Last Name
-                      // TODO: Reference hardcoded column indices from constants in Contract
+                      String.valueOf(updatedPlayersCursor.getLong(Contract.Players.PLAYERID_POS)),
+                      updatedPlayersCursor.getString(Contract.Players.PLAYERFIRST_POS),
+                      updatedPlayersCursor.getString(Contract.Players.PLAYERLAST_POS),
                 });
             } while (updatedPlayersCursor.moveToNext());
         }

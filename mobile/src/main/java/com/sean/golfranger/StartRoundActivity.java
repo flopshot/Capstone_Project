@@ -154,7 +154,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
             } else {
-                club.setText("Add Course");
+                club.setText(getString(R.string.coursePlaceHolder));
             }
             str = cursor.getString(2);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -168,7 +168,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 Timber.d("First Name of P1: " + str);
                 p1First.setText(str);
             } else {
-                p1First.setText("Add Player");
+                p1First.setText(getString(R.string.playerPlaceHolder));
             }
             str = cursor.getString(4);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -182,7 +182,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2First.setText(str);
             } else {
-                p2First.setText("Add Player");
+                p2First.setText(getString(R.string.playerPlaceHolder));
             }
             str = cursor.getString(6);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -196,7 +196,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3First.setText(str);
             } else {
-                p3First.setText("Add Player");
+                p3First.setText(getString(R.string.playerPlaceHolder));
             }
             str = cursor.getString(8);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -210,7 +210,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4First.setText(str);
             } else {
-                p4First.setText("Add Player");
+                p4First.setText(getString(R.string.playerPlaceHolder));
             }
             str = cursor.getString(10);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -267,15 +267,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     }
 
     private void startPlayerCourseIntent(final int requestCode, String text) {
-        //TODO ADD STRINGS to strings.xml
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(StartRoundActivity.this);
-        alertDialog.setTitle("Change");
+        alertDialog.setTitle(getString(R.string.dialogChange));
         String buttonMsg;
         Timber.d(text);
-        if (text.equals("Add Player") | text.equals("Add Course") | text.isEmpty()) {
-            buttonMsg = "ADD";
+        if (text.equals(getString(R.string.playerPlaceHolder)) | text.equals(getString(R.string.coursePlaceHolder)) | text.isEmpty()) {
+            buttonMsg = getString(R.string.dialogAddButton);
         } else {
-            buttonMsg = "EDIT";
+            buttonMsg = getString(R.string.dialogEditButton);
         }
 
         alertDialog.setNegativeButton(buttonMsg,
@@ -292,7 +291,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
               }
         );
 
-        alertDialog.setPositiveButton("DELETE",
+        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       Timber.d(String.valueOf(requestCode));
@@ -337,7 +336,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
                   }});
 
-        alertDialog.setNeutralButton("CANCEL",
+        alertDialog.setNeutralButton(getString(R.string.dialogCancelButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();
@@ -388,7 +387,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                               new String[]{mRoundId});
                     } catch (SQLiteConstraintException e) {
                         Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
                     } finally {
                         values.clear();
                     }
@@ -410,7 +409,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                               new String[]{mRoundId});
                     } catch (SQLiteConstraintException e) {
                         Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
                     } finally {
                         values.clear();
                     }
@@ -432,7 +431,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                               new String[]{mRoundId});
                     } catch (SQLiteConstraintException e) {
                         Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
                     } finally {
                         values.clear();
                     }
@@ -454,7 +453,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                               new String[]{mRoundId});
                     } catch (SQLiteConstraintException e) {
                         Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), "Player Is Already In Round!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
                     } finally {
                         values.clear();
                     }
@@ -465,14 +464,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
     public void startRound(View view) {
         String courseText = course.getText().toString();
-        if (courseText.equals("Add Course") | courseText.equals("")) {
-            Toast.makeText(this, "You Must Add A Course Before We Begin", Toast.LENGTH_LONG).show();
+        if (courseText.equals(getString(R.string.coursePlaceHolder)) | courseText.equals("")) {
+            Toast.makeText(this, getString(R.string.noCourseErrorMsg), Toast.LENGTH_LONG).show();
             return;
         }
 
         String p1FirstText = p1First.getText().toString();
-        if (p1FirstText.equals("Add Player") | p1FirstText.equals("")) {
-            Toast.makeText(this, "You Must Add A First Player Before We Begin", Toast.LENGTH_LONG).show();
+        if (p1FirstText.equals(getString(R.string.playerPlaceHolder)) | p1FirstText.equals("")) {
+            Toast.makeText(this, getString(R.string.noPlayer1ErrorMsg), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -486,17 +485,17 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
     public void onSave(View view) {
         String courseText = course.getText().toString();
-        if (courseText.equals("Add Course") | courseText.equals("")) {
-            Toast.makeText(this, "You Must Add A Course Before We Begin", Toast.LENGTH_LONG).show();
+        if (courseText.equals(getString(R.string.coursePlaceHolder)) | courseText.equals("")) {
+            Toast.makeText(this, getString(R.string.noCourseErrorMsg), Toast.LENGTH_LONG).show();
             return;
         }
 
         String p1FirstText = p1First.getText().toString();
-        if (p1FirstText.equals("Add Player") | p1FirstText.equals("")) {
-            Toast.makeText(this, "You Must Add A First Player Before We Begin", Toast.LENGTH_LONG).show();
+        if (p1FirstText.equals(getString(R.string.playerPlaceHolder)) | p1FirstText.equals("")) {
+            Toast.makeText(this, getString(R.string.noPlayer1ErrorMsg), Toast.LENGTH_LONG).show();
             return;
         }
         mDoSave = true;
-        Toast.makeText(getApplicationContext(), "Round is Safe With Me!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.safeRound), Toast.LENGTH_SHORT).show();
     }
 }

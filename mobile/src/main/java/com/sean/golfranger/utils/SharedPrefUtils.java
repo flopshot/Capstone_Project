@@ -10,7 +10,6 @@ import java.util.Set;
 /**
  * Utility Class to easily access Shared Preference Stores
  */
-
 public class SharedPrefUtils {
     private static final String KEY_USER_LAT = "SharedPrefUtilsUserLat";
     private static final String KEY_USER_LON = "SharedPrefUtilUserLon";
@@ -20,7 +19,6 @@ public class SharedPrefUtils {
     private static final String PENDING_MARKER_HASHES_KEY = "SharedPrefUtilsPMH";
     private static final String KEY_LAT = "lat";
     private static final String KEY_LON = "lon";
-    private static final String KEY_RESTART_MAP_FROM_ROTATION = "restartMapFromRotation";
     private static final String CURRENT_ROUNDID_KEY = "SharedPrefUtilsRoundIdCur";
     private static final String KEY_WIND_SPEED = "WindJobService.EXTRA_WIND_SPEED";
     private static final String KEY_WIND_DIRECTION = "WindJobService.EXTRA_WIND_DIRECTION";
@@ -73,24 +71,6 @@ public class SharedPrefUtils {
         curLatLonF[1] = prefs.getFloat(KEY_USER_LON,0f);
 
         return curLatLonF;
-    }
-
-    /**
-     * Returns true if the map is resumed. False if the map is paused
-     */
-    public static boolean isOnMapScreen(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(KEY_ON_MAP, false);
-    }
-
-    /**
-     * Set true if the map is resumed. False if the map is paused
-     */
-    public static void setIsOnMapScreen(Context context, boolean isOnMap) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(KEY_ON_MAP, isOnMap);
-        editor.apply();
     }
 
     /**

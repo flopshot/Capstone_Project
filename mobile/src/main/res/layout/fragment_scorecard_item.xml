@@ -9,7 +9,7 @@
     
     <TextView
         android:id="@+id/holeNumber"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"
@@ -18,7 +18,7 @@
     
     <TextView
         android:id="@+id/parNumber"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"
@@ -27,7 +27,7 @@
     
     <TextView
         android:id="@+id/p1HoleScore"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"
@@ -36,7 +36,7 @@
 
     <TextView
         android:id="@+id/p2HoleScore"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"
@@ -45,7 +45,7 @@
 
     <TextView
         android:id="@+id/p3HoleScore"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"
@@ -54,7 +54,7 @@
 
     <TextView
         android:id="@+id/p4HoleScore"
-        android:layout_width="55dp"
+        android:layout_width="@dimen/scorecardTextViewWidth"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:gravity="center"

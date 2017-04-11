@@ -13,4 +13,32 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_min_width">180dp</dimen>
     <dimen name="widget_child_view_height">100dp</dimen>
     <dimen name="widget_margin">0dp</dimen>
+
+    <!--COURSES AND PLAYERS SCREENS-->
+    <dimen name="recyclerViewPaddingTop">75dp</dimen>
+    <dimen name="recyclerViewPaddingBottom">28dp</dimen>
+
+    <!--COURSE LIST ITEM-->
+    <dimen name="itemHeight">60dp</dimen>
+    <dimen name="itemCourseMargin">15dp</dimen>
+
+    <!--FRAGMENT SCORECARD-->
+    <dimen name="scorecardFragMargin">15dp</dimen>
+    <dimen name="scorecardTextViewWidth">55dp</dimen>
+    <dimen name="scorecardRecyclerViewMarginTop">5dp</dimen>
+
+    <!--WIDGET DIMS-->
+    <dimen name="widgetTitleBarMargin">85dp</dimen>
+    <dimen name="widgetImageWidth">50dp</dimen>
+    <dimen name="widgetPadding">4dp</dimen>
+
+    <!--HOLE RADIO DIALOG-->
+    <dimen name="radioHeight">190dp</dimen>
+    <dimen name="radioEndMargin">15dp</dimen>
+
+    <!--MATCH LIST ITEM-->
+    <dimen name="match_list_height">200dp</dimen>
+    <dimen name="hyphenMargin">15dp</dimen>
+    <dimen name="matchTextViewMargin">20dp</dimen>
+
 </resources>

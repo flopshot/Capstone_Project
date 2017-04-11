@@ -45,7 +45,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_courses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mCourseAdapter = new CourseAdapter(this, new CourseAdapter.CourseAdapterOnClickHandler() {
+        mCourseAdapter = new CourseAdapter(new CourseAdapter.CourseAdapterOnClickHandler() {
             @Override
             public void onClick(Long courseId, String clubName, String courseName) {
                 if (getCallingActivity() == null) {
@@ -113,23 +113,22 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
     }
 
     public void addCourse(View v){
-        //TODO ADD STRINGS to strings.xml
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CoursesActivity.this);
-        alertDialog.setTitle("Add Course");
+        alertDialog.setTitle(getString(R.string.addCourseButton));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final EditText clubInput = new EditText(this);
-        clubInput.setHint("Club Name");
+        clubInput.setHint(getString(R.string.dialogClubNameHint));
         layout.addView(clubInput);
 
         final EditText courseInput = new EditText(this);
-        courseInput.setHint("Course Name");
+        courseInput.setHint(getString(R.string.dialogCourseNameHint));
         layout.addView(courseInput);
         alertDialog.setView(layout);
 
-        alertDialog.setPositiveButton("ADD",
+        alertDialog.setPositiveButton(getString(R.string.dialogAddButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String courseName = courseInput.getText().toString();
@@ -147,15 +146,15 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
-                                "All Fields Must Be Filled. \n Please Use Input Letters and Numbers Only",
-                                Toast.LENGTH_SHORT
+                                getString(R.string.dialogErrorMsg),
+                                Toast.LENGTH_LONG
                           ).show();
                       }
                   }
               }
         );
 
-        alertDialog.setNegativeButton("CANCEL",
+        alertDialog.setNegativeButton(getString(R.string.dialogCancelButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();
@@ -164,9 +163,8 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
     }
 
     private void showEditCourseDialog(final long courseId, String club, String course){
-        //TODO ADD STRINGS to strings.xml
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(CoursesActivity.this);
-        alertDialog.setTitle("Edit Course");
+        alertDialog.setTitle(getString(R.string.dialogEditCourse));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -180,7 +178,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         layout.addView(courseInput);
         alertDialog.setView(layout);
 
-        alertDialog.setNegativeButton("OK",
+        alertDialog.setNegativeButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String courseName = courseInput.getText().toString();
@@ -202,7 +200,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
                       } else {
                           Toast.makeText(
                                 getApplicationContext(),
-                                "All Fields Must Be Filled. \n Please Use Input Letters and Numbers Only",
+                                getString(R.string.dialogErrorMsg),
                                 Toast.LENGTH_SHORT
                           ).show();
                       }
@@ -210,7 +208,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
               }
         );
 
-        alertDialog.setPositiveButton("DELETE",
+        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       ContentResolver resolver = getContentResolver();

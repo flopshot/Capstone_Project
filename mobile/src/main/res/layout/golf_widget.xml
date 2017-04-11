@@ -10,7 +10,7 @@
         android:id="@+id/widget_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="@dimen/widgetTitleBarMargin"
         android:divider="@null"
         android:dividerHeight="0dp"
         tools:listitem="@layout/widget_list_item"/>
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/widget_empty"
         android:layout_width="match_parent"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="@dimen/widgetTitleBarMargin"
         android:layout_height="match_parent"
         android:gravity="center"
         android:fontFamily="sans-serif-condensed"
@@ -31,10 +31,11 @@
         android:layout_width="match_parent"
         android:gravity="center"
         style="@style/WidgetBar"
-        android:layout_height="85dp">
+        android:layout_height="@dimen/widgetTitleBarMargin">
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="@dimen/widgetImageWidth"
+            android:contentDescription="@string/widgetTitleContentDescription"
             android:layout_height="match_parent"
             android:src="@drawable/icon_small"/>
 
@@ -42,10 +43,12 @@
             android:id="@+id/widget"
             android:layout_width="wrap_content"
             android:textSize="22sp"
-            android:paddingStart="4dp"
+            android:paddingStart="@dimen/widgetPadding"
+            android:paddingEnd="@dimen/widgetPadding"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textStyle="bold"
+            android:contentDescription="@string/widgetTitleContentDescription"
             android:drawableEnd="@drawable/ic_sync"
             style="@style/WidgetBar"
             android:text="@string/app_name"/>

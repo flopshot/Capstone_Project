@@ -13,10 +13,10 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:outlineProvider="paddedBounds"
-        android:paddingBottom="28dp"
+        android:paddingBottom="@dimen/recyclerViewPaddingBottom"
         android:paddingLeft="@dimen/list_side_margin"
         android:paddingRight="@dimen/list_side_margin"
-        android:paddingTop="75dp"
+        android:paddingTop="@dimen/recyclerViewPaddingTop"
         android:scrollbarStyle="outsideOverlay"/>
 
     <android.support.design.widget.AppBarLayout
@@ -44,12 +44,12 @@
                 android:layout_gravity="center|start"
                 android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="Courses"/>
+                android:text="@string/coursesTitle"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="@string/app_name"
+                android:contentDescription="@string/logoCD"
                 android:src="@drawable/logo3"
                 android:layout_gravity="center_horizontal"/>
 
@@ -62,7 +62,8 @@
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:clickable="true"
                 android:onClick="addCourse"
-                android:text="Add Course"/>
+                android:contentDescription="@string/addCourseContentDescription"
+                android:text="@string/addCourseButton"/>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>

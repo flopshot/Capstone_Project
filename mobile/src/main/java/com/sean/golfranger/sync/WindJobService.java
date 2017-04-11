@@ -15,7 +15,6 @@ import zh.wang.android.yweathergetter4a.YahooWeatherInfoListener;
  * Job Service to get wind metrics every X minutes, depending on the job build schedule
  * Implements YahooWeather Listener interface callback, which passes back wind data
  */
-//TODO: Consider Putting user-sync function in map frag, separate from the JobService Logic
 public class WindJobService extends JobService implements YahooWeatherInfoListener {
     JobParameters mJobParams;
     private static final int CONNECTION_TIMEOUT = 5000;

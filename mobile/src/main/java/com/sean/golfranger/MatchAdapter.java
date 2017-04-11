@@ -20,11 +20,11 @@ import java.util.Locale;
  * Match Adapter For Matches Activity Layout. Will be fed Data from Rounds Table
  */
 
-public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHolder>{
+class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHolder>{
     private Cursor mCursor;
     private Context mContext;
 
-    public MatchAdapter(Context context) {
+    MatchAdapter(Context context) {
           this.mContext = context;
     }
 
@@ -33,8 +33,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.match_list_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
-        MatchAdapterViewHolder viewHolder = new MatchAdapterViewHolder(view);
-        return viewHolder;
+        return new MatchAdapterViewHolder(view);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
           implements View.OnClickListener, View.OnLongClickListener{
         TextView p1First, p2First, p3First, p4First, courseName, clubName, date;
 
-        public MatchAdapterViewHolder(View view) {
+        MatchAdapterViewHolder(View view) {
             super(view);
             this.p1First = (TextView) view.findViewById(R.id.p1First);
             this.p2First = (TextView) view.findViewById(R.id.p2First);
@@ -113,7 +112,7 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
 
     }
 
-    public void swapCursor(Cursor newCursor) {
+    void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
     }
@@ -123,7 +122,8 @@ public class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapte
     }
 
     private String getReadableDate(long unixtime) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy", Locale.getDefault());
+        SimpleDateFormat formatter =
+              new SimpleDateFormat(mContext.getString(R.string.dateFormat), Locale.getDefault());
 
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         Calendar calendar = Calendar.getInstance();

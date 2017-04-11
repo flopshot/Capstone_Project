@@ -20,7 +20,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             style="@style/HoleViewHeader"
-            android:text="Hole:"/>
+            android:text="@string/holeTitle"/>
 
         <Button
             android:id="@+id/holeValue"
@@ -30,7 +30,8 @@
             android:layout_marginStart="5dp"
             android:background="@drawable/rounded_textbox"
             android:gravity="center"
-            android:text="1▼"
+            android:text="@string/initialHoleNumber"
+            android:contentDescription="@string/holeValueCD"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <TextView
@@ -40,7 +41,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             style="@style/HoleViewHeader"
-            android:text="Distance (y):"/>
+            android:text="@string/distanceLabel"/>
 
         <EditText
             android:id="@+id/distanceValue"
@@ -52,8 +53,7 @@
             android:background="@drawable/rounded_textbox"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="480"/>
+            android:inputType="number"/>
 
         <TextView
             android:id="@+id/parLabel"
@@ -62,7 +62,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             style="@style/HoleViewHeader"
-            android:text="Par:"/>
+            android:text="@string/parLabel"/>
 
         <EditText
             android:id="@+id/parValue"
@@ -74,8 +74,7 @@
             android:background="@drawable/rounded_textbox"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:imeOptions="actionDone"
-            android:inputType="number"
-            android:text="4"/>
+            android:inputType="number"/>
 
     </LinearLayout>
 
@@ -96,7 +95,7 @@
             android:layout_columnWeight="1"
             android:layout_marginBottom="0dp"
             android:gravity="center"
-            android:text="The Players"
+            android:text="@string/thePlayersTitle"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <TextView
@@ -104,7 +103,6 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:text="Sean"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
         <TextView
@@ -112,7 +110,6 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
         <TextView
@@ -120,7 +117,6 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
         <TextView
@@ -128,7 +124,6 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:text="Matt"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
 
@@ -139,7 +134,6 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="The Scores"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <EditText
@@ -181,7 +175,7 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="The Putts"
+            android:text="@string/thePuttsLabel"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <EditText
@@ -223,7 +217,7 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="The Penalties"
+            android:text="@string/thePenaltiesLabel"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <EditText
@@ -266,7 +260,7 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="Green in Reg."
+            android:text="@string/girLabel"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <CheckBox
@@ -305,7 +299,7 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="Fwy in Reg."
+            android:text="@string/fwyInRegLabel"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <CheckBox
@@ -344,7 +338,7 @@
             android:layout_columnSpan="2"
             android:layout_columnWeight="1"
             android:gravity="center"
-            android:text="Sand"
+            android:text="@string/sandLabel"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
         <CheckBox
