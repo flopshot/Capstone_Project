@@ -1,5 +1,6 @@
 package com.sean.golfranger;
 
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.DialogUtils;
 
 import timber.log.Timber;
 
@@ -45,6 +48,10 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_players);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration =
+              new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
         mPlayerAdapter = new PlayerAdapter(new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
             public void onClick(Long playerId, String firstName, String lastName) {
@@ -114,7 +121,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     public void addPlayer(View v){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
         alertDialog.setTitle(getString(R.string.playerPlaceHolder));
 
         LinearLayout layout = new LinearLayout(this);
@@ -160,11 +167,12 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();
                   }});
-        alertDialog.show();
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 
     private void showEditPlayerDialog(final long playerId, String first, String last){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
         alertDialog.setTitle(getString(R.string.dialogEditPlayer));
 
         LinearLayout layout = new LinearLayout(this);
@@ -219,6 +227,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                             new String[] {String.valueOf(playerId)});
                       dialog.cancel();
                   }});
-        alertDialog.show();
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 }

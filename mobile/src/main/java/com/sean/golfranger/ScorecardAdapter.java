@@ -58,35 +58,20 @@ class ScorecardAdapter
                     )
               ));
         customViewHolder.parNumber.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                          Contract.Holes.HOLE_PAR
-                    )
-              ));
+              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.HOLE_PAR)))
+        );
         customViewHolder.p1HoleScore.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                          Contract.Holes.P1_SCORE
-                    )
-              ));
+              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P1_SCORE)))
+        );
         customViewHolder.p2HoleScore.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                          Contract.Holes.P2_SCORE
-                    )
-              ));
+              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P2_SCORE)))
+        );
         customViewHolder.p3HoleScore.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                          Contract.Holes.P3_SCORE
-                    )
-              ));
+              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P3_SCORE)))
+        );
         customViewHolder.p4HoleScore.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                        Contract.Holes.P4_SCORE
-                    )
-              ));
+              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P4_SCORE)))
+        );
     }
 
     @Override
@@ -102,5 +87,13 @@ class ScorecardAdapter
 
     public Cursor getCursor() {
         return mCursor;
+    }
+
+    private String nullOutZeroScore(String score) {
+        if (score != null && !score.equals("0")) {
+            return score;
+        } else {
+            return null;
+        }
     }
 }

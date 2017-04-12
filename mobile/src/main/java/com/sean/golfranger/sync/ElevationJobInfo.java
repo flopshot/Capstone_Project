@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Set;
 
 import timber.log.Timber;
@@ -44,7 +45,7 @@ public class ElevationJobInfo {
         }
 
         int establishedHashesCount = SharedPrefUtils.getEstablishedMarkerHashes(context).size();
-        Set<String> pendingHashes = SharedPrefUtils.getPendingMarkerHashes(context);
+        Set<String> pendingHashes = new HashSet<>(SharedPrefUtils.getPendingMarkerHashes(context));
 
         Timber.d("Established Hash Size: " + String.valueOf(establishedHashesCount) + " Pending Hash Size: " + String.valueOf(pendingHashes.size()));
         // If there are no pending and no established marker hashes, then end task

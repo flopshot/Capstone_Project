@@ -1,9 +1,12 @@
 package com.sean.golfranger;
 
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.DialogUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -71,15 +75,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
 
         @Override
         public boolean onLongClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
-
-            ContentResolver resolver = mContext.getContentResolver();
-            resolver.delete(
-                  Contract.Rounds.buildDirUri(),
-                  Contract.Rounds._ID + "=?",
-                  new String[]{String.valueOf(roundId)});
+            deleteRoundDialog(getAdapterPosition());
             return true;
         }
     }
@@ -129,5 +125,33 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixtime);
         return formatter.format(calendar.getTime());
+    }
+
+    private void deleteRoundDialog(final int adapterPosition) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle("Delete Round?");
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mCursor.moveToPosition(adapterPosition);
+                long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
+
+                ContentResolver resolver = mContext.getContentResolver();
+                resolver.delete(
+                      Contract.Rounds.buildDirUri(),
+                      Contract.Rounds._ID + "=?",
+                      new String[]{String.valueOf(roundId)});
+            }
+        });
+
+        alertDialog.setNeutralButton("NO",
+              new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int which) {
+                      dialog.cancel();
+                  }});
+
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 }

@@ -25,7 +25,6 @@
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -33,23 +32,24 @@
         <provider
             android:name=".data.Provider"
             android:authorities="com.sean.golfranger"
-            android:exported="true"/>
+            android:exported="false"/>
 
         <service
             android:name=".sync.WindJobService"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service
             android:name=".sync.ElevationJobService"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
         <service
             android:name=".sync.ElevationIntentService"
             android:exported="false"/>
 
-        <activity android:name=".RoundActivity">
+        <activity android:name=".RoundActivity"
+                  android:windowSoftInputMode="stateUnchanged|adjustResize">
         </activity>
         <activity android:name=".CoursesActivity">
         </activity>

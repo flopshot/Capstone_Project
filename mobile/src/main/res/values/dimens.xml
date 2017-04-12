@@ -42,4 +42,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="hyphenMargin">15dp</dimen>
     <dimen name="matchTextViewMargin">20dp</dimen>
 
+    <!--START ROUND ACTIVITY-->
+    <dimen name="dividerMargin">50dp</dimen>
+
 </resources>

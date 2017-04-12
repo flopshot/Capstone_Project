@@ -63,7 +63,7 @@
     <string name="startRoundTitle">Scorecard</string>
     <string name="letsPlay">Let\'s Play</string>
     <string name="letsPlayContentDescription">Starts your selected round to play</string>
-    <string name="courseTitle">Course</string>
+    <string name="courseTitle">Course:\u0020\u0020</string>
     <string name="coursePlaceHolder">Add Course</string>
     <string name="hyphen">-</string>
     <string name="logoCD">Title Image</string>
@@ -152,4 +152,15 @@
     <string name="noPlayer1ErrorMsg">You Must Add A First Player Before We Begin</string>
     <string name="noCourseErrorMsg">You Must Add A Course Before We Begin</string>
     <string name="safeRound">Your Round Is Safe With Me</string>
+    <string name="mapButtonText">Map</string>
+    <string name="holeButtonText">Hole</string>
+    <string name="scorecardButtonText">Scorecard</string>
+    <string name="tutorialButtonText">Tutorial</string>
+    <string name="mapTutorial">Click anywhere on the map to add a distance marker. The distance and elevation appear automatically.    Press and hold down on the map to clear all markers.</string>
+    <string name="gpsOffDialogTitle">Your GPS Is Turned Off</string>
+    <string name="gpsOffMsg">You must turn on your GPS in order to have map capabilities</string>
+    <string name="gpsEnableButtonText">TURN ON GPS</string>
+    <string name="gpsOffDialogDismiss">DISMISS</string>
+    <string name="badConnectionDialogTitle">Connection is Poor</string>
+    <string name="badConnectionDialogMsg">Distances might still be available, but wind and elevation cannot display.   Will reconnect when available</string>
 </resources>

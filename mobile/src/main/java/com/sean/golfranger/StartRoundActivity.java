@@ -1,5 +1,6 @@
 package com.sean.golfranger;
 
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.DialogUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
@@ -153,8 +156,10 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             String str = cursor.getString(1);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
+                club.setTypeface(null, Typeface.NORMAL);
             } else {
                 club.setText(getString(R.string.coursePlaceHolder));
+                club.setTypeface(null, Typeface.ITALIC);
             }
             str = cursor.getString(2);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -165,24 +170,26 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             }
             str = cursor.getString(3);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
-                Timber.d("First Name of P1: " + str);
                 p1First.setText(str);
+                p1First.setTypeface(null, Typeface.NORMAL);
             } else {
                 p1First.setText(getString(R.string.playerPlaceHolder));
+                p1First.setTypeface(null, Typeface.ITALIC);
             }
             str = cursor.getString(4);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p1Last.setText(str);
                 p1Last.setVisibility(View.VISIBLE);
-
             } else {
                 p1Last.setVisibility(View.INVISIBLE);
             }
             str = cursor.getString(5);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2First.setText(str);
+                p2First.setTypeface(null, Typeface.NORMAL);
             } else {
                 p2First.setText(getString(R.string.playerPlaceHolder));
+                p2First.setTypeface(null, Typeface.ITALIC);
             }
             str = cursor.getString(6);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -195,8 +202,10 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             str = cursor.getString(7);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3First.setText(str);
+                p3First.setTypeface(null, Typeface.NORMAL);
             } else {
                 p3First.setText(getString(R.string.playerPlaceHolder));
+                p3First.setTypeface(null, Typeface.ITALIC);
             }
             str = cursor.getString(8);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -209,8 +218,10 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             str = cursor.getString(9);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4First.setText(str);
+                p4First.setTypeface(null, Typeface.NORMAL);
             } else {
                 p4First.setText(getString(R.string.playerPlaceHolder));
+                p4First.setTypeface(null, Typeface.ITALIC);
             }
             str = cursor.getString(10);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
@@ -267,7 +278,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     }
 
     private void startPlayerCourseIntent(final int requestCode, String text) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(StartRoundActivity.this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(StartRoundActivity.this);
         alertDialog.setTitle(getString(R.string.dialogChange));
         String buttonMsg;
         Timber.d(text);
@@ -342,7 +353,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                       dialog.cancel();
                   }}
               );
-        alertDialog.show();
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 
     @Override

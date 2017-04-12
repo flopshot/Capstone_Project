@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,6 +25,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.DialogUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -287,7 +287,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
             RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group_hole);
 
             dialog.show();
-            doKeepDialog(dialog);
+            DialogUtils.doKeepDialog(dialog);
             rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
                 @Override
@@ -313,15 +313,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
             });
         }
     };
-
-    // Prevent dialog dismiss when orientation changes
-    private static void doKeepDialog(Dialog dialog){
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialog.getWindow().setAttributes(lp);
-    }
 
     private void setCheckBoxAndEditTextListeners(final String holeNumber) {
         for (int j = 0; j < editTexts.length; j++) {

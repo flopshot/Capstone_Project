@@ -1,10 +1,12 @@
 package com.sean.golfranger;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.job.JobScheduler;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -12,14 +14,18 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -37,7 +43,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sean.golfranger.sync.ElevationJobInfo;
 import com.sean.golfranger.sync.WindJobInfo;
+import com.sean.golfranger.utils.DialogUtils;
 import com.sean.golfranger.utils.GolfMarker;
+import com.sean.golfranger.utils.NetworkUtils;
 import com.sean.golfranger.utils.PermissionUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
@@ -71,10 +79,11 @@ public class RoundActivity extends FragmentActivity
     public static final int HOLE_STATE = 1;
     public static final int SCORECARD_STATE = 0;
     public static final String CURRENT_MARKER_KEY = "CURRENTmARKERhaSHkEY";
+    public static final double DEFAULT_ELEVATION = -2500.;
 
     Boolean mIsTablet;
 
-    //    Button mScorecardViewButton, mHoleViewButton, mMapViewButton;
+    Button mScorecardViewButton, mHoleViewButton, mMapViewButton;
     Boolean mLocationEnabled;
     FrameLayout mFragmentContainer;
     View mMarkerStats;
@@ -110,16 +119,9 @@ public class RoundActivity extends FragmentActivity
         windDefault = getString(R.string.wind_default);
         elevationDefault = getString(R.string.elevation_default);
         windArrow = (ImageView)findViewById(R.id.windArrow);
-
-        //Check Location Status
-        LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            mLocationEnabled = false;
-            Timber.d("Location DISABLED");
-        } else {
-            Timber.d("Location ENABLED");
-            mLocationEnabled = true;
-        }
+        mScorecardViewButton = (Button) findViewById(R.id.scorecardView);
+        mHoleViewButton = (Button) findViewById(R.id.holeView);
+        mMapViewButton = (Button) findViewById(R.id.mapView);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
               .addApi(LocationServices.API)
@@ -167,7 +169,11 @@ public class RoundActivity extends FragmentActivity
                 distanceMarker.setTag(hash);
 
                 Double[] markerLatLng = new Double[] {latLng.latitude, latLng.longitude};
-                golfMarkersInfo.put(hash, new GolfMarker(markerLatLng));
+                GolfMarker defaultMarkerInfo = new GolfMarker(markerLatLng);
+                defaultMarkerInfo.setElevationDelta(DEFAULT_ELEVATION);
+                defaultMarkerInfo.setElevation(DEFAULT_ELEVATION);
+                defaultMarkerInfo.setDistance(0.);
+                golfMarkersInfo.put(hash, defaultMarkerInfo);
 
                 SharedPrefUtils.setPendingMarkerLatLon(getApplicationContext(), hash, markerLatLng);
                 SharedPrefUtils.addPendingMarkerHash(getApplicationContext(), hash);
@@ -214,6 +220,7 @@ public class RoundActivity extends FragmentActivity
         outState.putString(CURRENT_MARKER_KEY, currentMarkerHash);
         outState.putBoolean(MAP_FIRST_CENTERED_KEY, mapFirstCentered);
         outState.putSerializable(MAP_MARKER_INFO_KEY, golfMarkersInfo);
+
     }
 
     @Override
@@ -233,22 +240,39 @@ public class RoundActivity extends FragmentActivity
     @Override
     protected void onResume() {
         PermissionUtils.checkLocationPermission(getApplicationContext());
+        if (!NetworkUtils.isNetworkAvailable(getApplicationContext()) && !mapFirstCentered) {
+            //On first resume, if connection is poor, notify user once and clear wind data
+            SharedPrefUtils.setCurrentWindSpeed(getApplicationContext(), null);
+            showBadConnectionDialog();
+        }
         super.onResume();
     }
 
     @Override
     protected void onStart() {
-        IntentFilter windFilter = new IntentFilter();
-        windFilter.addAction(ACTION_WIND_UPDATED);
-        registerReceiver(windReceiver, windFilter);
+        //Check Location Status
+        LocationManager manager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            mLocationEnabled = false;
+            SharedPrefUtils.setUserLatLon(getApplicationContext(), 0., 0.);
+            showLocationOffDialog();
+            Timber.d("Location DISABLED");
+        } else {
+            Timber.d("Location ENABLED");
+            mLocationEnabled = true;
+            IntentFilter windFilter = new IntentFilter();
+            windFilter.addAction(ACTION_WIND_UPDATED);
+            registerReceiver(windReceiver, windFilter);
 
-        IntentFilter elevationFilter = new IntentFilter();
-        elevationFilter.addAction(ACTION_ELEVATION_RETRIEVED);
-        registerReceiver(elevationReceiver, elevationFilter);
+            IntentFilter elevationFilter = new IntentFilter();
+            elevationFilter.addAction(ACTION_ELEVATION_RETRIEVED);
+            registerReceiver(elevationReceiver, elevationFilter);
 
-        mGoogleApiClient.connect();
-        WindJobInfo.initialize(getApplicationContext());
-        ElevationJobInfo.initialize(getApplicationContext());
+            mGoogleApiClient.connect();
+            WindJobInfo.initialize(getApplicationContext());
+            ElevationJobInfo.initialize(getApplicationContext());
+        }
+
         super.onStart();
     }
 
@@ -259,8 +283,10 @@ public class RoundActivity extends FragmentActivity
         jobScheduler.cancelAll();
         mGoogleApiClient.disconnect();
 
-        unregisterReceiver(elevationReceiver);
-        unregisterReceiver(windReceiver);
+        if (mLocationEnabled) {
+            unregisterReceiver(elevationReceiver);
+            unregisterReceiver(windReceiver);
+        }
         super.onStop();
     }
 
@@ -294,6 +320,9 @@ public class RoundActivity extends FragmentActivity
                       .hide(mMapFragment)
                       .commit();
                 mMarkerStats.setVisibility(View.INVISIBLE);
+                applyPressedState(mScorecardViewButton, true);
+                applyPressedState(mMapViewButton, false);
+                applyPressedState(mHoleViewButton, false);
                 break;
             case HOLE_STATE:
                 fm.beginTransaction()
@@ -302,6 +331,9 @@ public class RoundActivity extends FragmentActivity
                       .hide(mMapFragment)
                       .commit();
                 mMarkerStats.setVisibility(View.INVISIBLE);
+                applyPressedState(mScorecardViewButton, false);
+                applyPressedState(mMapViewButton, false);
+                applyPressedState(mHoleViewButton, true);
                 break;
             case MAP_STATE:
                 fm.beginTransaction()
@@ -310,8 +342,28 @@ public class RoundActivity extends FragmentActivity
                       .hide(mScorecardFragment)
                       .commit();
                 mMarkerStats.setVisibility(View.VISIBLE);
+                applyPressedState(mScorecardViewButton, false);
+                applyPressedState(mMapViewButton, true);
+                applyPressedState(mHoleViewButton, false);
                 break;
         }
+    }
+
+    public void onTutorialClick(View view) {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RoundActivity.this);
+        alertDialog.setTitle(getString(R.string.tutorialButtonText));
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final TextView tutorialView = new TextView(this);
+        tutorialView.setText(R.string.mapTutorial);
+        tutorialView.setPaddingRelative(10,0,0,5);
+        tutorialView.setTextSize(20);
+        layout.addView(tutorialView);
+        alertDialog.setView(layout);
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 
     @Override
@@ -370,7 +422,7 @@ public class RoundActivity extends FragmentActivity
 
         //Update all established markers
         Set<String> establishedMarkers
-              = SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext());
+              = new HashSet<>(SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext()));
 
         for (String hash : establishedMarkers) {
             //Set Marker Distance from current user location
@@ -379,8 +431,8 @@ public class RoundActivity extends FragmentActivity
                 markerLatLng = golfMarkersInfo.get(hash).getLatLon();
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                //In system process end events, onDestroy may not get called. if so, we remove
-                // hash manually when old hash attempts to be reset
+                //If system process ends unexpectedly, onDestroy may not get called.
+                // 1if so, we remove hash manually when old hash attempts to be reset
                 Timber.e("MarkerHash: " + hash + " no longer has associated Map Marker. Deleted from established marker hashes.");
                 SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
                 continue;
@@ -417,8 +469,14 @@ public class RoundActivity extends FragmentActivity
 
             //Check if marker has not been cleared from map
             if (golfMarkersInfo != null) {
-                SharedPrefUtils.addEstablishedMarkerHash(context, elevationHash[0]);
-                golfMarkersInfo.get(elevationHash[0]).setElevation(Double.valueOf(elevationHash[1]));
+                try {
+                    golfMarkersInfo.get(elevationHash[0]).setElevation(Double.valueOf(elevationHash[1]));
+                    SharedPrefUtils.addEstablishedMarkerHash(context, elevationHash[0]);
+                } catch (NullPointerException e) {
+                    //If system process ends unexpectedly, onDestroy may not get called.
+                    // 1if so, we remove hash manually when old hash attempts to be reset
+                    Timber.e("MarkerHash: " + elevationHash[0] + " no longer has associated Map Marker.");
+                }
             }
         }
     }
@@ -455,14 +513,14 @@ public class RoundActivity extends FragmentActivity
             GolfMarker currentMarker = golfMarkersInfo.get(currentMarkerHash);
             Double curMarkerDistance = currentMarker.getDistance();
             Double curMarkerElevationDelta = currentMarker.getElevationDelta();
-            if (curMarkerDistance != null) {
+            if (curMarkerDistance != 0.) {
                 yardageViewString = yardagePrefix + " " + viewFormatter(curMarkerDistance);
                 yardageView.setText(yardageViewString);
             } else {
                 yardageViewString = yardagePrefix + yardageDefault;
                 yardageView.setText(yardageViewString);
             }
-            if (curMarkerElevationDelta != null) {
+            if (curMarkerElevationDelta != DEFAULT_ELEVATION) {
                 elevationViewString = elevationPrefix + " " + viewFormatter(curMarkerElevationDelta);
                 elevationView.setText(elevationViewString);
                 if (curMarkerElevationDelta <= -1) {
@@ -503,5 +561,74 @@ public class RoundActivity extends FragmentActivity
             SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
             Timber.d("Marker " + hash + "Removed");
         }
+    }
+
+    private void applyPressedState(Button button, boolean pressed) {
+        if (pressed) {
+            button.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.lt_gray));
+            button.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.maroon));
+        } else {
+            button.setBackgroundResource(android.R.drawable.btn_default);
+            button.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray_900));
+        }
+    }
+
+    private void showLocationOffDialog() {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RoundActivity.this);
+        alertDialog.setTitle(R.string.gpsOffDialogTitle);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final TextView tutorialView = new TextView(this);
+        tutorialView.setText(R.string.gpsOffMsg);
+        tutorialView.setPaddingRelative(40,0,0,5);
+        tutorialView.setTextSize(20);
+        layout.addView(tutorialView);
+        alertDialog.setView(layout);
+        alertDialog.setPositiveButton(R.string.gpsEnableButtonText,
+              new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
+                          |Intent.FLAG_ACTIVITY_NEW_TASK
+                          |Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                    startActivity(intent);
+              }
+        });
+
+        alertDialog.setNeutralButton(getString(R.string.gpsOffDialogDismiss),
+              new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int which) {
+                      dialog.cancel();
+                  }});
+
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
+    }
+
+    private void showBadConnectionDialog() {
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RoundActivity.this);
+        alertDialog.setTitle(R.string.badConnectionDialogTitle);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final TextView tutorialView = new TextView(this);
+        tutorialView.setText(R.string.badConnectionDialogMsg);
+        tutorialView.setPaddingRelative(40,0,0,5);
+        tutorialView.setTextSize(20);
+        layout.addView(tutorialView);
+        alertDialog.setView(layout);
+
+        alertDialog.setNeutralButton(getString(R.string.gpsOffDialogDismiss),
+              new DialogInterface.OnClickListener() {
+                  public void onClick(DialogInterface dialog, int which) {
+                      dialog.cancel();
+                  }});
+
+        Dialog d = alertDialog.show();
+        DialogUtils.doKeepDialog(d);
     }
 }

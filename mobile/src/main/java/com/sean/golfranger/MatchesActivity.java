@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -36,6 +37,9 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_matches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DividerItemDecoration dividerItemDecoration =
+              new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         mMatchAdapter = new MatchAdapter(this);
         recyclerView.setAdapter(mMatchAdapter);
     }

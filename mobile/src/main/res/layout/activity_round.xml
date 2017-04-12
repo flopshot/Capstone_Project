@@ -13,21 +13,30 @@
 
         <Button
             android:id="@+id/scorecardView"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="33"
+            android:text="@string/scorecardButtonText"
+            android:textStyle="bold"
             android:layout_height="50dp"
             android:contentDescription="@string/scorecardViewCD"
             android:onClick="getScorecardView"/>
 
         <Button
             android:id="@+id/holeView"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="33"
+            android:text="@string/holeButtonText"
+            android:textStyle="bold"
             android:layout_height="50dp"
             android:contentDescription="@string/holeViewCD"
             android:onClick="getHoleView"/>
 
         <Button
             android:id="@+id/mapView"
-            android:layout_width="80dp"
+            android:layout_width="0dp"
+            android:layout_weight="33"
+            android:text="@string/mapButtonText"
+            android:textStyle="bold"
             android:layout_height="50dp"
             android:contentDescription="@string/mapViewCD"
             android:onClick="getMapView"/>
@@ -109,6 +118,17 @@
                 android:textColor="@android:color/white"
                 tools:drawableEnd="@drawable/arrow_down_float"
                 tools:text="Target Elevation: 5ft"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:textColor="@color/lt_gray"
+                android:textSize="14sp"
+                android:text="@string/tutorialButtonText"
+                android:clickable="true"
+                android:onClick="onTutorialClick"/>
         </LinearLayout>
 
     </FrameLayout>

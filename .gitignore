@@ -42,3 +42,4 @@ project.properties
 
 #Sensitive Info
 map_api_key.xml
+*.jks

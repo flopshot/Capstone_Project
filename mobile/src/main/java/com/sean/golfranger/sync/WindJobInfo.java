@@ -15,7 +15,7 @@ import timber.log.Timber;
 public class WindJobInfo {
 
     //Job Scheduling constants. Get wind data from api every
-    private static final int PERIOD = 5000; //Every 5min TODO: Change it back to 5min
+    private static final int PERIOD = 60000;
     private static final int INITIAL_BACKOFF = 3000;
     private static final int PERIODIC_ID = 2;
 
