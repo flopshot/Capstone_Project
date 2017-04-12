@@ -1,135 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gray_400">
-
-
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="end"
-        android:orientation="horizontal"
-        android:layout_marginEnd="@dimen/scorecardFragMargin"
-        android:layout_marginTop="@dimen/scorecardFragMargin">
-
-        <TextView
-            android:id="@+id/p1Name"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:background="@color/gray_900"
-            android:textColor="@color/lt_gray"/>
-
-        <TextView
-            android:id="@+id/p2Name"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:background="@color/gray_900"
-            android:textColor="@color/lt_gray"/>
-
-        <TextView
-            android:id="@+id/p3Name"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:background="@color/gray_900"
-            android:textColor="@color/lt_gray"/>
-
-        <TextView
-            android:id="@+id/p4Name"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:background="@color/gray_900"
-            android:textColor="@color/lt_gray"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginEnd="@dimen/scorecardFragMargin"
-        android:layout_marginTop="@dimen/scorecardFragMargin">
-
-        <TextView
-            android:id="@+id/holeLabel"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/scorecardHoleLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@color/lt_gray"
-            android:background="@color/maroon"/>
-
-        <TextView
-            android:id="@+id/parLabel"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/scorecardParLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@color/lt_gray"
-            android:background="@color/maroon"/>
-
-        <TextView
-            android:id="@+id/p1Total"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <TextView
-            android:id="@+id/p2Total"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <TextView
-            android:id="@+id/p3Total"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <TextView
-            android:id="@+id/p4Total"
-            android:layout_width="@dimen/scorecardTextViewWidth"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_holes"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/scorecardFragMargin"
-        android:layout_marginTop="@dimen/scorecardRecyclerViewMarginTop"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        android:gravity="end"/>
+        android:background="@color/gray_400">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:layout_marginEnd="@dimen/scorecardFragMargin"
+            android:layout_marginTop="@dimen/scorecardFragMargin">
 
-</LinearLayout>
+            <android.support.v4.widget.Space
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"/>
+            <android.support.v4.widget.Space
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/p1Name"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:background="@color/gray_900"
+                android:textColor="@color/lt_gray"/>
+
+            <TextView
+                android:id="@+id/p2Name"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:background="@color/gray_900"
+                android:textColor="@color/lt_gray"/>
+
+            <TextView
+                android:id="@+id/p3Name"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:background="@color/gray_900"
+                android:textColor="@color/lt_gray"/>
+
+            <TextView
+                android:id="@+id/p4Name"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:background="@color/gray_900"
+                android:textColor="@color/lt_gray"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginEnd="@dimen/scorecardFragMargin"
+            android:layout_marginTop="@dimen/scorecardFragMargin">
+
+            <TextView
+                android:id="@+id/holeLabel"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:text="@string/scorecardHoleLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/lt_gray"
+                android:background="@color/maroon"/>
+
+            <TextView
+                android:id="@+id/parLabel"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:text="@string/scorecardParLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/lt_gray"
+                android:background="@color/maroon"/>
+
+            <TextView
+                android:id="@+id/p1Total"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <TextView
+                android:id="@+id/p2Total"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <TextView
+                android:id="@+id/p3Total"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <TextView
+                android:id="@+id/p4Total"
+                android:layout_width="@dimen/scorecardTextViewWidth"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_holes"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/scorecardFragMargin"
+            android:layout_marginTop="@dimen/scorecardRecyclerViewMarginTop"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+    </LinearLayout>

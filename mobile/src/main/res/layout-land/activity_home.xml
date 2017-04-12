@@ -11,7 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:contentDescription="@string/appIconCD"
         android:layout_weight="1"
         app:srcCompat="@drawable/icon"/>
@@ -21,6 +21,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
+        android:layout_gravity="center"
         android:layout_marginTop="15dp">
 
         <TextView

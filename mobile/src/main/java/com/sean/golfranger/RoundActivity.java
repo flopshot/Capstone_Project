@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -71,6 +72,8 @@ public class RoundActivity extends FragmentActivity
     public static final int SCORECARD_STATE = 0;
     public static final String CURRENT_MARKER_KEY = "CURRENTmARKERhaSHkEY";
 
+    Boolean mIsTablet;
+
     //    Button mScorecardViewButton, mHoleViewButton, mMapViewButton;
     Boolean mLocationEnabled;
     FrameLayout mFragmentContainer;
@@ -124,7 +127,17 @@ public class RoundActivity extends FragmentActivity
               .addOnConnectionFailedListener(this)
               .build();
 
-        mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+        //Detect Weather Device is 8" tablet
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int widthPixels = metrics.widthPixels;
+        int heightPixels = metrics.heightPixels;
+        float scaleFactor = metrics.density;
+        float widthDp = widthPixels / scaleFactor;
+        float heightDp = heightPixels / scaleFactor;
+        float smallestWidth = Math.min(widthDp, heightDp);
+        mIsTablet = smallestWidth > 640;
+
         mMarkerStats = findViewById(R.id.markerStats);
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mMapFragment.setRetainInstance(true);
@@ -132,7 +145,8 @@ public class RoundActivity extends FragmentActivity
         mHoleFragment.setRetainInstance(true);
         mScorecardFragment = getFragmentManager().findFragmentById(R.id.scorecardFrag);
         mScorecardFragment.setRetainInstance(true);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null & !mIsTablet) {
+            mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
             setFragmentViewState(SCORECARD_STATE);
         }
         mMapFragment.getMapAsync(this);
@@ -189,7 +203,7 @@ public class RoundActivity extends FragmentActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (mMapFragment.isVisible()) {
+        if (mMapFragment.isVisible() & !mIsTablet) {
             outState.putInt(FRAG_VISIBILITY_STATE, MAP_STATE);
         } else if (mHoleFragment.isVisible()){
             outState.putInt(FRAG_VISIBILITY_STATE, HOLE_STATE);
@@ -207,7 +221,9 @@ public class RoundActivity extends FragmentActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState != null) {
-            setFragmentViewState(savedInstanceState.getInt(FRAG_VISIBILITY_STATE));
+            if (!mIsTablet) {
+                setFragmentViewState(savedInstanceState.getInt(FRAG_VISIBILITY_STATE));
+            }
             mapFirstCentered = savedInstanceState.getBoolean(MAP_FIRST_CENTERED_KEY);
             golfMarkersInfo = (HashMap<String, GolfMarker>) savedInstanceState.getSerializable(MAP_MARKER_INFO_KEY);
             currentMarkerHash = savedInstanceState.getString(CURRENT_MARKER_KEY);
