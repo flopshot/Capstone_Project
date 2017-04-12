@@ -33,7 +33,7 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
         } else {
             YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
             yahooWeather.setNeedDownloadIcons(false);
-            yahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
+            yahooWeather.setUnit(YahooWeather.UNIT.CELSIUS);
             yahooWeather.queryYahooWeatherByLatLon(getApplicationContext(), latLon[0], latLon[1], this);
         }
         Timber.d("Wind Sync Job Finished OK: ");
@@ -50,7 +50,7 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
     public void gotWeatherInfo(final WeatherInfo weatherInfo, YahooWeather.ErrorType errorType) {
         if (weatherInfo != null) {
             Float dir = Float.valueOf(weatherInfo.getWindDirection());
-            String speed = weatherInfo.getWindSpeed();
+            String speed = convertToMph(weatherInfo.getWindSpeed());
             Timber.d("Wind Dir: " + String.valueOf(dir));
             Timber.d("Wind Speed: " + speed);
             //Save Results to Shared Prefs
@@ -67,5 +67,9 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
         }
         // Update map of wind response
         sendBroadcast(new Intent(ACTION_WIND_UPDATED));
+    }
+
+    private String convertToMph(String windSpeed) {
+        return String.valueOf(Math.round(Double.valueOf(windSpeed) * 0.621371));
     }
 }

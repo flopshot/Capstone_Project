@@ -1,5 +1,6 @@
 package com.sean.golfranger;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +16,10 @@ import com.sean.golfranger.data.Contract;
 class ScorecardAdapter
       extends RecyclerView.Adapter<ScorecardAdapter.ScorecardAdapterViewHolder> {
     private Cursor mCursor;
+    private Context mContext;
 
-    ScorecardAdapter() {
-
+    ScorecardAdapter(Context context) {
+        mContext = context;
     }
 
     class ScorecardAdapterViewHolder extends RecyclerView.ViewHolder {
@@ -40,7 +42,7 @@ class ScorecardAdapter
               .from(viewGroup.getContext())
               .inflate(R.layout.fragment_scorecard_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
-              ViewGroup.LayoutParams.MATCH_PARENT,
+              ViewGroup.LayoutParams.WRAP_CONTENT,
               ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new ScorecardAdapterViewHolder(view);

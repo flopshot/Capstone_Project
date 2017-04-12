@@ -358,7 +358,17 @@ public class RoundActivity extends FragmentActivity
 
         for (String hash : establishedMarkers) {
             //Set Marker Distance from current user location
-            double[] markerLatLng = golfMarkersInfo.get(hash).getLatLon();
+            double[] markerLatLng;
+            try {
+                markerLatLng = golfMarkersInfo.get(hash).getLatLon();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                //In system process end events, onDestroy may not get called. if so, we remove
+                // hash manually when old hash attempts to be reset
+                Timber.e("MarkerHash: " + hash + " no longer has associated Map Marker. Deleted from established marker hashes.");
+                SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
+                continue;
+            }
             golfMarkersInfo.get(hash).setDistance(
                   distance(lat, lng, markerLatLng[0], markerLatLng[1]));
             //Set Marker Elevation Delta from current user elevation
@@ -417,8 +427,11 @@ public class RoundActivity extends FragmentActivity
     }
 
     /**
-     * This method is called in onLocationChanged to update marker info view with new user data
-     * Will update the currently selected marker with info
+     * This method is called in onLocationChanged to update marker info view with new user location
+     * data Will update the currently selected marker with Elevation and Distance info. We also
+     * reset the wind data on each call, even though the api call for wind is not as frequent. All
+     * data gathered here is retrieved from shared preferences, put there by the corresponding api
+     * calls
      */
     public void setMarkerInfoView() {
         String yardageViewString, elevationViewString, windViewString;
@@ -456,7 +469,7 @@ public class RoundActivity extends FragmentActivity
             windViewString = windPrefix + " " + viewFormatter(Double.valueOf(curWindSpeed));
             windView.setText(windViewString);
             if (curWindDir >= 0) {
-                windArrow.setRotation(curWindDir + 90f);
+                windArrow.setRotation(curWindDir + 180f);
                 windArrow.setVisibility(View.VISIBLE);
             } else {
                 windArrow.setVisibility(View.INVISIBLE);

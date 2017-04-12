@@ -2,9 +2,9 @@ package com.sean.golfranger;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -76,7 +76,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mScoreCardAdapter = new ScorecardAdapter();
+
         View rootView = inflater.inflate(R.layout.fragmet_scorecard, container, false);
         p1TotalView = (TextView) rootView.findViewById(R.id.p1Total);
         p2TotalView = (TextView) rootView.findViewById(R.id.p2Total);
@@ -89,19 +89,20 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
         p4Initials = (TextView) rootView.findViewById(R.id.p4Name);
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_holes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        LinearLayoutManager layMan = new LinearLayoutManager(getActivity().getApplicationContext());
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layMan.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(layMan);
+        } else {
+            layMan.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(layMan);
+        }
+
+        mScoreCardAdapter = new ScorecardAdapter(getActivity().getApplicationContext());
         recyclerView.setAdapter(mScoreCardAdapter);
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 
     @Override

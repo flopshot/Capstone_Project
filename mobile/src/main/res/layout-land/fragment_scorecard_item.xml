@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="@dimen/scorecardFragMargin"
+    android:layout_marginStart="@dimen/scorecardFragMargin"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/holeNumber"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        tools:text="18"/>
+
+    <TextView
+        android:id="@+id/parNumber"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        tools:text="5"/>
+
+    <TextView
+        android:id="@+id/p1HoleScore"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        tools:text="3"/>
+
+    <TextView
+        android:id="@+id/p2HoleScore"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        tools:text="4"/>
+
+    <TextView
+        android:id="@+id/p3HoleScore"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        tools:text="7"/>
+
+    <TextView
+        android:id="@+id/p4HoleScore"
+        android:layout_height="@dimen/scorecardTextViewHeight"
+        android:layout_width="40dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+        tools:text="5"/>
+</LinearLayout>

@@ -86,6 +86,7 @@
 
     <!--HOLE FRAGMENT-->
     <string name="thePlayersTitle">The Players</string>
+    <string name="theScoreTitle">The Score</string>
     <string name="initialHoleNumber" translatable="false">1▼</string>
     <string name="dropDownIcon" translatable="false">▼</string>
     <string name="holeTitle">Hole:</string>
@@ -93,7 +94,7 @@
     <string name="distanceLabel">Distance (y):</string>
     <string name="parLabel">Par:</string>
     <string name="thePuttsLabel">The Putts</string>
-    <string name="thePenaltiesLabel">The Penalties</string>
+    <string name="thePenaltiesLabel">Penalties</string>
     <string name="girLabel">Green in Reg.</string>
     <string name="fwyInRegLabel">Fwy in Reg.</string>
     <string name="sandLabel">Sand</string>

@@ -10,7 +10,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".15"
+        android:layout_weight=".14"
         android:background="@color/maroon"
         android:gravity="center">
         <TextView
@@ -25,7 +25,7 @@
         <Button
             android:id="@+id/holeValue"
             android:layout_width="55dp"
-            android:layout_height="45dp"
+            android:layout_height="35dp"
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:background="@drawable/rounded_textbox"
@@ -78,313 +78,317 @@
 
     </LinearLayout>
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".85"
-        android:columnCount="7"
-        android:paddingTop="10dp"
-        android:rowCount="8">
-
-        <!--TODO: Change margin bottom to 20dp in landscape mode-->
-        <TextView
-            android:id="@+id/nameLabel"
+        android:gravity="center_horizontal"
+        android:layout_weight=".86">
+        <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:layout_marginBottom="0dp"
-            android:gravity="center"
-            android:text="@string/thePlayersTitle"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+            android:columnCount="7"
+            android:paddingTop="10dp"
+            android:rowCount="8">
 
-        <TextView
-            android:id="@+id/p1Name"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <TextView
+                android:id="@+id/nameLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:layout_marginBottom="0dp"
+                android:gravity="center"
+                android:text="@string/thePlayersTitle"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-        <TextView
-            android:id="@+id/p2Name"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <TextView
+                android:id="@+id/p1Name"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
-        <TextView
-            android:id="@+id/p3Name"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <TextView
+                android:id="@+id/p2Name"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
-        <TextView
-            android:id="@+id/p4Name"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <TextView
+                android:id="@+id/p3Name"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
-
-        <TextView
-            android:id="@+id/scoreLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <EditText
-            android:id="@+id/p1Score"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p2Score"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p3Score"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p4Score"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <TextView
-            android:id="@+id/puttLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="@string/thePuttsLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <EditText
-            android:id="@+id/p1Putts"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p2Putts"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p3Putts"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p4Putts"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <TextView
-            android:id="@+id/penaltyLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="@string/thePenaltiesLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-        <EditText
-            android:id="@+id/p1Penalties"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p2Penalties"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p3Penalties"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
-
-        <EditText
-            android:id="@+id/p4Penalties"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:imeOptions="actionDone"
-            android:inputType="number"/>
+            <TextView
+                android:id="@+id/p4Name"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
 
 
-        <TextView
-            android:id="@+id/girLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="@string/girLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+            <TextView
+                android:id="@+id/scoreLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/theScoreTitle"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-        <CheckBox
-            android:id="@+id/p1Gir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p1Score"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p2Gir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p2Score"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p3Gir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p3Score"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p4Gir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p4Score"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
+            <TextView
+                android:id="@+id/puttLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/thePuttsLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-        <TextView
-            android:id="@+id/firLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="@string/fwyInRegLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+            <EditText
+                android:id="@+id/p1Putts"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p1Fir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p2Putts"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p2Fir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p3Putts"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p3Fir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p4Putts"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p4Fir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <TextView
+                android:id="@+id/penaltyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/thePenaltiesLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
+            <EditText
+                android:id="@+id/p1Penalties"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <TextView
-            android:id="@+id/sandLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="2"
-            android:layout_columnWeight="1"
-            android:gravity="center"
-            android:text="@string/sandLabel"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+            <EditText
+                android:id="@+id/p2Penalties"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p1Sand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+            <EditText
+                android:id="@+id/p3Penalties"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
-        <CheckBox
-            android:id="@+id/p2Sand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
-
-        <CheckBox
-            android:id="@+id/p3Sand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
-
-        <CheckBox
-            android:id="@+id/p4Sand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
-
-
-        <Space
-            android:id="@+id/space1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="3"
-            android:layout_columnWeight="1"/>
-
-        <android.support.v4.widget.Space
-            android:id="@+id/space2"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_columnSpan="3"
-            android:layout_columnWeight="1"/>
+            <EditText
+                android:id="@+id/p4Penalties"
+                android:layout_width="40dp"
+                android:layout_height="39dp"
+                android:cursorVisible="false"
+                android:imeOptions="actionDone"
+                android:inputType="number"/>
 
 
-    </GridLayout>
+            <TextView
+                android:id="@+id/girLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/girLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
+            <CheckBox
+                android:id="@+id/p1Gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p2Gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p3Gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p4Gir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+            <TextView
+                android:id="@+id/firLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/fwyInRegLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <CheckBox
+                android:id="@+id/p1Fir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p2Fir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p3Fir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p4Fir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+            <TextView
+                android:id="@+id/sandLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="2"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:text="@string/sandLabel"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <CheckBox
+                android:id="@+id/p1Sand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p2Sand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p3Sand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            <CheckBox
+                android:id="@+id/p4Sand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+
+            <Space
+                android:id="@+id/space1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:layout_columnWeight="1"/>
+
+            <android.support.v4.widget.Space
+                android:id="@+id/space2"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_columnSpan="3"
+                android:layout_columnWeight="1"/>
+
+
+        </GridLayout>
+    </LinearLayout>
 </LinearLayout>

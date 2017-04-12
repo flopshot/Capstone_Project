@@ -15,7 +15,7 @@
     </style>
 
     <style name="HoleViewHeader">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/lt_gray</item>
         <item name="android:textStyle">bold|italic</item>
     </style>
