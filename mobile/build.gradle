@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'golfranger'
-            keyPassword 'babylonsisters'
-            storeFile file("$rootDir/seanKeyStore.jks")
-            storePassword '91a18e40c639811d66d41774f800d0e6'
+            keyAlias 'udacity'
+            keyPassword 'password'
+            storeFile file('C:/Users/snajera/AndroidStudioProjects/Capstone_Project/udacityKeyStore.jks')
+            storePassword 'password'
         }
     }
     compileSdkVersion 25
