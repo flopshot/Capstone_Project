@@ -53,7 +53,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                     Long gamesPlayed = data.getLong(Contract.PlayerTotals.PLAYER_GAME_COUNT);
                     Float meanScore = data.getFloat(Contract.PlayerTotals.PLAYER_MEAN_SCORE);
                     Long minScore = data.getLong(Contract.PlayerTotals.PLAYER_MIN_SCORE);
-                    String formattedMinScore = (minScore == 0) ? "N/A" : String.valueOf(minScore);
+                    String formattedMinScore = (minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
                     Timber.d("Name: " + name + " GamesPlayed: " + gamesPlayed + " meanScore: " + meanScore + "minScore: " + formattedMinScore);
                 } else {
                     Timber.d("Data is null");
@@ -87,7 +87,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 Long gamesPlayed = data.getLong(Contract.PlayerTotals.PLAYER_GAME_COUNT);
                 Float meanScore = data.getFloat(Contract.PlayerTotals.PLAYER_MEAN_SCORE);
                 Long minScore = data.getLong(Contract.PlayerTotals.PLAYER_MIN_SCORE);
-                String formattedMinScore = (minScore == 0) ? "N/A" : String.valueOf(minScore);
+                String formattedMinScore = (minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
 
                 views.setTextViewText(R.id.widgetPlayerName, name);
                 views.setTextViewText(R.id.widgetGames, String.valueOf(gamesPlayed));

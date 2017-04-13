@@ -239,46 +239,9 @@ public class Provider extends ContentProvider {
                       Contract.Courses.TABLE_NAME, whereClause, whereArgs);
                 break;
             case ROUND:
-                // Here, the rows in the holes table that correspond to the round by roundId
-                // are deleted first. If successful, the row(s) in the rounds table corresponding
-                // to the roundId in method is/are deleted
-
-//                android.database.Cursor checkDeletedRoundsCursor = mDb.query(
-//                      Contract.Rounds.TABLE_NAME,
-//                      new String[] {Contract.Rounds._ID},
-//                      whereClause,
-//                      whereArgs,
-//                      null,
-//                      null,
-//                      null);
-//
-//                int idCount = checkDeletedRoundsCursor.getCount();
-//
-//                if (idCount < 1) {
-//                    checkDeletedRoundsCursor.close();
-//                    throw new UnsupportedOperationException("Could Not Delete Round(s)!");
-//                } else {
-//
-//                    String roundIds[] = new String[idCount];
-//                    int l = 0;
-//                    if (checkDeletedRoundsCursor.moveToFirst()) {
-//                        do {
-//                            roundIds[l] = String.valueOf(checkDeletedRoundsCursor.getLong(0));
-//                            l++;
-//                        } while (checkDeletedRoundsCursor.moveToNext());
-//                    }
-//                    checkDeletedRoundsCursor.close();
-//                String[] roundIds = getAffectedIds(Contract.Rounds.TABLE_NAME, whereClause, whereArgs);
-//                int holesDeleted =
-//                      mDb.delete(Contract.Holes.TABLE_NAME, Contract.Holes.ROUND_ID+"=?",roundIds);
-//
-//                if (holesDeleted != 18) {
-//                    throw new UnsupportedOperationException("Incorrect Deletion!");
-//                }
                 rowsDeleted = mDb.delete(
                       Contract.Rounds.TABLE_NAME, whereClause, whereArgs);
                 break;
-//                }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

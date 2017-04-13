@@ -139,8 +139,8 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.setPositiveButton(getString(R.string.dialogAddButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String firstName =firstInput.getText().toString();
-                      String lastName = lastInput.getText().toString();
+                      String firstName =firstInput.getText().toString().trim();
+                      String lastName = lastInput.getText().toString().trim();
                       if (!firstName.equals("") & firstName.matches("[a-zA-Z 0-9]+") &
                             !lastName.equals("") & lastName.matches("[a-zA-Z 0-9]+") ) {
 
@@ -190,8 +190,8 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.setNegativeButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String lastName = lastInput.getText().toString();
-                      String firstName = firstInput.getText().toString();
+                      String lastName = lastInput.getText().toString().trim();
+                      String firstName = firstInput.getText().toString().trim();
                       if (!lastName.equals("") & lastName.matches("[a-zA-Z 0-9]+") &
                             !firstName.equals("") & firstName.matches("[a-zA-Z 0-9]+") ) {
 

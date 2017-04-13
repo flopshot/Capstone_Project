@@ -163,4 +163,8 @@
     <string name="gpsOffDialogDismiss">DISMISS</string>
     <string name="badConnectionDialogTitle">Connection is Poor</string>
     <string name="badConnectionDialogMsg">Distances might still be available, but wind and elevation cannot display.   Will reconnect when available</string>
+    <string name="mathDeletedialogYes">YES</string>
+    <string name="matchDeleteDialogNo">NO</string>
+    <string name="matchDeleteDialogTitle">Delete Round?</string>
+    <string name="widgetValNA">N/A</string>
 </resources>

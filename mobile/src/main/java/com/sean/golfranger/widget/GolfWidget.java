@@ -17,6 +17,7 @@ import timber.log.Timber;
  * Implementation of App Widget functionality.
  */
 public class GolfWidget extends AppWidgetProvider {
+    private static final String actionName = "android.appwidget.action.APPWIDGET_UPDATE";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -41,7 +42,6 @@ public class GolfWidget extends AppWidgetProvider {
     @Override
     public void onReceive(@NonNull Context context, @NonNull Intent intent) {
         super.onReceive(context, intent);
-        String actionName = "android.appwidget.action.APPWIDGET_UPDATE";
         if (actionName.equals(intent.getAction())) {
             Timber.v("Starting on Receive Method from Intent Data Changed");
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

@@ -137,8 +137,8 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         alertDialog.setPositiveButton(getString(R.string.dialogAddButton),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String courseName = courseInput.getText().toString();
-                      String clubName = clubInput.getText().toString();
+                      String courseName = courseInput.getText().toString().trim();
+                      String clubName = clubInput.getText().toString().trim();
                       if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
                             !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
 
@@ -188,8 +188,8 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         alertDialog.setNegativeButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                      String courseName = courseInput.getText().toString();
-                      String clubName = clubInput.getText().toString();
+                      String courseName = courseInput.getText().toString().trim();
+                      String clubName = clubInput.getText().toString().trim();
                       if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
                             !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
 

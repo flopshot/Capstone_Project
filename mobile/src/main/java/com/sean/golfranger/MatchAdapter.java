@@ -129,9 +129,9 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
 
     private void deleteRoundDialog(final int adapterPosition) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-        alertDialog.setTitle("Delete Round?");
+        alertDialog.setTitle(R.string.matchDeleteDialogTitle);
 
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton(R.string.mathDeletedialogYes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mCursor.moveToPosition(adapterPosition);
@@ -145,7 +145,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
             }
         });
 
-        alertDialog.setNeutralButton("NO",
+        alertDialog.setNeutralButton(R.string.matchDeleteDialogNo,
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();

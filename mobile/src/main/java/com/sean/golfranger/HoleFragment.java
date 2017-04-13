@@ -69,10 +69,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                 Contract.Holes.P3_GIR, Contract.Holes.P4_GIR, Contract.Holes.P1_SAND,
                 Contract.Holes.P2_SAND, Contract.Holes.P3_SAND, Contract.Holes.P4_SAND};
 
-    public HoleFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         sLoaderManager = getLoaderManager();

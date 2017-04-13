@@ -38,10 +38,6 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
     private TextView p1TotalView, p2TotalView, p3TotalView, p4TotalView;
     private TextView p1Initials, p2Initials, p3Initials, p4Initials;
 
-    public ScorecardFragment() {
-        // Required empty public constructor
-    }
-
     public static ScorecardFragment newInstance() {
         return new ScorecardFragment();
     }

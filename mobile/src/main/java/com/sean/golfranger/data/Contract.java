@@ -13,10 +13,10 @@ import timber.log.Timber;
 
 public class Contract {
     static final String CONTENT_AUTHORITY = "com.sean.golfranger";
-    private static final Uri BASE_URI = Uri.parse("content://com.sean.golfranger");
-    static final String DB_NAME = "golf";
+    private static final Uri BASE_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+        static final String DB_NAME = "golf";
 
-    public static class Courses implements BaseColumns {
+        public static class Courses implements BaseColumns {
         //COLUMN POSITION
         static final int COURSEID_POS = 0;
         static final int CLUBNAME_POS = 1;
@@ -30,11 +30,11 @@ public class Contract {
         /**
          * Type: TEXT NOT NULL
          */
-        public static String CLUB_NAME = "clubName";
+        public static final String CLUB_NAME = "clubName";
         /**
          * Type: TEXT
          */
-        public static String COURSE_NAME = "courseName";
+        public static final String COURSE_NAME = "courseName";
 
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.courses"
@@ -81,11 +81,11 @@ public class Contract {
         /**
          * Type: TEXT NOT NULL
          */
-        public static String FIRST_NAME = "firstName";
+        public static final String FIRST_NAME = "firstName";
         /**
          * Type: TEXT NOT NULL
          */
-        public static String LAST_NAME = "lastName";
+        public static final String LAST_NAME = "lastName";
 
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
