@@ -22,6 +22,7 @@ public class Contract {
         static final int CLUBNAME_POS = 1;
         static final int COURSENAME_POS = 2;
         static final int COURSEENABLED_POS = 3;
+        static final int DATECREATED_POS = 4;
 
         // TABLE NAME
         static final String TABLE_NAME = "courses";
@@ -81,6 +82,8 @@ public class Contract {
         static final int PLAYERFIRST_POS = 1;
         static final int PLAYERLAST_POS = 2;
         static final int PLAYERENABLED_POS = 3;
+        static final int DATECREATED_POS = 4;
+        static final int HANDICAP_POS = 5;
 
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "players";
@@ -137,6 +140,10 @@ public class Contract {
     }
 
     public static class Rounds implements BaseColumns {
+        static final int ROUNDID_POS = 0;
+        static final int COURSEID_POS = 1;
+        static final int DATECREATED_POS = 2;
+
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "rounds";
 
@@ -183,6 +190,13 @@ public class Contract {
     }
 
     public static class CourseHoles implements BaseColumns {
+        static final int COURSEHOLEID_POS = 0;
+        static final int COURSE_POS = 1;
+        static final int HOLENUMBER_POS = 2;
+        static final int HOLEPAR_POS = 3;
+        static final int HOLEDISTANCE_POS = 4;
+        static final int HOLEHANDOCAP_POS = 5;
+
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "courseHoles";
 
@@ -241,6 +255,10 @@ public class Contract {
     }
 
     public static class RoundPlayers implements BaseColumns {
+        static final int ROUNDPLAYERID_POS = 0;
+        static final int PLAYERID_POS = 1;
+        static final int PLAYERORDER_POS = 2;
+
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "roundPlayers";
 
@@ -249,6 +267,10 @@ public class Contract {
          * Type: INT NOT NULL
          */
         public static final String PLAYER_ID = "playerId";
+        /**
+         * Type: INT
+         */
+        public static final String PLAYER_ORDER = "playerOrder";
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
          */
@@ -283,6 +305,17 @@ public class Contract {
     }
 
     public static class RoundPlayerCourseHoles implements BaseColumns {
+        static final int ROUNDPLAYERCOURSEHOLE_POS = 0;
+        static final int ROUNDPLAYERID_POS = 1;
+        static final int COURSEHOLEID_POS = 2;
+        static final int SCORE_POS = 3;
+        static final int PENALTIES_POS = 4;
+        static final int PUTTS_POS = 5;
+        static final int SANDSHOTES_POS = 6;
+        static final int SANDFLAG_POS = 7;
+        static final int GIRFLAG_POS = 8;
+        static final int FIRFLAG_POS = 9;
+
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "gamePlayerCourseHoles";
 
@@ -290,11 +323,7 @@ public class Contract {
         /**
          * Type: INT NOT NULL
          */
-        public static final String ROUND_ID = "roundId";
-        /**
-         * Type: INT NOT NULL
-         */
-        public static final String PLAYER_ID = "playerId";
+        public static final String ROUNDPLAYER_ID = "roundPlayerId";
         /**
          * Type: INT NOT NULL
          */
@@ -360,10 +389,10 @@ public class Contract {
         }
     }
 
-    public static class CourseColumnPosition {
-        public static final int ID = 0;
-        public static final int CLUB_NAME = 1;
-        public static final int COURSE_NAME = 2;
+    public interface CourseColumnPosition {
+        int ID = 0;
+        int CLUB_NAME = 1;
+        int COURSE_NAME = 2;
     }
 
     public static class PlayerColumnPosition {
