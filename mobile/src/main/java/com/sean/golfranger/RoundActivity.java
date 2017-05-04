@@ -108,7 +108,7 @@ public class RoundActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_round);
+        setContentView(R.layout.activity_round_dev);
         elevationView = (TextView) findViewById(R.id.elevationView);
         yardageView = (TextView) findViewById(R.id.yardageView);
         windView = (TextView) findViewById(R.id.windView);
@@ -150,6 +150,11 @@ public class RoundActivity extends FragmentActivity
         if (savedInstanceState == null & !mIsTablet) {
             mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
             setFragmentViewState(SCORECARD_STATE);
+        }
+
+        if (mIsTablet) {
+            // Set marker stats view to visible if in 8" tablet device
+            mMarkerStats.setVisibility(View.VISIBLE);
         }
         mMapFragment.getMapAsync(this);
     }

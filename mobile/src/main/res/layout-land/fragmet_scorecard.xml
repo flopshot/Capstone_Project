@@ -17,6 +17,7 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="@dimen/scorecardFragMargin">
 
         <android.support.v4.widget.Space
@@ -77,6 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/scorecardFragMargin"
         android:layout_marginStart="@dimen/scorecardFragMargin"
+        android:layout_marginTop="15dp"
         android:gravity="bottom"
         android:orientation="vertical">
 
@@ -150,6 +152,7 @@
         android:orientation="horizontal"
         android:layout_marginStart="15dp"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:layout_gravity="center"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         android:gravity="bottom"/>
