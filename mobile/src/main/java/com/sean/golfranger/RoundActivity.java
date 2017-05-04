@@ -108,7 +108,7 @@ public class RoundActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_round_dev);
+        setContentView(R.layout.activity_round);
         elevationView = (TextView) findViewById(R.id.elevationView);
         yardageView = (TextView) findViewById(R.id.yardageView);
         windView = (TextView) findViewById(R.id.windView);
