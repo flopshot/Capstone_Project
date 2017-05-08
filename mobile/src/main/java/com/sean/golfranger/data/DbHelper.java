@@ -39,78 +39,99 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Courses.TABLE_NAME + " (" +
               Contract.Courses._ID + " INTEGER PRIMARY KEY," +
               Contract.Courses.CLUB_NAME + " TEXT NOT NULL," +
-              Contract.Courses.COURSE_NAME + " TEXT);";
+              Contract.Courses.COURSE_NAME + " TEXT" +
+              Contract.Courses.COURSE_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Courses.COURSE_ENABLED +" IN (0,1))," +
+              Contract.Courses.DATE_CREATED + " INTEGER NOT NULL, " +
+              Contract.Courses.DATE_UPDATED + " INTEGER NOT NULL " +
+              ");";
 
         // String to create a table to hold player data
         final String SQL_CREATE_PLAYER_TABLE = "CREATE TABLE IF NOT EXISTS " +
               Contract.Players.TABLE_NAME + " (" +
               Contract.Players._ID + " INTEGER PRIMARY KEY," +
               Contract.Players.FIRST_NAME + " TEXT NOT NULL," +
-              Contract.Players.LAST_NAME + " TEXT NOT NULL);";
+              Contract.Players.LAST_NAME + " TEXT NOT NULL," +
+              Contract.Players.PLAYER_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Players.PLAYER_ENABLED +" IN (0,1))," +
+              Contract.Players.DATE_CREATED + " INTEGER NOT NULL, " +
+              Contract.Players.DATE_UPDATED + " INTEGER NOT NULL, " +
+              Contract.Players.HANDICAP + " INTEGER" +
+              ");";
 
-        // String to create a table to hold round data
+        // String to Create a table to hold round data
         final String SQL_CREATE_ROUNDS_TABLE = "CREATE TABLE IF NOT EXISTS " +
               Contract.Rounds.TABLE_NAME + " (" +
               Contract.Rounds._ID + " INTEGER PRIMARY KEY," +
               Contract.Rounds.COURSE_ID + " INTEGER ," +
-              Contract.Rounds.CLUB_NAME + " TEXT," +
-              Contract.Rounds.COURSE_NAME + " TEXT, " +
-              Contract.Rounds.PLAYER1_ID + " INTEGER ," +
-              Contract.Rounds.PLAYER1_FIRST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER1_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER2_ID + " INTEGER," +
-              Contract.Rounds.PLAYER2_FIRST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER2_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER3_ID + " INTEGER," +
-              Contract.Rounds.PLAYER3_FIRST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER3_LAST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER4_ID + " INTEGER," +
-              Contract.Rounds.PLAYER4_FIRST_NAME + " TEXT," +
-              Contract.Rounds.PLAYER4_LAST_NAME + " TEXT," +
-              Contract.Rounds.DATE + " INTEGER NOT NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER1_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER2_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER3_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.PLAYER4_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ") ON DELETE SET NULL, " +
-              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE SET NULL," +
-              " CHECK ( " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER2_ID + " AND " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER3_ID +
-                    " AND " + Contract.Rounds.PLAYER1_ID + "<>" + Contract.Rounds.PLAYER4_ID + " AND " + Contract.Rounds.PLAYER2_ID + "<>" + Contract.Rounds.PLAYER3_ID +
-                    " AND " + Contract.Rounds.PLAYER2_ID + "<>" + Contract.Rounds.PLAYER4_ID + " AND " + Contract.Rounds.PLAYER3_ID + "<>" + Contract.Rounds.PLAYER4_ID + ") " +
+              Contract.Rounds.DATE_CREATED + " INTEGER NOT NULL, " +
+              Contract.Rounds.DATE_UPDATED + " INTEGER NOT NULL, " +
+              Contract.Rounds.ROUND_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Rounds.ROUND_ENABLED +" IN (0,1))," +
+              " FOREIGN KEY (" + Contract.Rounds.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ")" +
               ");";
 
-        final String SQL_CREATE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
-              Contract.Holes.TABLE_NAME + " (" +
-              Contract.Holes._ID + " INTEGER PRIMARY KEY," +
-              Contract.Holes.ROUND_ID + " INTEGER NOT NULL," +
-              Contract.Holes.HOLE_NUMBER + " INTEGER NOT NULL," +
-              Contract.Holes.HOLE_DISTANCE + " INTEGER," +
-              Contract.Holes.HOLE_PAR + " INTEGER," +
-              Contract.Holes.P1_SCORE + " INTEGER," +
-              Contract.Holes.P1_PUTTS + " INTEGER," +
-              Contract.Holes.P1_PENALTIES + " INTEGER," +
-              Contract.Holes.P1_FIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P1_FIR +" IN (0,1))," +
-              Contract.Holes.P1_GIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P1_GIR +" IN (0,1))," +
-              Contract.Holes.P1_SAND + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P1_SAND +" IN (0,1))," +
-              Contract.Holes.P2_SCORE + " INTEGER," +
-              Contract.Holes.P2_PUTTS + " INTEGER," +
-              Contract.Holes.P2_PENALTIES + " INTEGER," +
-              Contract.Holes.P2_FIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P2_FIR +" IN (0,1))," +
-              Contract.Holes.P2_GIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P2_GIR +" IN (0,1))," +
-              Contract.Holes.P2_SAND + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P2_SAND +" IN (0,1))," +
-              Contract.Holes.P3_SCORE + " INTEGER," +
-              Contract.Holes.P3_PUTTS + " INTEGER," +
-              Contract.Holes.P3_PENALTIES + " INTEGER," +
-              Contract.Holes.P3_FIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P3_FIR +" IN (0,1))," +
-              Contract.Holes.P3_GIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P3_GIR +" IN (0,1))," +
-              Contract.Holes.P3_SAND + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P3_SAND +" IN (0,1))," +
-              Contract.Holes.P4_SCORE + " INTEGER," +
-              Contract.Holes.P4_PUTTS + " INTEGER," +
-              Contract.Holes.P4_PENALTIES + " INTEGER," +
-              Contract.Holes.P4_FIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_FIR +" IN (0,1))," +
-              Contract.Holes.P4_GIR + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_GIR +" IN (0,1))," +
-              Contract.Holes.P4_SAND + " BOOLEAN DEFAULT 0 CHECK(" + Contract.Holes.P4_SAND +" IN (0,1))," +
-              " FOREIGN KEY (" + Contract.Holes.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON DELETE CASCADE, " +
-              " UNIQUE (" + Contract.Holes.ROUND_ID + "," + Contract.Holes.HOLE_NUMBER + ") ON CONFLICT FAIL" +
+        // String to Create a table to hold course/holes data
+        final String SQL_CREATE_COURSE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.CourseHoles.TABLE_NAME + " (" +
+              Contract.CourseHoles._ID + " INTEGER PRIMARY KEY," +
+              Contract.CourseHoles.COURSE_ID + " INTEGER ," +
+              Contract.CourseHoles.HOLE_NUMBER + " INTEGER, " +
+              Contract.CourseHoles.HOLE_PAR + " INTEGER, " +
+              Contract.CourseHoles.HOLE_DISTANCE + " INTEGER, " +
+              Contract.CourseHoles.HOLE_HANDICAP + " INTEGER, " +
+              " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ")" +
+              ");";
+
+        // String to Create a table to hold ROUND/PLAYERS data
+        final String SQL_CREATE_ROUND_PLAYERS_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.RoundPlayers.TABLE_NAME + " (" +
+              Contract.RoundPlayers._ID + " INTEGER PRIMARY KEY," +
+              Contract.RoundPlayers.PLAYER_ID + " INTEGER ," +
+              Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
+              " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")" +
+              ");";
+
+        // String to create a table to hold ROUND/PLAYER/COURSE/HOLES data
+        final String SQL_CREATE_ROUND_PLAYER_COURSE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.RoundPlayerCourseHoles.TABLE_NAME + " (" +
+              Contract.RoundPlayerCourseHoles._ID + " INTEGER PRIMARY KEY," +
+              Contract.RoundPlayerCourseHoles.ROUNDPLAYER_ID + " INTEGER ," +
+              Contract.RoundPlayerCourseHoles.COURSE_HOLE_ID + " INTEGER, " +
+              Contract.RoundPlayerCourseHoles.SCORE + " INTEGER ," +
+              Contract.RoundPlayerCourseHoles.PENALITES + " INTEGER," +
+              Contract.RoundPlayerCourseHoles.PUTTS + " INTEGER," +
+              Contract.RoundPlayerCourseHoles.SAND_SHOTS + " INTEGER," +
+              Contract.RoundPlayerCourseHoles.SAND_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.SAND_FLAG+" IN (0,1))," +
+              Contract.RoundPlayerCourseHoles.GIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.GIR_FLAG+" IN (0,1))," +
+              Contract.RoundPlayerCourseHoles.FIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.FIR_FLAG+" IN (0,1))," +
+              " FOREIGN KEY (" + Contract.RoundPlayerCourseHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + "), " +
+              " FOREIGN KEY (" + Contract.RoundPlayerCourseHoles.COURSE_HOLE_ID + ") REFERENCES " + Contract.CourseHoles.TABLE_NAME + " (" + Contract.CourseHoles._ID + ")" +
+              ");";
+
+        // String to create a table to hold Player Location data
+        final String SQL_CREATE_PLAYER_LOCATION_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.PlayerLocation.TABLE_NAME + " (" +
+              Contract.PlayerLocation._ID + " INTEGER PRIMARY KEY," +
+              Contract.PlayerLocation.LOCATION + " REAL ," +
+              Contract.PlayerLocation.DATE_UPDATED + " INTEGER, " +
+              Contract.PlayerLocation.STATUS + " INTEGER " +
+              ");";
+
+        // String to create a table to hold Marker Location data
+        final String SQL_CREATE_MARKER_LOCATION_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.MarkerLocation.TABLE_NAME + " (" +
+              Contract.MarkerLocation._ID + " INTEGER NOT NULL," +
+              Contract.MarkerLocation.LOCATION + " REAL ," +
+              Contract.MarkerLocation.DATE_UPDATED + " INTEGER NOT NULL, " +
+              Contract.MarkerLocation.STATUS + " INTEGER " +
+              ");";
+
+        // String to create a table to hold Wind data
+        final String SQL_CREATE_WIND_TABLE = "CREATE TABLE IF NOT EXISTS " +
+              Contract.Wind.TABLE_NAME + " (" +
+              Contract.Wind._ID + " INTEGER PRIMARY KEY," +
+              Contract.Wind.WIND_SPEED + " REAL ," +
+              Contract.Wind.WIND_DIRECTION + " REAL ," +
+              Contract.Wind.DATE_UPDATED + " INTEGER, " +
+              Contract.PlayerLocation.STATUS + " INTEGER " +
               ");";
 
         final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
@@ -239,10 +260,12 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUNDS_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_HOLES_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_COURSE_ROUND_VIEW);
-        sqLiteDatabase.execSQL(SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW);
-        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TOTALS_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_COURSE_HOLES_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ROUND_PLAYERS_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ROUND_PLAYER_COURSE_HOLES_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_LOCATION_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_MARKER_LOCATION_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB
@@ -255,6 +278,4 @@ class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // No Updates Needed At The Moment
     }
-
-
 }

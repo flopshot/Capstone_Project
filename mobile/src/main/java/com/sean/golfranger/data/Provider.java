@@ -5,13 +5,9 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.sean.golfranger.data.DbHelper.getHelper;
 
@@ -28,41 +24,12 @@ public class Provider extends ContentProvider {
     private static final int PLAYER = 100;
     private static final int COURSE = 101;
     private static final int ROUND = 102;
-    private static final int HOLE = 103;
-    private static final int ROUND_HOLE = 104;
-    private static final int ROUND_COURSES_PLAYERS = 105;
-    private static final int PLAYERS_ROUND_TOTALS = 106;
-    private static final int PLAYER_TOTALS = 107;
-
-
-    // START: implement table JOIN logic on Holes and Rounds tables for Content Provider
-    private static final SQLiteQueryBuilder sHoleAndRoundQueryBuilder;
-
-    static{
-        sHoleAndRoundQueryBuilder = new SQLiteQueryBuilder();
-
-        //This is an inner join which looks like
-        //rounds LEFT JOIN holes ON rounds._id = holes.roundId
-        sHoleAndRoundQueryBuilder.setTables(
-              Contract.Holes.TABLE_NAME + " LEFT JOIN " +
-                    Contract.Rounds.TABLE_NAME +
-                    " ON " + Contract.Rounds.TABLE_NAME +
-                    "." + Contract.Rounds._ID +
-                    " = " + Contract.Holes.TABLE_NAME +
-                    "." + Contract.Holes.ROUND_ID);
-    }
-
-    private Cursor getRoundWithHoleCursor(String[] columns, String whereClause, String[] whereArgs, String sortOrder) {
-        return sHoleAndRoundQueryBuilder.query(
-              mOpenHelper.getReadableDatabase(),
-              columns,
-              whereClause,
-              whereArgs,
-              null,
-              null,
-              sortOrder
-        );
-    }
+    private static final int COURSE_HOLE = 103;
+    private static final int ROUND_PLAYER = 104;
+    private static final int ROUND_PLAYER_COURSE_HOLE= 105;
+    private static final int PLAYER_LOCATION = 107;
+    private static final int MARKER_LOCATION = 108;
+    private static final int WIND = 109;
 
     private static UriMatcher buildUriMatcher() {
         // All paths added to the UriMatcher have a corresponding code to return when a match is
@@ -75,16 +42,12 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority, Contract.Players.TABLE_NAME, PLAYER);
         matcher.addURI(authority, Contract.Courses.TABLE_NAME, COURSE);
         matcher.addURI(authority, Contract.Rounds.TABLE_NAME, ROUND);
-        matcher.addURI(authority, Contract.Holes.TABLE_NAME, HOLE);
-        matcher.addURI(authority,
-              Contract.Rounds.TABLE_NAME + "/" + Contract.Holes.TABLE_NAME,
-              ROUND_HOLE);
-        matcher.addURI(authority,
-              Contract.Rounds.TABLE_NAME + "/" + Contract.Courses.TABLE_NAME + "/"
-                    + Contract.Players.TABLE_NAME,
-              ROUND_COURSES_PLAYERS);
-        matcher.addURI(authority, Contract.PlayerRoundTotals.TABLE_NAME,PLAYERS_ROUND_TOTALS);
-        matcher.addURI(authority, Contract.PlayerTotals.TABLE_NAME, PLAYER_TOTALS);
+        matcher.addURI(authority, Contract.CourseHoles.TABLE_NAME, COURSE_HOLE);
+        matcher.addURI(authority, Contract.RoundPlayers.TABLE_NAME,ROUND_PLAYER);
+        matcher.addURI(authority, Contract.RoundPlayerCourseHoles.TABLE_NAME, ROUND_PLAYER_COURSE_HOLE);
+        matcher.addURI(authority, Contract.PlayerLocation.TABLE_NAME, PLAYER_LOCATION);
+        matcher.addURI(authority, Contract.MarkerLocation.TABLE_NAME, MARKER_LOCATION);
+        matcher.addURI(authority, Contract.Wind.TABLE_NAME, WIND);
         return matcher;
     }
 
@@ -105,42 +68,69 @@ public class Provider extends ContentProvider {
 
         switch (match) {
             case PLAYER:
+                if (whereClause == null) {
+                    whereClause = Contract.Players.PLAYER_ENABLED + "=?";
+                    whereArgs = new String[]{"1"};
+                } else {
+                    whereClause = whereClause + " AND " + Contract.Players.PLAYER_ENABLED + "=?";
+                    whereArgs = concat(whereArgs, new String[]{"1"});
+                }
                 return mDb.query(
                       Contract.Players.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
             case COURSE:
+                if (whereClause == null) {
+                    whereClause = Contract.Courses.COURSE_ENABLED + "=?";
+                    whereArgs = new String[]{"1"};
+                } else {
+                    whereClause = whereClause + " AND " + Contract.Courses.COURSE_ENABLED + "=?";
+                    whereArgs = concat(whereArgs, new String[]{"1"});
+                }
                 return mDb.query(
                       Contract.Courses.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
             case ROUND:
+                if (whereClause == null) {
+                    whereClause = Contract.Rounds.ROUND_ENABLED + "=?";
+                    whereArgs = new String[]{"1"};
+                } else {
+                    whereClause = whereClause + " AND " + Contract.Rounds.ROUND_ENABLED + "=?";
+                    whereArgs = concat(whereArgs, new String[]{"1"});
+                }
                 return mDb.query(
                       Contract.Rounds.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
-            case HOLE:
+            case ROUND_PLAYER:
                 return mDb.query(
-                      Contract.Holes.TABLE_NAME, columns,
+                      Contract.RoundPlayers.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
-            case ROUND_HOLE:
-                return getRoundWithHoleCursor(columns, whereClause, whereArgs, sortOrder);
-
-            case ROUND_COURSES_PLAYERS:
+            case COURSE_HOLE:
                 return mDb.query(
-                      Contract.RoundCoursesPlayers.TABLE_NAME, columns,
+                      Contract.CourseHoles.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
-                //return getRoundWithPlayersCoursesCursor(columns, whereClause, sortOrder);
-            case PLAYERS_ROUND_TOTALS:
+            case ROUND_PLAYER_COURSE_HOLE:
                 return mDb.query(
-                      Contract.PlayerRoundTotals.TABLE_NAME, columns,
+                      Contract.RoundPlayerCourseHoles.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
-            case PLAYER_TOTALS:
+            case PLAYER_LOCATION:
                 return mDb.query(
-                      Contract.PlayerTotals.TABLE_NAME, columns,
+                      Contract.PlayerLocation.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
+            case MARKER_LOCATION:
+                return mDb.query(
+                      Contract.MarkerLocation.TABLE_NAME, columns,
+                      whereClause, whereArgs, null, null, sortOrder
+                );
+            case WIND:
+                return mDb.query(
+                      Contract.Wind.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
             default:
@@ -161,10 +151,12 @@ public class Provider extends ContentProvider {
                 return Contract.Courses.CONTENT_TYPE;
             case ROUND:
                 return Contract.Rounds.CONTENT_TYPE;
-            case HOLE:
-                return Contract.Holes.CONTENT_TYPE;
-            case ROUND_HOLE:
-                return Contract.Rounds.CONTENT_TYPE;
+            case COURSE_HOLE:
+                return Contract.CourseHoles.CONTENT_TYPE;
+            case ROUND_PLAYER:
+                return Contract.RoundPlayers.CONTENT_TYPE;
+            case ROUND_PLAYER_COURSE_HOLE:
+                return Contract.RoundPlayerCourseHoles.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -177,6 +169,8 @@ public class Provider extends ContentProvider {
 
         switch (match) {
             case PLAYER: {
+                contentValues.put(Contract.Players.DATE_CREATED, getCurTimeStamp());
+                contentValues.put(Contract.Players.DATE_UPDATED, getCurTimeStamp());
                 long _id = mDb.insert(Contract.Players.TABLE_NAME, null, contentValues);
                 if ( _id > 0 )
                     returnUri = Contract.Players.buildItemUri(_id);
@@ -185,6 +179,8 @@ public class Provider extends ContentProvider {
                 break;
             }
             case COURSE: {
+                contentValues.put(Contract.Courses.DATE_CREATED, getCurTimeStamp());
+                contentValues.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 long _id = mDb.insert(Contract.Courses.TABLE_NAME, null, contentValues);
                 if ( _id > 0)
                     returnUri = Contract.Courses.buildItemUri(_id);
@@ -192,30 +188,70 @@ public class Provider extends ContentProvider {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
                 break;
             }
-            // INSERT_ONE_ROUND => INSERT_18_HOLES
             case ROUND: {
-                mDb.beginTransaction();
+                contentValues.put(Contract.Rounds.DATE_CREATED, getCurTimeStamp());
+                contentValues.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 long _id = mDb.insert(Contract.Rounds.TABLE_NAME, null, contentValues);
-                if ( _id < 1) {
+                if ( _id > 0)
+                    returnUri = Contract.Rounds.buildItemUri(_id);
+                else
                     throw new android.database.SQLException("Failed to insert row into" + uri);
-                }
-                int holesCountInserted = bulkInsert18HolesForNewRound(_id);
-                if (holesCountInserted != 18) {
-                    throw new android.database.SQLException("Failed to insert row into" + uri);
-                }
-                returnUri = Contract.Rounds.buildItemUri(_id);
-                mDb.setTransactionSuccessful();
-                mDb.endTransaction();
                 break;
             }
-//            case HOLE: {
-//                long _id = mDb.insert(Contract.Holes.TABLE_NAME, null, contentValues);
-//                if ( _id > 0)
-//                    returnUri = Contract.Holes.buildItemUri(_id);
-//                else
-//                    throw new android.database.SQLException("Failed to insert row into " + uri);
-//                break;
-//            }
+            case COURSE_HOLE: {
+                long _id = mDb.insert(Contract.CourseHoles.TABLE_NAME, null, contentValues);
+                if ( _id > 0) {
+                    returnUri = Contract.CourseHoles.buildItemUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                }
+                break;
+            }
+            case ROUND_PLAYER: {
+                long _id = mDb.insert(Contract.RoundPlayers.TABLE_NAME, null, contentValues);
+                if ( _id > 0) {
+                    returnUri = Contract.RoundPlayers.buildItemUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                }
+                break;
+            }
+            case ROUND_PLAYER_COURSE_HOLE: {
+                long _id = mDb.insert(Contract.RoundPlayerCourseHoles.TABLE_NAME, null, contentValues);
+                if ( _id > 0) {
+                    returnUri = Contract.RoundPlayerCourseHoles.buildItemUri(_id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                }
+                break;
+            }
+            case PLAYER_LOCATION: {
+                contentValues.put(Contract.PlayerLocation.DATE_UPDATED, getCurTimeStamp());
+                long _id = mDb.insert(Contract.PlayerLocation.TABLE_NAME, null, contentValues);
+                if ( _id > 0)
+                    returnUri = Contract.PlayerLocation.buildItemUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                break;
+            }
+            case MARKER_LOCATION: {
+                contentValues.put(Contract.MarkerLocation.DATE_UPDATED, getCurTimeStamp());
+                long _id = mDb.insert(Contract.MarkerLocation.TABLE_NAME, null, contentValues);
+                if ( _id > 0)
+                    returnUri = Contract.MarkerLocation.buildItemUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                break;
+            }
+            case WIND: {
+                contentValues.put(Contract.Wind.DATE_UPDATED, getCurTimeStamp());
+                long _id = mDb.insert(Contract.Wind.TABLE_NAME, null, contentValues);
+                if ( _id > 0)
+                    returnUri = Contract.Wind.buildItemUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -242,6 +278,30 @@ public class Provider extends ContentProvider {
                 rowsDeleted = mDb.delete(
                       Contract.Rounds.TABLE_NAME, whereClause, whereArgs);
                 break;
+            case COURSE_HOLE:
+                rowsDeleted = mDb.delete(
+                      Contract.CourseHoles.TABLE_NAME, whereClause, whereArgs);
+                break;
+            case ROUND_PLAYER:
+                rowsDeleted = mDb.delete(
+                      Contract.RoundPlayers.TABLE_NAME, whereClause, whereArgs);
+                break;
+            case ROUND_PLAYER_COURSE_HOLE:
+                rowsDeleted = mDb.delete(
+                      Contract.RoundPlayerCourseHoles.TABLE_NAME, whereClause, whereArgs);
+                break;
+            case PLAYER_LOCATION:
+                rowsDeleted = mDb.delete(
+                      Contract.PlayerLocation.TABLE_NAME, whereClause, whereArgs);
+                break;
+            case MARKER_LOCATION:
+                rowsDeleted = mDb.delete(
+                      Contract.MarkerLocation.TABLE_NAME, whereClause, whereArgs);
+                break;
+            case WIND:
+                rowsDeleted = mDb.delete(
+                      Contract.Wind.TABLE_NAME, whereClause, whereArgs);
+                break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -256,25 +316,48 @@ public class Provider extends ContentProvider {
         int rowsUpdated;
         switch (match) {
             case PLAYER:
-                String[] playerIds =
-                      getAffectedIds(Contract.Players.TABLE_NAME, whereClause, whereArgs);
+                values.put(Contract.Players.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Players.TABLE_NAME,
                       values, whereClause, whereArgs);
-                updateRoundPlayers(playerIds);
                 break;
             case COURSE:
-                String[] courseIds =
-                      getAffectedIds(Contract.Courses.TABLE_NAME, whereClause, whereArgs);
+                values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Courses.TABLE_NAME,
                       values, whereClause, whereArgs);
-                updateRoundCourses(courseIds);
                 break;
             case ROUND:
+                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Rounds.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
-            case HOLE:
-                rowsUpdated = mDb.update(Contract.Holes.TABLE_NAME,
+            case COURSE_HOLE:
+                values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.CourseHoles.TABLE_NAME,
+                      values, whereClause, whereArgs);
+                break;
+            case ROUND_PLAYER:
+                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.RoundPlayers.TABLE_NAME,
+                      values, whereClause, whereArgs);
+                break;
+            case ROUND_PLAYER_COURSE_HOLE:
+                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.RoundPlayerCourseHoles.TABLE_NAME,
+                      values, whereClause, whereArgs);
+                break;
+            case PLAYER_LOCATION:
+                values.put(Contract.PlayerLocation.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.PlayerLocation.TABLE_NAME,
+                      values, whereClause, whereArgs);
+                break;
+            case MARKER_LOCATION:
+                values.put(Contract.MarkerLocation.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.MarkerLocation.TABLE_NAME,
+                      values, whereClause, whereArgs);
+                break;
+            case WIND:
+                values.put(Contract.Wind.DATE_UPDATED, getCurTimeStamp());
+                rowsUpdated = mDb.update(Contract.Wind.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
             default:
@@ -309,178 +392,19 @@ public class Provider extends ContentProvider {
         return returnCount;
     }
 
-    /**
-     * Preliminary method to ascertain what record id's will be affected by the whereClause,
-     * before applying the SQL command to execute and change the DB. returns the record _id's
-     * in a String Array
-     */
-    private String[] getAffectedIds(String tableName, String whereClause, String[] whereArgs) {
-        if (whereClause == null | whereArgs.length == 0) {
-            throw new UnsupportedOperationException("Could Not Execute SQL Command!");
-        }
-        android.database.Cursor getAffectedIdsCursor = mDb.query(
-              tableName,
-              new String[] {"_id"},
-              whereClause,
-              whereArgs,
-              null,
-              null,
-              null);
-
-        int idCount = getAffectedIdsCursor.getCount();
-
-        if (idCount < 1) {
-            getAffectedIdsCursor.close();
-            throw new UnsupportedOperationException("Could Not Execute SQL Command!");
-        } else {
-
-            String ids[] = new String[idCount];
-            int l = 0;
-            if (getAffectedIdsCursor.moveToFirst()) {
-                do {
-                    ids[l] = String.valueOf(getAffectedIdsCursor.getLong(0));
-                    l++;
-                } while (getAffectedIdsCursor.moveToNext());
-            }
-            getAffectedIdsCursor.close();
-            return ids;
-        }
+    // set the format to sql date time
+    private String getCurTimeStamp() {
+        Long tsLong = System.currentTimeMillis();
+        return tsLong.toString();
     }
 
-    /**
-     * Preferably, we would like a cascade update to change all foreign references of the updated
-     * courses attributes in the courses table, but with the schema implemented in this app, it is
-     * not possible. Thus we will manually update course attributes of foreign references with this
-     * method in the rounds table
-     */
-    private void updateRoundCourses (String[] courseIds){
-        Cursor updatedCoursesCursor = mDb.query(
-              Contract.Courses.TABLE_NAME,
-              null,
-              Contract.Courses._ID + "=?",
-              courseIds,
-              null,
-              null,
-              null
-        );
-        int idCount = updatedCoursesCursor.getCount();
-        if (idCount<1) {
-            updatedCoursesCursor.close();
-            return;
-        }
-        List<String[]> courseRecords = new ArrayList<>();
-        if (updatedCoursesCursor.moveToFirst()) {
-            do {
-                courseRecords.add(new String[] {
-                      String.valueOf(updatedCoursesCursor.getLong(Contract.Courses.COURSEID_POS)),
-                      updatedCoursesCursor.getString(Contract.Courses.CLUBNAME_POS),
-                      updatedCoursesCursor.getString(Contract.Courses.COURSENAME_POS),
-                });
-            } while (updatedCoursesCursor.moveToNext());
-        }
-        updatedCoursesCursor.close();
-        ContentValues values = new ContentValues();
-        for (String[] record: courseRecords) {
-            values.put(Contract.Rounds.CLUB_NAME, record[1]);
-            values.put(Contract.Rounds.COURSE_NAME, record[2]);
-
-            mDb.update(
-                  Contract.Rounds.TABLE_NAME,
-                  values,
-                  Contract.Rounds.COURSE_ID + "=?",
-                  new String[]{record[0]}
-            );
-            values.clear();
-        }
-    }
-
-    /**
-     * Preferably, we would like a cascade update to change all foreign references of the updated
-     * player attributes in the players table, but with the schema implemented in this app, it is
-     * not possible. Thus we will manually update player attributes of foreign references with this
-     * method in the rounds table
-     */
-    private void updateRoundPlayers(String[] playerIds) {
-        Cursor updatedPlayersCursor = mDb.query(
-              Contract.Players.TABLE_NAME,
-              null,
-              Contract.Players._ID + "=?",
-              playerIds,
-              null,
-              null,
-              null
-        );
-        int idCount = updatedPlayersCursor.getCount();
-
-        if (idCount<1) {
-            updatedPlayersCursor.close();
-            return;
-        }
-
-        List<String[]> playerRecords = new ArrayList<>();
-        if (updatedPlayersCursor.moveToFirst()) {
-            do {
-                playerRecords.add(new String[] {
-                      String.valueOf(updatedPlayersCursor.getLong(Contract.Players.PLAYERID_POS)),
-                      updatedPlayersCursor.getString(Contract.Players.PLAYERFIRST_POS),
-                      updatedPlayersCursor.getString(Contract.Players.PLAYERLAST_POS),
-                });
-            } while (updatedPlayersCursor.moveToNext());
-        }
-        updatedPlayersCursor.close();
-        updatePlayersByPosition(playerRecords);
-    }
-
-    /**
-     * helper method to update play attributes by each position for the updateRoundPlayers method
-     */
-    private void updatePlayersByPosition(List<String[]> records) {
-        ContentValues values = new ContentValues();
-
-        for (String[] record: records) {
-            values.put(Contract.Rounds.PLAYER1_FIRST_NAME, record[1]);
-            values.put(Contract.Rounds.PLAYER1_LAST_NAME, record[2]);
-
-            mDb.update(
-                  Contract.Rounds.TABLE_NAME,
-                  values,
-                  Contract.Rounds.PLAYER1_ID +"=?",
-                  new String[] {record[0]}
-            );
-            values.clear();
-
-            values.put(Contract.Rounds.PLAYER2_FIRST_NAME, record[1]);
-            values.put(Contract.Rounds.PLAYER2_LAST_NAME, record[2]);
-
-            mDb.update(
-                  Contract.Rounds.TABLE_NAME,
-                  values,
-                  Contract.Rounds.PLAYER2_ID +"=?",
-                  new String[] {record[0]}
-            );
-            values.clear();
-
-            values.put(Contract.Rounds.PLAYER3_FIRST_NAME, record[1]);
-            values.put(Contract.Rounds.PLAYER3_LAST_NAME, record[2]);
-
-            mDb.update(
-                  Contract.Rounds.TABLE_NAME,
-                  values,
-                  Contract.Rounds.PLAYER3_ID +"=?",
-                  new String[] {record[0]}
-            );
-            values.clear();
-
-            values.put(Contract.Rounds.PLAYER4_FIRST_NAME, record[1]);
-            values.put(Contract.Rounds.PLAYER4_LAST_NAME, record[2]);
-
-            mDb.update(
-                  Contract.Rounds.TABLE_NAME,
-                  values,
-                  Contract.Rounds.PLAYER4_ID +"=?",
-                  new String[] {record[0]}
-            );
-            values.clear();
-        }
+    //Helper function for whereArgs concatination
+    private String[] concat(String[] a, String[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+        String[] c = new String[aLen+bLen];
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+        return c;
     }
 }

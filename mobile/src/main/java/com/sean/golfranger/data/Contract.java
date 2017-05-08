@@ -23,6 +23,7 @@ public class Contract {
         static final int COURSENAME_POS = 2;
         static final int COURSEENABLED_POS = 3;
         static final int DATECREATED_POS = 4;
+        static final int DATEUPDATED_POS = 5;
 
         // TABLE NAME
         static final String TABLE_NAME = "courses";
@@ -43,7 +44,11 @@ public class Contract {
         /**
          * Type: INTEGER NOT NULL
          */
-        public static final String DATE = "date_created";
+        public static final String DATE_CREATED = "dateCreated";
+        /**
+        * Type: INTEGER NOT NULL
+        */
+        public static final String DATE_UPDATED = "dateUpdated";
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.courses"
          */
@@ -83,6 +88,7 @@ public class Contract {
         static final int PLAYERLAST_POS = 2;
         static final int PLAYERENABLED_POS = 3;
         static final int DATECREATED_POS = 4;
+        static final int DATEUPDATED_POS = 6;
         static final int HANDICAP_POS = 5;
 
         // TABLE NAME FOR DB
@@ -104,7 +110,11 @@ public class Contract {
         /**
          * Type: INT NOT NULL
          */
-        public static final String DATE = "date_created";
+        public static final String DATE_CREATED = "dateCreated";
+        /**
+        * Type: INT NOT NULL
+        */
+        public static final String DATE_UPDATED = "dateUpdated";
         /**
          * Type: INT
          */
@@ -143,6 +153,8 @@ public class Contract {
         static final int ROUNDID_POS = 0;
         static final int COURSEID_POS = 1;
         static final int DATECREATED_POS = 2;
+        static final int DATEUPDATED_POS = 3;
+        static final int ROUNDENABLED_POS = 4;
 
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "rounds";
@@ -155,17 +167,25 @@ public class Contract {
         /**
          * Type: INTEGER NOT NULL
          */
-        public static final String DATE = "date_created";
+        public static final String DATE_CREATED = "dateCreated";
+        /**
+        * Type: INT NOT NULL
+        */
+        public static final String DATE_UPDATED = "dateUpdated";
+        /**
+         * Type: Bool
+         */
+        public static final String ROUND_ENABLED = "roundEnabled";
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
-         */
+5         */
         static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
         /**
          * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
          */
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
 
-        public static final String DEFAULT_SORT = DATE + " DESC";
+        public static final String DEFAULT_SORT = DATE_CREATED + " DESC";
 
         /**
          * Matches: /[TABLE_NAME]/
@@ -191,7 +211,7 @@ public class Contract {
 
     public static class CourseHoles implements BaseColumns {
         static final int COURSEHOLEID_POS = 0;
-        static final int COURSE_POS = 1;
+        static final int COURSEID_POS = 1;
         static final int HOLENUMBER_POS = 2;
         static final int HOLEPAR_POS = 3;
         static final int HOLEDISTANCE_POS = 4;
@@ -389,85 +409,175 @@ public class Contract {
         }
     }
 
-    public interface CourseColumnPosition {
-        int ID = 0;
-        int CLUB_NAME = 1;
-        int COURSE_NAME = 2;
-    }
+    public static class PlayerLocation implements BaseColumns {
+        static final int PLAYERLOCATIONID_POS = 0;
+        static final int LOCATION_POS = 1;
+        static final int DATEUPDATED_POS = 2;
+        static final int STATUS_POS = 3;
 
-    public static class PlayerColumnPosition {
-        public static final int ID = 0;
-        public static final int FIRST_NAME = 1;
-        public static final int LAST_NAME = 2;
-    }
+        // TABLE NAME FOR DB
+        static final String TABLE_NAME = "playerLocation";
 
-    public static class RoundColumnPosition {
-        public static final int ID = 0;
-        public static final int CLUB_NAME = 2;
-        public static final int COURSE_NAME = 3;
-        public static final int P1_FIRST_NAME = 5;
-        public static final int P1_LAST_NAME = 6;
-        public static final int P2_FIRST_NAME = 8;
-        public static final int P2_LAST_NAME = 9;
-        public static final int P3_FIRST_NAME = 11;
-        public static final int P3_LAST_NAME = 12;
-        public static final int P4_FIRST_NAME = 14;
-        public static final int P4_LAST_NAME = 15;
-        public static final int DATE = 16;
-    }
+        // COLUMN NAMES
+        /**
+         * Type: REAL
+         */
+        public static final String LOCATION = "location";
+        /**
+         * Type: INT
+         */
+        public static final String DATE_UPDATED = "dateUpdated";
+        /**
+         * Type: TEXT
+         */
+        public static final String STATUS = "status";
+        /**
+         * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
+         */
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        /**
+         * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
 
-    public static class HoleColumnPosition {
-        public static final int ID = 0;
-        public static final int ROUND_ID = 1;
-        public static final int HOLE_NUMBER = 2;
-        public static final int HOLE_PAR = 3;
-        public static final int HOLE_DISTANCE = 4;
-        public static final int P1_SCORE = 5;
-        public static final int P1_PUTTS = 6;
-        public static final int P1_PENALTIES = 7;
-        public static final int P1_FIR = 8;
-        public static final int P1_GIR = 9;
-        public static final int P1_SAND = 10;
-        public static final int P2_SCORE = 11;
-        public static final int P2_PUTTS = 12;
-        public static final int P2_PENALTIES = 13;
-        public static final int P2_FIR = 14;
-        public static final int P2_GIR = 15;
-        public static final int P2_SAND = 16;
-        public static final int P3_SCORE = 17;
-        public static final int P3_PUTTS = 18;
-        public static final int P3_PENALTIES = 19;
-        public static final int P3_FIR = 20;
-        public static final int P3_GIR = 21;
-        public static final int P3_SAND = 22;
-        public static final int P4_SCORE = 23;
-        public static final int P4_PUTTS = 24;
-        public static final int P4_PENALTIES = 25;
-        public static final int P4_FIR = 26;
-        public static final int P4_GIR = 27;
-        public static final int P4_SAND = 28;
-    }
+        public static final String DEFAULT_SORT = _ID + " DESC";
 
-    public static class RoundCoursesPlayers {
-        static final String TABLE_NAME = "roundPlayerCourse";
-        public static Uri roundCoursesPlayersUri() {
-            return BASE_URI.buildUpon()
-                  .appendPath(Rounds.TABLE_NAME)
-                  .appendPath(Courses.TABLE_NAME)
-                  .appendPath(Players.TABLE_NAME)
-                  .build();
+        /**
+         * Matches: /[TABLE_NAME]/
+         */
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).build();
+        }
+
+        /**
+         * Matches: /[TABLE_NAME]/[_id]/
+         */
+        public static Uri buildItemUri(long _id) {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
+        }
+
+        /**
+         * Read item ID item detail URI.
+         */
+        public static long getItemId(Uri itemUri) {
+            return Long.parseLong(itemUri.getPathSegments().get(0));
         }
     }
 
-    //TODO: Delete when ready
-//    public static Uri roundHolesUri() {
-//        Timber.d("Building roundHolesUri: " +
-//              BASE_URI.buildUpon().appendPath(Rounds.TABLE_NAME).appendPath(Holes.TABLE_NAME).build().toString());
-//        return BASE_URI.buildUpon()
-//              .appendPath(Rounds.TABLE_NAME)
-//              .appendPath(Holes.TABLE_NAME)
-//              .build();
-//    }
+    public static class MarkerLocation implements BaseColumns {
+        static final int MARKERLOCATIONID_POS = 0;
+        static final int LOCATION_POS = 1;
+        static final int DATEUPDATED_POS = 2;
+        static final int STATUS_POS = 3;
+
+        // TABLE NAME FOR DB
+        static final String TABLE_NAME = "markerLocation";
+
+        // COLUMN NAMES
+        /**
+         * Type: REAL
+         */
+        public static final String LOCATION = "location";
+        /**
+         * Type: INT
+         */
+        public static final String DATE_UPDATED = "dateUpdated";
+        /**
+         * Type: TEXT
+         */
+        public static final String STATUS = "status";
+        /**
+         * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
+         */
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        /**
+         * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+
+        public static final String DEFAULT_SORT = _ID + " DESC";
+
+        /**
+         * Matches: /[TABLE_NAME]/
+         */
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).build();
+        }
+
+        /**
+         * Matches: /[TABLE_NAME]/[_id]/
+         */
+        public static Uri buildItemUri(long _id) {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
+        }
+
+        /**
+         * Read item ID item detail URI.
+         */
+        public static long getItemId(Uri itemUri) {
+            return Long.parseLong(itemUri.getPathSegments().get(0));
+        }
+    }
+
+    public static class Wind implements BaseColumns {
+        static final int WINDID_POS = 0;
+        static final int WINDSPEED_POS = 1;
+        static final int WINDDIRECTION_POS = 2;
+        static final int DATEUPDATED_POS = 3;
+        static final int STATUS_POS = 4;
+
+        // TABLE NAME FOR DB
+        static final String TABLE_NAME = "markerLocation";
+
+        // COLUMN NAMES
+        /**
+         * Type: REAL
+         */
+        public static final String WIND_SPEED = "windSpeed";
+        /**
+         * Type: REAL
+         */
+        public static final String WIND_DIRECTION = "windDirection";
+        /**
+         * Type: INT
+         */
+        public static final String DATE_UPDATED = "dateUpdated";
+        /**
+         * Type: TEXT
+         */
+        public static final String STATUS = "status";
+        /**
+         * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
+         */
+        static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+        /**
+         * "vnd.android.cursor.item/vnd.com.sean.golfranger.[TABLE_NAME]";
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_NAME;
+
+        public static final String DEFAULT_SORT = _ID + " DESC";
+
+        /**
+         * Matches: /[TABLE_NAME]/
+         */
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).build();
+        }
+
+        /**
+         * Matches: /[TABLE_NAME]/[_id]/
+         */
+        public static Uri buildItemUri(long _id) {
+            return BASE_URI.buildUpon().appendPath(TABLE_NAME).appendPath(Long.toString(_id)).build();
+        }
+
+        /**
+         * Read item ID item detail URI.
+         */
+        public static long getItemId(Uri itemUri) {
+            return Long.parseLong(itemUri.getPathSegments().get(0));
+        }
+    }
 
     public static class PlayerRoundTotals {
         static final String TABLE_NAME = "playerRoundTotals";
