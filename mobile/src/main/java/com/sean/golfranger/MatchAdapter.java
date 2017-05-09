@@ -67,7 +67,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
+            long roundId = mCursor.getLong(Contract.Rounds.ROUNDID_POS);
             Intent intent = new Intent(mContext, StartRoundActivity.class);
             intent.putExtra(StartRoundActivity.EXTRA_ROUND_ID, String.valueOf(roundId));
             mContext.startActivity(intent);
@@ -135,7 +135,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mCursor.moveToPosition(adapterPosition);
-                long roundId = mCursor.getLong(Contract.RoundColumnPosition.ID);
+                long roundId = mCursor.getLong(Contract.Rounds.ROUNDID_POS);
 
                 ContentResolver resolver = mContext.getContentResolver();
                 resolver.delete(

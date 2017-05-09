@@ -187,7 +187,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         layout.addView(lastInput);
         alertDialog.setView(layout);
 
-        alertDialog.setNegativeButton(getString(R.string.dialogOk),
+        alertDialog.setPositiveButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String lastName = lastInput.getText().toString().trim();
@@ -217,12 +217,15 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
               }
         );
 
-        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
+        alertDialog.setNegativeButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       ContentResolver resolver = getContentResolver();
-                      resolver.delete(
+                      ContentValues values = new ContentValues();
+                      values.put(Contract.Players.PLAYER_ENABLED, "0");
+                      resolver.update(
                             Contract.Players.buildDirUri(),
+                            values,
                             Contract.Players._ID + "=?",
                             new String[] {String.valueOf(playerId)});
                       dialog.cancel();

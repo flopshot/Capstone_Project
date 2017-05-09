@@ -37,10 +37,10 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     public void onBindViewHolder(CourseAdapterViewHolder customViewHolder, int i) {
         mCursor.moveToPosition(i);
         customViewHolder.courseNameView.setText(
-              mCursor.getString(Contract.CourseColumnPosition.COURSE_NAME
+              mCursor.getString(Contract.Courses.COURSENAME_POS
         ));
         customViewHolder.clubNameView.setText(
-              mCursor.getString(Contract.CourseColumnPosition.CLUB_NAME
+              mCursor.getString(Contract.Courses.CLUBNAME_POS
         ));
     }
 
@@ -67,9 +67,9 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long courseId = mCursor.getLong(Contract.CourseColumnPosition.ID);
-            String courseName = mCursor.getString(Contract.CourseColumnPosition.COURSE_NAME);
-            String clubName = mCursor.getString(Contract.CourseColumnPosition.CLUB_NAME);
+            long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
+            String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
+            String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
             mClickHandler.onClick(courseId, courseName, clubName);
         }
 
@@ -77,9 +77,9 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
         public boolean onLongClick(View view) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long courseId = mCursor.getLong(Contract.CourseColumnPosition.ID);
-            String courseName = mCursor.getString(Contract.CourseColumnPosition.COURSE_NAME);
-            String clubName = mCursor.getString(Contract.CourseColumnPosition.CLUB_NAME);
+            long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
+            String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
+            String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
             mLongClickHandler.onLongClick(courseId, courseName, clubName);
             return true;
         }

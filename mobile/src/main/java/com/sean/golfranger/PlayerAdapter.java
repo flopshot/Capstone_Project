@@ -38,12 +38,8 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     @Override
     public void onBindViewHolder(PlayerAdapterViewHolder customViewHolder, int i) {
         mCursor.moveToPosition(i);
-        customViewHolder.firstNameView.setText(
-              mCursor.getString(Contract.PlayerColumnPosition.FIRST_NAME
-              ));
-        customViewHolder.lastNameView.setText(
-              mCursor.getString(Contract.PlayerColumnPosition.LAST_NAME
-              ));
+        customViewHolder.firstNameView.setText(mCursor.getString(Contract.Players.PLAYERFIRST_POS));
+        customViewHolder.lastNameView.setText(mCursor.getString(Contract.Players.PLAYERLAST_POS));
     }
 
     @Override
@@ -69,9 +65,9 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long playerId = mCursor.getLong(Contract.PlayerColumnPosition.ID);
-            String firstName = mCursor.getString(Contract.PlayerColumnPosition.FIRST_NAME);
-            String lastName = mCursor.getString(Contract.PlayerColumnPosition.LAST_NAME);
+            long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
+            String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
+            String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
             mClickHandler.onClick(playerId, firstName, lastName);
         }
 
@@ -79,9 +75,9 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         public boolean onLongClick(View view) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long playerId = mCursor.getLong(Contract.PlayerColumnPosition.ID);
-            String firstName = mCursor.getString(Contract.PlayerColumnPosition.FIRST_NAME);
-            String lastName = mCursor.getString(Contract.PlayerColumnPosition.LAST_NAME);
+            long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
+            String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
+            String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
             mLongClickHandler.onLongClick(playerId, firstName, lastName);
             return true;
         }

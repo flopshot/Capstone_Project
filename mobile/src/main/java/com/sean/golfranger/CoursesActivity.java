@@ -185,7 +185,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         layout.addView(courseInput);
         alertDialog.setView(layout);
 
-        alertDialog.setNegativeButton(getString(R.string.dialogOk),
+        alertDialog.setPositiveButton(getString(R.string.dialogOk),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       String courseName = courseInput.getText().toString().trim();
@@ -215,12 +215,15 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
               }
         );
 
-        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
+        alertDialog.setNegativeButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       ContentResolver resolver = getContentResolver();
-                      resolver.delete(
+                      ContentValues values = new ContentValues();
+                      values.put(Contract.Courses.COURSE_ENABLED, "0");
+                      resolver.update(
                             Contract.Courses.buildDirUri(),
+                            values,
                             Contract.Courses._ID + "=?",
                             new String[] {String.valueOf(courseId)});
                       dialog.cancel();

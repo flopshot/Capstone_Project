@@ -38,7 +38,6 @@ public class HomeActivity extends AppCompatActivity
             // Location permission has not been granted.
             requestLocationPermission();
         }
-
     }
 
     @Override
