@@ -35,8 +35,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     private static final int REQUEST_CODE_P3 = 103;
     private static final int REQUEST_CODE_P4 = 104;
     private static final int REQUEST_CODE_COURSE = 105;
-    public static final String EXTRA_ROUND_ID = "startRoundActivityRoundId";
 
+    public static final String EXTRA_ROUND_ID = "startRoundActivityRoundId";
     public static final String EXTRA_RETURN_ID = "RETURNID";
     public static final String EXTRA_RETURN_FIRST_ITEM = "RETURNFIRSTITEM";
     public static final String EXTRA_RETURN_SECOND_ITEM = "RETURNSECONDITEM";
@@ -100,11 +100,6 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
         if (isFinishing() & !mDoSave) {
             ContentResolver resolver = getContentResolver();
@@ -123,27 +118,22 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String roundWhereClause = Contract.Rounds._ID + "=?";
-        String[] roundId;
         Timber.d("Loader Args Are: " + String.valueOf(args != null));
         Timber.d("RoundId Initialized: " + String.valueOf(mRoundId!=null));
         if (mRoundId == null) {
             if (args != null) {
                 mRoundId = args.getString(EXTRA_ROUND_ID);
             } else {
-                Long tsLong = System.currentTimeMillis();
-                String ts = tsLong.toString();
-                ContentValues values = new ContentValues();
                 ContentResolver resolver = getContentResolver();
-                values.put(Contract.Rounds.DATE, ts);
-                Uri insertUri = resolver.insert(Contract.Rounds.buildDirUri(), values);
+                Uri insertUri = resolver.insert(Contract.Rounds.buildDirUri(), new ContentValues());
                 mRoundId = String.valueOf(ContentUris.parseId(insertUri));
                 Timber.d("Triggered new Round Entry in Table With ID: " + mRoundId);
             }
         }
-        roundId = new String[]{mRoundId};
+        String[] roundId = new String[]{mRoundId};
+        String roundWhereClause = Contract.MatchesView.ROUND_ID + "=?";
         return new CursorLoader(getApplicationContext(),
-              Contract.RoundCoursesPlayers.roundCoursesPlayersUri(),
+              Contract.MatchesView.buildDirUri(),
               null,
               roundWhereClause,
               roundId,
@@ -153,7 +143,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.moveToFirst()) {
-            String str = cursor.getString(1);
+            String str = cursor.getString(Contract.MatchesView.CLUBNAME_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
                 club.setTypeface(null, Typeface.NORMAL);
@@ -161,14 +151,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 club.setText(getString(R.string.coursePlaceHolder));
                 club.setTypeface(null, Typeface.ITALIC);
             }
-            str = cursor.getString(2);
+            str = cursor.getString(Contract.MatchesView.COURSENAME_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 course.setText(str);
                 course.setVisibility(View.VISIBLE);
             } else {
                 course.setVisibility(View.INVISIBLE);
             }
-            str = cursor.getString(3);
+            str = cursor.getString(Contract.MatchesView.P1_FIRST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p1First.setText(str);
                 p1First.setTypeface(null, Typeface.NORMAL);
@@ -176,14 +166,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 p1First.setText(getString(R.string.playerPlaceHolder));
                 p1First.setTypeface(null, Typeface.ITALIC);
             }
-            str = cursor.getString(4);
+            str = cursor.getString(Contract.MatchesView.P1_LAST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p1Last.setText(str);
                 p1Last.setVisibility(View.VISIBLE);
             } else {
                 p1Last.setVisibility(View.INVISIBLE);
             }
-            str = cursor.getString(5);
+            str = cursor.getString(Contract.MatchesView.P2_FIRST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2First.setText(str);
                 p2First.setTypeface(null, Typeface.NORMAL);
@@ -191,7 +181,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 p2First.setText(getString(R.string.playerPlaceHolder));
                 p2First.setTypeface(null, Typeface.ITALIC);
             }
-            str = cursor.getString(6);
+            str = cursor.getString(Contract.MatchesView.P2_LAST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p2Last.setText(str);
                 p2Last.setVisibility(View.VISIBLE);
@@ -199,7 +189,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             } else {
                 p2Last.setVisibility(View.INVISIBLE);
             }
-            str = cursor.getString(7);
+            str = cursor.getString(Contract.MatchesView.P3_FIRST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3First.setText(str);
                 p3First.setTypeface(null, Typeface.NORMAL);
@@ -207,7 +197,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 p3First.setText(getString(R.string.playerPlaceHolder));
                 p3First.setTypeface(null, Typeface.ITALIC);
             }
-            str = cursor.getString(8);
+            str = cursor.getString(Contract.MatchesView.P3_LAST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p3Last.setText(str);
                 p3Last.setVisibility(View.VISIBLE);
@@ -215,7 +205,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             } else {
                 p3Last.setVisibility(View.INVISIBLE);
             }
-            str = cursor.getString(9);
+            str = cursor.getString(Contract.MatchesView.P4_FIRST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4First.setText(str);
                 p4First.setTypeface(null, Typeface.NORMAL);
@@ -223,7 +213,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 p4First.setText(getString(R.string.playerPlaceHolder));
                 p4First.setTypeface(null, Typeface.ITALIC);
             }
-            str = cursor.getString(10);
+            str = cursor.getString(Contract.MatchesView.P4_LAST_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 p4Last.setText(str);
                 p4Last.setVisibility(View.VISIBLE);
@@ -288,7 +278,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             buttonMsg = getString(R.string.dialogEditButton);
         }
 
-        alertDialog.setNegativeButton(buttonMsg,
+        alertDialog.setPositiveButton(buttonMsg,
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       if (requestCode == REQUEST_CODE_COURSE) {
@@ -302,7 +292,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
               }
         );
 
-        alertDialog.setPositiveButton(getString(R.string.dialogDelete),
+        alertDialog.setNegativeButton(getString(R.string.dialogDelete),
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       Timber.d(String.valueOf(requestCode));

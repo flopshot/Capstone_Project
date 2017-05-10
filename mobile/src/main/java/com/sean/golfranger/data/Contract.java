@@ -584,6 +584,7 @@ public class Contract {
 
     public static class MatchesView {
         static final String TABLE_NAME = "MatchesView";
+        public static final String ROUND_ID = "roundId";
         public static final int ROUNDID_COL_INDEX = 0;
         public static final int COURSEID_COL_INDEX = 1;
         public static final int COURSENAME_COL_INDEX = 2;

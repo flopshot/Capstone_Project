@@ -77,7 +77,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.CourseHoles.HOLE_PAR + " INTEGER, " +
               Contract.CourseHoles.HOLE_DISTANCE + " INTEGER, " +
               Contract.CourseHoles.HOLE_HANDICAP + " INTEGER, " +
-              " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ")" +
+              " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE CASCADE" +
               ");";
 
         // String to Create a table to hold ROUND/PLAYERS data
@@ -138,7 +138,7 @@ class DbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_MATCHES_ADAPTER_VIEW = "CREATE VIEW " +
         Contract.MatchesView.TABLE_NAME + " AS " +
               "SELECT " +
-              "r." + Contract.Rounds._ID + " AS roundId, " +
+              "r." + Contract.Rounds._ID + " AS " + Contract.MatchesView.ROUND_ID + ", " +
               "c." + Contract.Courses._ID + " AS courseId, " +
               "c." + Contract.Courses.COURSE_NAME + " AS courseName, " +
               "c." + Contract.Courses.CLUB_NAME + " AS clubName, " +
@@ -302,7 +302,7 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MARKER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW );
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB
