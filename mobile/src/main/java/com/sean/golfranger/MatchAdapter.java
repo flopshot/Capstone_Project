@@ -2,6 +2,7 @@ package com.sean.golfranger;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,7 +68,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
-            long roundId = mCursor.getLong(Contract.Rounds.ROUNDID_POS);
+            long roundId = mCursor.getLong(Contract.MatchesView.ROUNDID_COL_INDEX);
             Intent intent = new Intent(mContext, StartRoundActivity.class);
             intent.putExtra(StartRoundActivity.EXTRA_ROUND_ID, String.valueOf(roundId));
             mContext.startActivity(intent);
@@ -84,28 +85,27 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
     public void onBindViewHolder(MatchAdapterViewHolder customViewHolder, int i) {
         mCursor.moveToPosition(i);
         customViewHolder.p1First.setText(
-              mCursor.getString(Contract.RoundColumnPosition.P1_FIRST_NAME
+              mCursor.getString(Contract.MatchesView.P1_FIRST_COL_INDEX
               ));
         customViewHolder.p2First.setText(
-              mCursor.getString(Contract.RoundColumnPosition.P2_FIRST_NAME
+              mCursor.getString(Contract.MatchesView.P2_FIRST_COL_INDEX
               ));
         customViewHolder.p3First.setText(
-              mCursor.getString(Contract.RoundColumnPosition.P3_FIRST_NAME
+              mCursor.getString(Contract.MatchesView.P3_FIRST_COL_INDEX
               ));
         customViewHolder.p4First.setText(
-              mCursor.getString(Contract.RoundColumnPosition.P4_FIRST_NAME
+              mCursor.getString(Contract.MatchesView.P4_FIRST_COL_INDEX
               ));
         customViewHolder.clubName.setText(
-              mCursor.getString(Contract.RoundColumnPosition.CLUB_NAME
+              mCursor.getString(Contract.MatchesView.CLUBNAME_COL_INDEX
               ));
         customViewHolder.courseName.setText(
-              mCursor.getString(Contract.RoundColumnPosition.COURSE_NAME
+              mCursor.getString(Contract.MatchesView.COURSENAME_COL_INDEX
               ));
         customViewHolder.date.setText(
               getReadableDate(
-                mCursor.getLong(Contract.RoundColumnPosition.DATE
-                    )));
-
+                mCursor.getLong(Contract.MatchesView.START_DATE
+              )));
     }
 
     void swapCursor(Cursor newCursor) {
@@ -135,11 +135,13 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mCursor.moveToPosition(adapterPosition);
-                long roundId = mCursor.getLong(Contract.Rounds.ROUNDID_POS);
-
+                long roundId = mCursor.getLong(Contract.MatchesView.ROUNDID_COL_INDEX);
+                ContentValues values = new ContentValues();
+                values.put(Contract.Rounds.ROUND_ENABLED, "0");
                 ContentResolver resolver = mContext.getContentResolver();
-                resolver.delete(
+                resolver.update(
                       Contract.Rounds.buildDirUri(),
+                      values,
                       Contract.Rounds._ID + "=?",
                       new String[]{String.valueOf(roundId)});
             }

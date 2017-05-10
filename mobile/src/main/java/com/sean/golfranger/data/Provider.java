@@ -30,6 +30,7 @@ public class Provider extends ContentProvider {
     private static final int PLAYER_LOCATION = 107;
     private static final int MARKER_LOCATION = 108;
     private static final int WIND = 109;
+    private static final int MATCHES = 110;
 
     private static UriMatcher buildUriMatcher() {
         // All paths added to the UriMatcher have a corresponding code to return when a match is
@@ -48,6 +49,7 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority, Contract.PlayerLocation.TABLE_NAME, PLAYER_LOCATION);
         matcher.addURI(authority, Contract.MarkerLocation.TABLE_NAME, MARKER_LOCATION);
         matcher.addURI(authority, Contract.Wind.TABLE_NAME, WIND);
+        matcher.addURI(authority, Contract.MatchesView.TABLE_NAME, MATCHES);
         return matcher;
     }
 
@@ -132,6 +134,11 @@ public class Provider extends ContentProvider {
                 return mDb.query(
                       Contract.Wind.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
+                );
+            case MATCHES:
+                return mDb.query(
+                      Contract.MatchesView.TABLE_NAME, columns, whereClause,
+                      whereArgs, null, null, sortOrder
                 );
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

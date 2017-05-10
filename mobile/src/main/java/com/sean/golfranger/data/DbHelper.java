@@ -84,6 +84,7 @@ class DbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_ROUND_PLAYERS_TABLE = "CREATE TABLE IF NOT EXISTS " +
               Contract.RoundPlayers.TABLE_NAME + " (" +
               Contract.RoundPlayers._ID + " INTEGER PRIMARY KEY," +
+              Contract.RoundPlayers.ROUND_ID + " INTEGER NOT NULL," +
               Contract.RoundPlayers.PLAYER_ID + " INTEGER ," +
               Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
               " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")" +
@@ -133,6 +134,41 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Wind.DATE_UPDATED + " INTEGER, " +
               Contract.PlayerLocation.STATUS + " INTEGER " +
               ");";
+
+        final String SQL_CREATE_MATCHES_ADAPTER_VIEW = "CREATE VIEW " +
+        Contract.MatchesView.TABLE_NAME + " AS " +
+              "SELECT " +
+              "r." + Contract.Rounds._ID + " AS roundId, " +
+              "c." + Contract.Courses._ID + " AS courseId, " +
+              "c." + Contract.Courses.COURSE_NAME + " AS courseName, " +
+              "c." + Contract.Courses.CLUB_NAME + " AS clubName, " +
+              "p1." + Contract.Players._ID + " AS player1Id, " +
+              "p1." + Contract.Players.FIRST_NAME + " AS player1First, " +
+              "p1." + Contract.Players.LAST_NAME + " AS player1Last, " +
+              "p2." + Contract.Players._ID + " AS player2Id, " +
+              "p2." + Contract.Players.FIRST_NAME + " AS player2First, " +
+              "p2." + Contract.Players.LAST_NAME + " AS player2Last, " +
+              "p3." + Contract.Players._ID + " AS player3Id, " +
+              "p3." + Contract.Players.FIRST_NAME + " AS player3First, " +
+              "p3." + Contract.Players.LAST_NAME + " AS player3Last, " +
+              "p4." + Contract.Players._ID + " AS player4Id, " +
+              "p4." + Contract.Players.FIRST_NAME + " AS player4First, " +
+              "p4." + Contract.Players.LAST_NAME + " AS player4Last, " +
+              "r." + Contract.Rounds.DATE_CREATED + " AS startDate " +
+
+              " FROM " + Contract.Rounds.TABLE_NAME + " AS r " +
+              " LEFT JOIN " + Contract.Courses.TABLE_NAME + " AS c " +
+              " ON c." + Contract.Courses._ID + " = r." + Contract.Rounds.COURSE_ID + " AND r." + Contract.Rounds.ROUND_ENABLED + " = 1 " +
+              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp " +
+              " ON r." + Contract.Rounds._ID + " = rp." + Contract.RoundPlayers.ROUND_ID +
+              " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p1 " +
+              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p1." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 1 " +
+              " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p2 " +
+              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p2." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 2 " +
+              " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p3 " +
+              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p3." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 3 " +
+              " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p4 " +
+              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 4; ";
 
         final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
         Contract.RoundCoursesPlayers.TABLE_NAME +
@@ -266,6 +302,7 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MARKER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

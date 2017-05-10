@@ -31,7 +31,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
         getContentResolver()
-              .registerContentObserver(Contract.Rounds.buildDirUri(), true, mMyObserver);
+              .registerContentObserver(Contract.MatchesView.buildDirUri(), true, mMyObserver);
         sLoaderCallback = this;
         sLoaderManager.initLoader(0, null, sLoaderCallback);
 
@@ -53,7 +53,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getApplicationContext(),
-              Contract.Rounds.buildDirUri(),
+              Contract.MatchesView.buildDirUri(),
               null,
               null,
               null,

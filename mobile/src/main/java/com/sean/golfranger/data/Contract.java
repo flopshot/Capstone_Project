@@ -274,13 +274,18 @@ public class Contract {
 
     public static class RoundPlayers implements BaseColumns {
         public static final int ROUNDPLAYERID_POS = 0;
-        public static final int PLAYERID_POS = 1;
-        public static final int PLAYERORDER_POS = 2;
+        public static final int ROUNDID_POS = 1;
+        public static final int PLAYERID_POS = 2;
+        public static final int PLAYERORDER_POS = 3;
 
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "roundPlayers";
 
         // COLUMN NAMES
+        /**
+        * Type: INT
+        */
+        public static final String ROUND_ID = "roundId";
         /**
          * Type: INT NOT NULL
          */
@@ -574,6 +579,33 @@ public class Contract {
          */
         public static long getItemId(Uri itemUri) {
             return Long.parseLong(itemUri.getPathSegments().get(0));
+        }
+    }
+
+    public static class MatchesView {
+        static final String TABLE_NAME = "MatchesView";
+        public static final int ROUNDID_COL_INDEX = 0;
+        public static final int COURSEID_COL_INDEX = 1;
+        public static final int COURSENAME_COL_INDEX = 2;
+        public static final int CLUBNAME_COL_INDEX = 3;
+        public static final int P1_ID_COL_INDEX = 4;
+        public static final int P1_FIRST_COL_INDEX = 5;
+        public static final int P1_LAST_COL_INDEX = 6;
+        public static final int P2_ID_COL_INDEX = 7;
+        public static final int P2_FIRST_COL_INDEX = 8;
+        public static final int P2_LAST_COL_INDEX = 9;
+        public static final int P3_ID_COL_INDEX = 10;
+        public static final int P3_FIRST_COL_INDEX = 11;
+        public static final int P3_LAST_COL_INDEX = 12;
+        public static final int P4_ID_COL_INDEX = 13;
+        public static final int P4_FIRST_COL_INDEX = 14;
+        public static final int P4_LAST_COL_INDEX = 15;
+        public static final int START_DATE = 16;
+
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon()
+                  .appendPath(TABLE_NAME)
+                  .build();
         }
     }
 }
