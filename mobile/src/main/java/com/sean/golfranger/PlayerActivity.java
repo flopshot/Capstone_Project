@@ -54,14 +54,12 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
 
         mPlayerAdapter = new PlayerAdapter(new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
-            public void onClick(Long playerId, String firstName, String lastName) {
+            public void onClick(Long playerId) {
                 if (getCallingActivity() == null) {
                     Timber.d("No Activity called this activity");
                 } else {
                     Intent intent = new Intent();
                     intent.putExtra(StartRoundActivity.EXTRA_RETURN_ID, String.valueOf(playerId));
-                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_FIRST_ITEM, firstName);
-                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_SECOND_ITEM, lastName);
                     setResult(RESULT_OK, intent);
                     finish();
                     Timber.d("Some Activity DID call this activity");

@@ -68,9 +68,7 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
-            String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
-            String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
-            mClickHandler.onClick(courseId, courseName, clubName);
+            mClickHandler.onClick(courseId);
         }
 
         @Override
@@ -86,7 +84,7 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     }
 
     interface CourseAdapterOnClickHandler {
-        void onClick(Long courseId, String clubName, String courseName);
+        void onClick(Long courseId);
     }
 
     interface CourseAdapterLongClickHandler {

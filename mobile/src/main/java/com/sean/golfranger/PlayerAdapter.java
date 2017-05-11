@@ -66,9 +66,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
-            String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
-            String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
-            mClickHandler.onClick(playerId, firstName, lastName);
+            mClickHandler.onClick(playerId);
         }
 
         @Override
@@ -84,7 +82,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     }
 
     interface PlayerAdapterOnClickHandler {
-        void onClick(Long courseId, String firstName, String lastName);
+        void onClick(Long courseId);
     }
 
     interface PlayerAdapterLongClickHandler {

@@ -53,14 +53,12 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         recyclerView.addItemDecoration(dividerItemDecoration);
         mCourseAdapter = new CourseAdapter(new CourseAdapter.CourseAdapterOnClickHandler() {
             @Override
-            public void onClick(Long courseId, String clubName, String courseName) {
+            public void onClick(Long courseId) {
                 if (getCallingActivity() == null) {
                     Timber.d("No Activity Called This Intent");
                 } else {
                     Intent intent = new Intent();
                     intent.putExtra(StartRoundActivity.EXTRA_RETURN_ID, String.valueOf(courseId));
-                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_FIRST_ITEM, clubName);
-                    intent.putExtra(StartRoundActivity.EXTRA_RETURN_SECOND_ITEM, courseName);
                     setResult(RESULT_OK, intent);
                     finish();
                     Timber.d("Some Activity DID call this activity");

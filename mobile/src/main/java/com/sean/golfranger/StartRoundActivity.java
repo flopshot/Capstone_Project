@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +26,9 @@ import com.sean.golfranger.utils.DialogUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
+
+import static com.sean.golfranger.R.id.clubName;
+import static com.sean.golfranger.R.id.courseName;
 
 public class StartRoundActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -58,8 +60,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_round);
 
-        club = (TextView) findViewById(R.id.clubName);
-        course = (TextView) findViewById(R.id.courseName);
+        club = (TextView) findViewById(clubName);
+        course = (TextView) findViewById(courseName);
         p1First = (TextView) findViewById(R.id.p1First);
         p1Last = (TextView) findViewById(R.id.p1Last);
         p2First = (TextView) findViewById(R.id.p2First);
@@ -357,19 +359,12 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         ContentValues values = new ContentValues();
         ContentResolver resolver = getContentResolver();
         String playerId;
-        String firstName;
-        String lastName;
 
         if (resultCode == RESULT_OK){
             switch (requestCode) {
                 case REQUEST_CODE_COURSE:
                     String courseID = data.getStringExtra(EXTRA_RETURN_ID);
-                    String clubName = data.getStringExtra(EXTRA_RETURN_FIRST_ITEM);
-                    String courseName = data.getStringExtra(EXTRA_RETURN_SECOND_ITEM);
-
                     values.put(Contract.Rounds.COURSE_ID, courseID);
-                    values.put(Contract.Rounds.CLUB_NAME, clubName);
-                    values.put(Contract.Rounds.COURSE_NAME, courseName);
                     resolver.update(
                           Contract.Rounds.buildDirUri(),
                           values,
@@ -379,90 +374,66 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     break;
                 case REQUEST_CODE_P1:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
-                    firstName = data.getStringExtra(EXTRA_RETURN_FIRST_ITEM);
-                    lastName = data.getStringExtra(EXTRA_RETURN_SECOND_ITEM);
-
-                    resolver = getContentResolver();
-                    values.put(Contract.Rounds.PLAYER1_ID, playerId);
-                    values.put(Contract.Rounds.PLAYER1_FIRST_NAME, firstName);
-                    values.put(Contract.Rounds.PLAYER1_LAST_NAME, lastName);
-                    try {
-                        resolver.update(
-                              Contract.Rounds.buildDirUri(),
-                              values,
-                              Contract.Rounds._ID + "=?",
-                              new String[]{mRoundId});
-                    } catch (SQLiteConstraintException e) {
-                        Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        values.clear();
+                    values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
+                    values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
+                    //Update Player 1 with new player info
+                    int rowUpdated1 = resolver.update(
+                          Contract.Rounds.buildDirUri(),
+                          values,
+                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                          new String[]{mRoundId, "1"});
+                    //If no player is selected for Player 1, create a new row
+                    if (rowUpdated1 == 0) {
+                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "1");
+                        resolver.insert(Contract.Rounds.buildDirUri(),values);
                     }
                     break;
                 case REQUEST_CODE_P2:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
-                    firstName = data.getStringExtra(EXTRA_RETURN_FIRST_ITEM);
-                    lastName = data.getStringExtra(EXTRA_RETURN_SECOND_ITEM);
-
-                    resolver = getContentResolver();
-                    values.put(Contract.Rounds.PLAYER2_ID, playerId);
-                    values.put(Contract.Rounds.PLAYER2_FIRST_NAME, firstName);
-                    values.put(Contract.Rounds.PLAYER2_LAST_NAME, lastName);
-                    try {
-                        resolver.update(
-                              Contract.Rounds.buildDirUri(),
-                              values,
-                              Contract.Rounds._ID + "=?",
-                              new String[]{mRoundId});
-                    } catch (SQLiteConstraintException e) {
-                        Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        values.clear();
+                    values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
+                    values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
+                    //Update Player 2 with new player info
+                    int rowUpdated2 = resolver.update(
+                          Contract.Rounds.buildDirUri(),
+                          values,
+                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                          new String[]{mRoundId, "2"});
+                    //If no player is selected for Player 2, create a new row
+                    if (rowUpdated2 == 0) {
+                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "2");
+                        resolver.insert(Contract.Rounds.buildDirUri(),values);
                     }
                     break;
                 case REQUEST_CODE_P3:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
-                    firstName = data.getStringExtra(EXTRA_RETURN_FIRST_ITEM);
-                    lastName = data.getStringExtra(EXTRA_RETURN_SECOND_ITEM);
-
-                    resolver = getContentResolver();
-                    values.put(Contract.Rounds.PLAYER3_ID, playerId);
-                    values.put(Contract.Rounds.PLAYER3_FIRST_NAME, firstName);
-                    values.put(Contract.Rounds.PLAYER3_LAST_NAME, lastName);
-                    try {
-                        resolver.update(
-                              Contract.Rounds.buildDirUri(),
-                              values,
-                              Contract.Rounds._ID + "=?",
-                              new String[]{mRoundId});
-                    } catch (SQLiteConstraintException e) {
-                        Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        values.clear();
+                    values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
+                    values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
+                    //Update Player 3 with new player info
+                    int rowUpdated3 = resolver.update(
+                          Contract.Rounds.buildDirUri(),
+                          values,
+                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                          new String[]{mRoundId, "3"});
+                    //If no player is selected for Player 3, create a new row
+                    if (rowUpdated3 == 0) {
+                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "3");
+                        resolver.insert(Contract.Rounds.buildDirUri(),values);
                     }
                     break;
                 case REQUEST_CODE_P4:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
-                    firstName = data.getStringExtra(EXTRA_RETURN_FIRST_ITEM);
-                    lastName = data.getStringExtra(EXTRA_RETURN_SECOND_ITEM);
-
-                    resolver = getContentResolver();
-                    values.put(Contract.Rounds.PLAYER4_ID, playerId);
-                    values.put(Contract.Rounds.PLAYER4_FIRST_NAME, firstName);
-                    values.put(Contract.Rounds.PLAYER4_LAST_NAME, lastName);
-                    try {
-                        resolver.update(
-                              Contract.Rounds.buildDirUri(),
-                              values,
-                              Contract.Rounds._ID + "=?",
-                              new String[]{mRoundId});
-                    } catch (SQLiteConstraintException e) {
-                        Timber.e("Cannot Add Unique Player Multiple Times");
-                        Toast.makeText(getApplicationContext(), getString(R.string.playerAlreadyMsg), Toast.LENGTH_SHORT).show();
-                    } finally {
-                        values.clear();
+                    values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
+                    values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
+                    //Update Player 4 with new player info
+                    int rowUpdated4 = resolver.update(
+                          Contract.Rounds.buildDirUri(),
+                          values,
+                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                          new String[]{mRoundId, "4"});
+                    //If no player is selected for Player 4, create a new row
+                    if (rowUpdated4 == 0) {
+                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "4");
+                        resolver.insert(Contract.Rounds.buildDirUri(),values);
                     }
                     break;
             }
