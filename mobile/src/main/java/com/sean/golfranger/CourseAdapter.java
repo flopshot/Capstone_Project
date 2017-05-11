@@ -78,7 +78,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
             long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
             String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
             String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
-            mLongClickHandler.onLongClick(courseId, courseName, clubName);
+            int holeCount = mCursor.getInt(Contract.Courses.HOLECNT_POS);
+            mLongClickHandler.onLongClick(courseId, courseName, clubName, holeCount);
             return true;
         }
     }
@@ -88,7 +89,7 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     }
 
     interface CourseAdapterLongClickHandler {
-        void onLongClick(Long courseId, String clubName, String courseName);
+        void onLongClick(Long courseId, String clubName, String courseName, int holeCount);
     }
 
     void swapCursor(Cursor newCursor) {

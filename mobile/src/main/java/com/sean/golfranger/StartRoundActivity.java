@@ -44,7 +44,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     public static final String EXTRA_RETURN_SECOND_ITEM = "RETURNSECONDITEM";
     private static final String EXTRA_SAVE_STATE = "mDoSaveState4SaveInstanceArg";
 
-    private String mRoundId;
+    private String mRoundId, mCourseId;
     private boolean mDoSave = false;
     private ContentObserver mMyObserver;
     private static LoaderManager sLoaderManager;
@@ -311,6 +311,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                                     Contract.Rounds._ID + "=?",
                                     new String[] {mRoundId}
                               );
+                              mCourseId = null;
                               break;
                           case REQUEST_CODE_P1:
                               resolver.delete(
@@ -365,11 +366,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                 case REQUEST_CODE_COURSE:
                     String courseId = data.getStringExtra(EXTRA_RETURN_ID);
                     values.put(Contract.Rounds.COURSE_ID, courseId);
-                    resolver.update(
+                    int updated = resolver.update(
                           Contract.Rounds.buildDirUri(),
                           values,
                           Contract.Rounds._ID + "=?",
                           new String[]{mRoundId});
+                    if (updated > 0) {
+                        mCourseId = courseId;
+                    }
                     values.clear();
                     break;
                 case REQUEST_CODE_P1:
@@ -422,6 +426,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         }
 
         SharedPrefUtils.setCurrentRoundId(getApplicationContext(), mRoundId);
+        SharedPrefUtils.setCourseId(getApplicationContext(), mCourseId);
 
         Intent intent = new Intent(getApplicationContext(), RoundActivity.class);
         intent.putExtra(EXTRA_ROUND_ID, mRoundId);

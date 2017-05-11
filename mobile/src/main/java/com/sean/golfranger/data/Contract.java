@@ -22,6 +22,7 @@ public class Contract {
         public static final int COURSEENABLED_POS = 3;
         public static final int DATECREATED_POS = 4;
         public static final int DATEUPDATED_POS = 5;
+        public static final int HOLECNT_POS = 6;
 
         // TABLE NAME
         static final String TABLE_NAME = "courses";
@@ -47,6 +48,10 @@ public class Contract {
         * Type: INTEGER NOT NULL
         */
         public static final String DATE_UPDATED = "dateUpdated";
+        /**
+         * Type: INT
+         */
+        public static final String HOLE_CNT = "holeCount";
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.courses"
          */

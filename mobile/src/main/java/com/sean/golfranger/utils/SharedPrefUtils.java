@@ -277,22 +277,4 @@ public class SharedPrefUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(KEY_COURSE_ID, null);
     }
-
-    /**
-     * Set RoundActivity Round Id
-     */
-    public static void setRoundId(Context context, String roundId) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(KEY_ROUND_ID, roundId);
-        editor.apply();
-    }
-
-    /**
-     * Get RoundActivity Round Id
-     */
-    public static String getRoundId(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(KEY_ROUND_ID, null);
-    }
 }

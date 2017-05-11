@@ -39,10 +39,11 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Courses.TABLE_NAME + " (" +
               Contract.Courses._ID + " INTEGER PRIMARY KEY," +
               Contract.Courses.CLUB_NAME + " TEXT NOT NULL," +
-              Contract.Courses.COURSE_NAME + " TEXT" +
+              Contract.Courses.COURSE_NAME + " TEXT, " +
               Contract.Courses.COURSE_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Courses.COURSE_ENABLED +" IN (0,1))," +
               Contract.Courses.DATE_CREATED + " INTEGER NOT NULL, " +
-              Contract.Courses.DATE_UPDATED + " INTEGER NOT NULL " +
+              Contract.Courses.DATE_UPDATED + " INTEGER NOT NULL, " +
+              Contract.Courses.HOLE_CNT + " INTEGER " +
               ");";
 
         // String to create a table to hold player data
@@ -77,6 +78,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.CourseHoles.HOLE_PAR + " INTEGER, " +
               Contract.CourseHoles.HOLE_DISTANCE + " INTEGER, " +
               Contract.CourseHoles.HOLE_HANDICAP + " INTEGER, " +
+              " UNIQUE (" + Contract.CourseHoles._ID + ") ON CONFLICT IGNORE " +
               " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE CASCADE" +
               ");";
 
@@ -87,7 +89,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayers.ROUND_ID + " INTEGER NOT NULL," +
               Contract.RoundPlayers.PLAYER_ID + " INTEGER ," +
               Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
-              " UNIQUE (" + Contract.RoundPlayers._ID + ") ON CONFLICT REPLACE " +
+              " UNIQUE (" + Contract.RoundPlayers._ID + ") ON CONFLICT REPLACE, " +
               " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")" +
               ");";
 

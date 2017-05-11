@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.Locale;
+
 import static com.sean.golfranger.data.DbHelper.getHelper;
 
 /**
@@ -188,11 +190,15 @@ public class Provider extends ContentProvider {
             case COURSE: {
                 contentValues.put(Contract.Courses.DATE_CREATED, getCurTimeStamp());
                 contentValues.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
+                int holeCount = contentValues.getAsInteger(Contract.Courses.HOLE_CNT);
+
                 long _id = mDb.insert(Contract.Courses.TABLE_NAME, null, contentValues);
-                if ( _id > 0)
+                if ( _id > 0) {
+                    bulkInsertCourseHoles(String.valueOf(_id), holeCount);
                     returnUri = Contract.Courses.buildItemUri(_id);
-                else
+                } else {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
+                }
                 break;
             }
             case ROUND: {
@@ -331,6 +337,8 @@ public class Provider extends ContentProvider {
                 values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Courses.TABLE_NAME,
                       values, whereClause, whereArgs);
+                int holeCount = values.getAsInteger(Contract.Courses.HOLE_CNT);
+                bulkInsertCourseHoles(whereArgs[0], holeCount);
                 break;
             case ROUND:
                 values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
@@ -398,6 +406,30 @@ public class Provider extends ContentProvider {
 //        }
 //        return returnCount;
 //    }
+    private void bulkInsertCourseHoles(String courseId, int holeCount) {
+        ContentValues values = new ContentValues();
+        try {
+            for (int k = 1; k < 37; k++) {
+                values.put(Contract.CourseHoles.HOLE_NUMBER, String.valueOf(k));
+                values.put(Contract.CourseHoles.COURSE_ID, courseId);
+                values.put(Contract.CourseHoles._ID, courseId + String.format(Locale.getDefault(), "%02d", k));
+                mDb.insert(Contract.CourseHoles.TABLE_NAME, null, values);
+                values.clear();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            for (int j = 36; j > holeCount; j--) {
+                mDb.delete(
+                      Contract.CourseHoles.TABLE_NAME,
+                      Contract.CourseHoles._ID + "=?",
+                      new String[] {courseId + String.format(Locale.getDefault(), "%02d", j)});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // set the format to sql date time
     private String getCurTimeStamp() {

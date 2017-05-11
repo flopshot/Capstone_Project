@@ -136,7 +136,7 @@
     <string name="dialogChange">CHANGE</string>
     <string name="dialogClubNameHint">Club Name</string>
     <string name="dialogCourseNameHint">Course Name</string>
-    <string name="dialogErrorMsg">All Fields Must Be Filled. Please Use Input Letters and Numbers Only</string>
+    <string name="dialogErrorMsg">All Fields Must Be Filled. Please Use Input Letters Hole Number Must Be Between 1 \- 36</string>
     <string name="dialogEditCourse">Edit Course</string>
     <string name="dialogEditPlayer">Edit Player</string>
     <string name="dialogOk">OK</string>
@@ -167,4 +167,5 @@
     <string name="matchDeleteDialogNo">NO</string>
     <string name="matchDeleteDialogTitle">Delete Round?</string>
     <string name="widgetValNA">N/A</string>
+    <string name="CourseActivityDialogHoleCnt">Number of Holes</string>
 </resources>

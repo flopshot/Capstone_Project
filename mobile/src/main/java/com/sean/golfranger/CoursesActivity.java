@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import com.sean.golfranger.data.Contract;
 import com.sean.golfranger.utils.DialogUtils;
 
 import timber.log.Timber;
+
 
 public class CoursesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private CourseAdapter mCourseAdapter;
@@ -66,8 +68,8 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
             }
             }, new CourseAdapter.CourseAdapterLongClickHandler() {
             @Override
-            public void onLongClick(Long courseId, String clubName, String courseName) {
-                showEditCourseDialog(courseId, clubName, courseName);
+            public void onLongClick(Long courseId, String clubName, String courseName, int holeCount) {
+                showEditCourseDialog(courseId, clubName, courseName, holeCount);
             }
         });
         recyclerView.setAdapter(mCourseAdapter);
@@ -130,6 +132,11 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         final EditText courseInput = new EditText(this);
         courseInput.setHint(getString(R.string.dialogCourseNameHint));
         layout.addView(courseInput);
+
+        final EditText holeInput = new EditText(this);
+        holeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        holeInput.setHint(R.string.CourseActivityDialogHoleCnt);
+        layout.addView(holeInput);
         alertDialog.setView(layout);
 
         alertDialog.setPositiveButton(getString(R.string.dialogAddButton),
@@ -137,13 +144,17 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
                   public void onClick(DialogInterface dialog, int which) {
                       String courseName = courseInput.getText().toString().trim();
                       String clubName = clubInput.getText().toString().trim();
+                      String holeCount = holeInput.getText().toString().trim();
                       if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
-                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
+                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+")  &
+                            !holeCount.equals("") & holeCount.matches("^([1-9]|[12][0-9]|[3][0-6])$")
+                         ) {
 
                           ContentValues values = new ContentValues();
                           ContentResolver resolver = getContentResolver();
                           values.put(Contract.Courses.CLUB_NAME, clubName);
                           values.put(Contract.Courses.COURSE_NAME, courseName);
+                          values.put(Contract.Courses.HOLE_CNT, holeCount);
                           resolver.insert(Contract.Courses.buildDirUri(), values);
                           dialog.dismiss();
                           Timber.d("Course Row Entered");
@@ -167,7 +178,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         DialogUtils.doKeepDialog(d);
     }
 
-    private void showEditCourseDialog(final long courseId, String club, String course){
+    private void showEditCourseDialog(final long courseId, String club, String course, int holeCount){
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(CoursesActivity.this);
         alertDialog.setTitle(getString(R.string.dialogEditCourse));
 
@@ -181,6 +192,11 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         final EditText courseInput = new EditText(this);
         courseInput.setText(course);
         layout.addView(courseInput);
+
+        final EditText holeInput = new EditText(this);
+        holeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        holeInput.setText(String.valueOf(holeCount));
+        layout.addView(holeInput);
         alertDialog.setView(layout);
 
         alertDialog.setPositiveButton(getString(R.string.dialogOk),
@@ -188,13 +204,17 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
                   public void onClick(DialogInterface dialog, int which) {
                       String courseName = courseInput.getText().toString().trim();
                       String clubName = clubInput.getText().toString().trim();
+                      String holeCount = holeInput.getText().toString().trim();
                       if (!courseName.equals("") & courseName.matches("[a-zA-Z 0-9]+") &
-                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+") ) {
+                            !clubName.equals("") & clubName.matches("[a-zA-Z 0-9]+")  &
+                            !holeCount.equals("") & holeCount.matches("^([1-9]|[12][0-9]|[3][0-6])$")
+                            ) {
 
                           ContentValues values = new ContentValues();
                           ContentResolver resolver = getContentResolver();
                           values.put(Contract.Courses.CLUB_NAME, clubName);
                           values.put(Contract.Courses.COURSE_NAME, courseName);
+                          values.put(Contract.Courses.HOLE_CNT, holeCount);
                           resolver.update(
                                 Contract.Courses.buildDirUri(),
                                 values,
