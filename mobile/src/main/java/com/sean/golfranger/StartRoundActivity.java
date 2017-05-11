@@ -71,9 +71,11 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
+        sLoaderCallback = this;
         getContentResolver()
               .registerContentObserver(Contract.Rounds.buildDirUri(), true, mMyObserver);
-        sLoaderCallback = this;
+        getContentResolver()
+              .registerContentObserver(Contract.RoundPlayers.buildDirUri(), true, mMyObserver);
 
         Timber.d("Saved Instance: " + String.valueOf(savedInstanceState != null));
         if (savedInstanceState != null) {
@@ -296,45 +298,48 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       Timber.d(String.valueOf(requestCode));
-                      ContentValues values = new ContentValues();
+                      ContentResolver resolver = getContentResolver();
                       switch (requestCode) {
                           case REQUEST_CODE_COURSE:
+                              ContentValues values = new ContentValues();
                               values.putNull(Contract.Rounds.COURSE_ID);
-                              values.putNull(Contract.Rounds.COURSE_NAME);
-                              values.putNull(Contract.Rounds.CLUB_NAME);
+                              resolver.update(
+                                    Contract.Rounds.buildDirUri(),
+                                    values,
+                                    Contract.Rounds._ID + "=?",
+                                    new String[] {mRoundId}
+                              );
                               break;
                           case REQUEST_CODE_P1:
-                              Timber.d("Putting Null Values in Player 1 Round Info");
-                              values.putNull(Contract.Rounds.PLAYER1_ID);
-                              values.putNull(Contract.Rounds.PLAYER1_FIRST_NAME);
-                              values.putNull(Contract.Rounds.PLAYER1_LAST_NAME);
+                              resolver.delete(
+                                    Contract.RoundPlayers.buildDirUri(),
+                                    Contract.RoundPlayers.ROUND_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                                    new String[]{mRoundId, "1"}
+                              );
                               break;
                           case REQUEST_CODE_P2:
-                              values.putNull(Contract.Rounds.PLAYER2_ID);
-                              values.putNull(Contract.Rounds.PLAYER2_FIRST_NAME);
-                              values.putNull(Contract.Rounds.PLAYER2_LAST_NAME);
+                              resolver.delete(
+                                    Contract.RoundPlayers.buildDirUri(),
+                                    Contract.RoundPlayers.ROUND_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                                    new String[]{mRoundId, "2"}
+                              );
                               break;
                           case REQUEST_CODE_P3:
-                              values.putNull(Contract.Rounds.PLAYER3_ID);
-                              values.putNull(Contract.Rounds.PLAYER3_FIRST_NAME);
-                              values.putNull(Contract.Rounds.PLAYER3_LAST_NAME);
+                              resolver.delete(
+                                    Contract.RoundPlayers.buildDirUri(),
+                                    Contract.RoundPlayers.ROUND_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                                    new String[]{mRoundId, "3"}
+                              );
                               break;
                           case REQUEST_CODE_P4:
-                              values.putNull(Contract.Rounds.PLAYER4_ID);
-                              values.putNull(Contract.Rounds.PLAYER4_FIRST_NAME);
-                              values.putNull(Contract.Rounds.PLAYER4_LAST_NAME);
+                              resolver.delete(
+                                    Contract.RoundPlayers.buildDirUri(),
+                                    Contract.RoundPlayers.ROUND_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
+                                    new String[]{mRoundId, "4"}
+                              );
                               break;
                       }
-
-                      ContentResolver resolver = getContentResolver();
-                      resolver.update(
-                            Contract.Rounds.buildDirUri(),
-                            values,
-                            Contract.Rounds._ID + "=?",
-                            new String[]{mRoundId});
-                      values.clear();
                       dialog.cancel();
-
                   }});
 
         alertDialog.setNeutralButton(getString(R.string.dialogCancelButton),
