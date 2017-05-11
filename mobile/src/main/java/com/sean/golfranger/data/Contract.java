@@ -332,10 +332,10 @@ public class Contract {
         }
     }
 
-    public static class RoundPlayerCourseHoles implements BaseColumns {
-        public static final int ROUNDPLAYERCOURSEHOLE_POS = 0;
+    public static class RoundPlayerHoles implements BaseColumns {
+        public static final int ROUNDPLAYERCOURSEHOLE_POS = 0; //Concatenation of RoundId, player position,  and hole number
         public static final int ROUNDPLAYERID_POS = 1;
-        public static final int COURSEHOLEID_POS = 2;
+        public static final int ROUNDID_POS = 2;
         public static final int SCORE_POS = 3;
         public static final int PENALTIES_POS = 4;
         public static final int PUTTS_POS = 5;
@@ -343,6 +343,8 @@ public class Contract {
         public static final int SANDFLAG_POS = 7;
         public static final int GIRFLAG_POS = 8;
         public static final int FIRFLAG_POS = 9;
+        public static final int HOLENUM_POS = 10;
+
 
         // TABLE NAME FOR DB
         static final String TABLE_NAME = "gamePlayerCourseHoles";
@@ -353,9 +355,9 @@ public class Contract {
          */
         public static final String ROUNDPLAYER_ID = "roundPlayerId";
         /**
-         * Type: INT NOT NULL
+         * Type: INT
          */
-        public static final String COURSE_HOLE_ID = "courseHoleId";
+        public static final String ROUND_ID = "roundId";
         /**
          * Type: INT
          */
@@ -384,6 +386,10 @@ public class Contract {
          * Type: BOOLEAN
          */
         public static final String FIR_FLAG = "firFlag";
+        /**
+        * Type: Int
+        */
+        public static final String HOLE_NUM = "holeNumber";
         /**
          * "vnd.android.cursor.dir/vnd.com.sean.golfranger.[TABLE_NAME]</>"
          */

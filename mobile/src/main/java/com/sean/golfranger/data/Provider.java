@@ -28,7 +28,7 @@ public class Provider extends ContentProvider {
     private static final int ROUND = 102;
     private static final int COURSE_HOLE = 103;
     private static final int ROUND_PLAYER = 104;
-    private static final int ROUND_PLAYER_COURSE_HOLE= 105;
+    private static final int ROUND_PLAYER_HOLE = 105;
     private static final int PLAYER_LOCATION = 107;
     private static final int MARKER_LOCATION = 108;
     private static final int WIND = 109;
@@ -47,7 +47,7 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority, Contract.Rounds.TABLE_NAME, ROUND);
         matcher.addURI(authority, Contract.CourseHoles.TABLE_NAME, COURSE_HOLE);
         matcher.addURI(authority, Contract.RoundPlayers.TABLE_NAME,ROUND_PLAYER);
-        matcher.addURI(authority, Contract.RoundPlayerCourseHoles.TABLE_NAME, ROUND_PLAYER_COURSE_HOLE);
+        matcher.addURI(authority, Contract.RoundPlayerHoles.TABLE_NAME, ROUND_PLAYER_HOLE);
         matcher.addURI(authority, Contract.PlayerLocation.TABLE_NAME, PLAYER_LOCATION);
         matcher.addURI(authority, Contract.MarkerLocation.TABLE_NAME, MARKER_LOCATION);
         matcher.addURI(authority, Contract.Wind.TABLE_NAME, WIND);
@@ -117,9 +117,9 @@ public class Provider extends ContentProvider {
                       Contract.CourseHoles.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
-            case ROUND_PLAYER_COURSE_HOLE:
+            case ROUND_PLAYER_HOLE:
                 return mDb.query(
-                      Contract.RoundPlayerCourseHoles.TABLE_NAME, columns,
+                      Contract.RoundPlayerHoles.TABLE_NAME, columns,
                       whereClause, whereArgs, null, null, sortOrder
                 );
             case PLAYER_LOCATION:
@@ -164,8 +164,8 @@ public class Provider extends ContentProvider {
                 return Contract.CourseHoles.CONTENT_TYPE;
             case ROUND_PLAYER:
                 return Contract.RoundPlayers.CONTENT_TYPE;
-            case ROUND_PLAYER_COURSE_HOLE:
-                return Contract.RoundPlayerCourseHoles.CONTENT_TYPE;
+            case ROUND_PLAYER_HOLE:
+                return Contract.RoundPlayerHoles.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -205,10 +205,12 @@ public class Provider extends ContentProvider {
                 contentValues.put(Contract.Rounds.DATE_CREATED, getCurTimeStamp());
                 contentValues.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 long _id = mDb.insert(Contract.Rounds.TABLE_NAME, null, contentValues);
-                if ( _id > 0)
+                if (_id > 0) {
+                    bulkInsertRoundPlayerHoles(String.valueOf(_id));
                     returnUri = Contract.Rounds.buildItemUri(_id);
-                else
+                } else {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
+                }
                 break;
             }
             case COURSE_HOLE: {
@@ -229,10 +231,10 @@ public class Provider extends ContentProvider {
                 }
                 break;
             }
-            case ROUND_PLAYER_COURSE_HOLE: {
-                long _id = mDb.insert(Contract.RoundPlayerCourseHoles.TABLE_NAME, null, contentValues);
+            case ROUND_PLAYER_HOLE: {
+                long _id = mDb.insert(Contract.RoundPlayerHoles.TABLE_NAME, null, contentValues);
                 if ( _id > 0) {
-                    returnUri = Contract.RoundPlayerCourseHoles.buildItemUri(_id);
+                    returnUri = Contract.RoundPlayerHoles.buildItemUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
                 }
@@ -299,9 +301,9 @@ public class Provider extends ContentProvider {
                 rowsDeleted = mDb.delete(
                       Contract.RoundPlayers.TABLE_NAME, whereClause, whereArgs);
                 break;
-            case ROUND_PLAYER_COURSE_HOLE:
+            case ROUND_PLAYER_HOLE:
                 rowsDeleted = mDb.delete(
-                      Contract.RoundPlayerCourseHoles.TABLE_NAME, whereClause, whereArgs);
+                      Contract.RoundPlayerHoles.TABLE_NAME, whereClause, whereArgs);
                 break;
             case PLAYER_LOCATION:
                 rowsDeleted = mDb.delete(
@@ -355,9 +357,9 @@ public class Provider extends ContentProvider {
                 rowsUpdated = mDb.update(Contract.RoundPlayers.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
-            case ROUND_PLAYER_COURSE_HOLE:
+            case ROUND_PLAYER_HOLE:
                 values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
-                rowsUpdated = mDb.update(Contract.RoundPlayerCourseHoles.TABLE_NAME,
+                rowsUpdated = mDb.update(Contract.RoundPlayerHoles.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
             case PLAYER_LOCATION:
@@ -384,28 +386,6 @@ public class Provider extends ContentProvider {
         return rowsUpdated;
     }
 
-    /**
-     * When a new round is inserted, this method will be triggered. The method creates 18 records
-     * in the holes table which has a foreign key reference to the round by roundId
-     */
-//    private int bulkInsert18HolesForNewRound(long roundId) {
-//        int returnCount = 0;
-//        ContentValues values = new ContentValues();
-//        try {
-//            for (int k = 1; k < 19; k++) {
-//                values.put(Contract.Holes.HOLE_NUMBER, String.valueOf(k));
-//                values.put(Contract.Holes.ROUND_ID, String.valueOf(roundId));
-//                long _id = mDb.insert(Contract.Holes.TABLE_NAME, null, values);
-//                if (_id != -1) {
-//                    returnCount++;
-//                }
-//                values.clear();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return returnCount;
-//    }
     private void bulkInsertCourseHoles(String courseId, int holeCount) {
         ContentValues values = new ContentValues();
         try {
@@ -425,6 +405,26 @@ public class Provider extends ContentProvider {
                       Contract.CourseHoles.TABLE_NAME,
                       Contract.CourseHoles._ID + "=?",
                       new String[] {courseId + String.format(Locale.getDefault(), "%02d", j)});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void bulkInsertRoundPlayerHoles(String roundId) {
+        ContentValues values = new ContentValues();
+        try {
+            for (int k = 1; k < 4; k++) {
+                for (int l = 1; l < 37; l++) {
+                    values.put(
+                          Contract.RoundPlayerHoles._ID,
+                          roundId + String.valueOf(k) + String.format(Locale.getDefault(), "%02d", l)
+                    );
+                    values.put(Contract.RoundPlayerHoles.ROUNDPLAYER_ID, roundId + String.valueOf(k));
+                    values.put(Contract.RoundPlayerHoles.HOLE_NUM, String.valueOf(l));
+                    mDb.insert(Contract.RoundPlayerHoles.TABLE_NAME, null, values);
+                    values.clear();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

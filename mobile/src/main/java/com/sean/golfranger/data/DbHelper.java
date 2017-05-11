@@ -78,8 +78,8 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.CourseHoles.HOLE_PAR + " INTEGER, " +
               Contract.CourseHoles.HOLE_DISTANCE + " INTEGER, " +
               Contract.CourseHoles.HOLE_HANDICAP + " INTEGER, " +
-              " UNIQUE (" + Contract.CourseHoles._ID + ") ON CONFLICT IGNORE " +
-              " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ") ON DELETE CASCADE" +
+              " UNIQUE (" + Contract.CourseHoles._ID + ") ON CONFLICT IGNORE, " +
+              " FOREIGN KEY (" + Contract.CourseHoles.COURSE_ID + ") REFERENCES " + Contract.Courses.TABLE_NAME + " (" + Contract.Courses._ID + ")" +
               ");";
 
         // String to Create a table to hold ROUND/PLAYERS data
@@ -90,24 +90,27 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayers.PLAYER_ID + " INTEGER ," +
               Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
               " UNIQUE (" + Contract.RoundPlayers._ID + ") ON CONFLICT REPLACE, " +
-              " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")" +
+              " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")," +
+              " FOREIGN KEY (" + Contract.RoundPlayers.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON CASCADE DELETE" +
               ");";
 
-        // String to create a table to hold ROUND/PLAYER/COURSE/HOLES data
+        // String to create a table to hold ROUND/PLAYER/HOLES data
         final String SQL_CREATE_ROUND_PLAYER_COURSE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
-              Contract.RoundPlayerCourseHoles.TABLE_NAME + " (" +
-              Contract.RoundPlayerCourseHoles._ID + " INTEGER PRIMARY KEY," +
-              Contract.RoundPlayerCourseHoles.ROUNDPLAYER_ID + " INTEGER ," +
-              Contract.RoundPlayerCourseHoles.COURSE_HOLE_ID + " INTEGER, " +
-              Contract.RoundPlayerCourseHoles.SCORE + " INTEGER ," +
-              Contract.RoundPlayerCourseHoles.PENALITES + " INTEGER," +
-              Contract.RoundPlayerCourseHoles.PUTTS + " INTEGER," +
-              Contract.RoundPlayerCourseHoles.SAND_SHOTS + " INTEGER," +
-              Contract.RoundPlayerCourseHoles.SAND_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.SAND_FLAG+" IN (0,1))," +
-              Contract.RoundPlayerCourseHoles.GIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.GIR_FLAG+" IN (0,1))," +
-              Contract.RoundPlayerCourseHoles.FIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerCourseHoles.FIR_FLAG+" IN (0,1))," +
-              " FOREIGN KEY (" + Contract.RoundPlayerCourseHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + "), " +
-              " FOREIGN KEY (" + Contract.RoundPlayerCourseHoles.COURSE_HOLE_ID + ") REFERENCES " + Contract.CourseHoles.TABLE_NAME + " (" + Contract.CourseHoles._ID + ")" +
+              Contract.RoundPlayerHoles.TABLE_NAME + " (" +
+              Contract.RoundPlayerHoles._ID + " INTEGER PRIMARY KEY," + //Concatenation of RoundId, player position,  and hole number
+              Contract.RoundPlayerHoles.ROUNDPLAYER_ID + " INTEGER NOT NULL," +
+              Contract.RoundPlayerHoles.ROUND_ID + " INTEGER NOT NULL, " +
+              Contract.RoundPlayerHoles.SCORE + " INTEGER," +
+              Contract.RoundPlayerHoles.PENALITES + " INTEGER," +
+              Contract.RoundPlayerHoles.PUTTS + " INTEGER," +
+              Contract.RoundPlayerHoles.SAND_SHOTS + " INTEGER," +
+              Contract.RoundPlayerHoles.SAND_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerHoles.SAND_FLAG+" IN (0,1))," +
+              Contract.RoundPlayerHoles.GIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerHoles.GIR_FLAG+" IN (0,1))," +
+              Contract.RoundPlayerHoles.FIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerHoles.FIR_FLAG+" IN (0,1))," +
+              Contract.RoundPlayerHoles.HOLE_NUM + " INTEGER NOT NULL, " +
+              " UNIQUE (" + Contract.RoundPlayerHoles._ID + ") ON CONFLICT IGNORE, " +
+              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + "), " +
+              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON CASCADE DELETE" +
               ");";
 
         // String to create a table to hold Player Location data
