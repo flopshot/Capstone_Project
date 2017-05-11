@@ -380,24 +380,24 @@ public class Provider extends ContentProvider {
      * When a new round is inserted, this method will be triggered. The method creates 18 records
      * in the holes table which has a foreign key reference to the round by roundId
      */
-    private int bulkInsert18HolesForNewRound(long roundId) {
-        int returnCount = 0;
-        ContentValues values = new ContentValues();
-        try {
-            for (int k = 1; k < 19; k++) {
-                values.put(Contract.Holes.HOLE_NUMBER, String.valueOf(k));
-                values.put(Contract.Holes.ROUND_ID, String.valueOf(roundId));
-                long _id = mDb.insert(Contract.Holes.TABLE_NAME, null, values);
-                if (_id != -1) {
-                    returnCount++;
-                }
-                values.clear();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return returnCount;
-    }
+//    private int bulkInsert18HolesForNewRound(long roundId) {
+//        int returnCount = 0;
+//        ContentValues values = new ContentValues();
+//        try {
+//            for (int k = 1; k < 19; k++) {
+//                values.put(Contract.Holes.HOLE_NUMBER, String.valueOf(k));
+//                values.put(Contract.Holes.ROUND_ID, String.valueOf(roundId));
+//                long _id = mDb.insert(Contract.Holes.TABLE_NAME, null, values);
+//                if (_id != -1) {
+//                    returnCount++;
+//                }
+//                values.clear();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return returnCount;
+//    }
 
     // set the format to sql date time
     private String getCurTimeStamp() {

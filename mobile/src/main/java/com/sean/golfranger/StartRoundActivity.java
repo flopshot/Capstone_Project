@@ -363,8 +363,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         if (resultCode == RESULT_OK){
             switch (requestCode) {
                 case REQUEST_CODE_COURSE:
-                    String courseID = data.getStringExtra(EXTRA_RETURN_ID);
-                    values.put(Contract.Rounds.COURSE_ID, courseID);
+                    String courseId = data.getStringExtra(EXTRA_RETURN_ID);
+                    values.put(Contract.Rounds.COURSE_ID, courseId);
                     resolver.update(
                           Contract.Rounds.buildDirUri(),
                           values,
@@ -376,65 +376,33 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
                     values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
-                    //Update Player 1 with new player info
-                    int rowUpdated1 = resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
-                          new String[]{mRoundId, "1"});
-                    //If no player is selected for Player 1, create a new row
-                    if (rowUpdated1 == 0) {
-                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "1");
-                        resolver.insert(Contract.Rounds.buildDirUri(),values);
-                    }
+                    values.put(Contract.RoundPlayers._ID, mRoundId + "1");
+                    values.put(Contract.RoundPlayers.PLAYER_ORDER, "1");
+                    resolver.insert(Contract.Rounds.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P2:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
                     values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
-                    //Update Player 2 with new player info
-                    int rowUpdated2 = resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
-                          new String[]{mRoundId, "2"});
-                    //If no player is selected for Player 2, create a new row
-                    if (rowUpdated2 == 0) {
-                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "2");
-                        resolver.insert(Contract.Rounds.buildDirUri(),values);
-                    }
+                    values.put(Contract.RoundPlayers._ID, mRoundId + "2");
+                    values.put(Contract.RoundPlayers.PLAYER_ORDER, "2");
+                    resolver.insert(Contract.Rounds.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P3:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
                     values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
-                    //Update Player 3 with new player info
-                    int rowUpdated3 = resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
-                          new String[]{mRoundId, "3"});
-                    //If no player is selected for Player 3, create a new row
-                    if (rowUpdated3 == 0) {
-                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "3");
-                        resolver.insert(Contract.Rounds.buildDirUri(),values);
-                    }
+                    values.put(Contract.RoundPlayers._ID, mRoundId + "3");
+                    values.put(Contract.RoundPlayers.PLAYER_ORDER, "3");
+                    resolver.insert(Contract.Rounds.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P4:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
                     values.put(Contract.RoundPlayers.PLAYER_ID, playerId);
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
-                    //Update Player 4 with new player info
-                    int rowUpdated4 = resolver.update(
-                          Contract.Rounds.buildDirUri(),
-                          values,
-                          Contract.RoundPlayers.PLAYER_ID + "=? AND " + Contract.RoundPlayers.PLAYER_ORDER + "=?",
-                          new String[]{mRoundId, "4"});
-                    //If no player is selected for Player 4, create a new row
-                    if (rowUpdated4 == 0) {
-                        values.put(Contract.RoundPlayers.PLAYER_ORDER, "4");
-                        resolver.insert(Contract.Rounds.buildDirUri(),values);
-                    }
+                    values.put(Contract.RoundPlayers._ID, mRoundId + "4");
+                    values.put(Contract.RoundPlayers.PLAYER_ORDER, "4");
+                    resolver.insert(Contract.Rounds.buildDirUri(),values);
                     break;
             }
         }

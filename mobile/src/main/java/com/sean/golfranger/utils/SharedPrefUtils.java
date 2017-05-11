@@ -22,6 +22,8 @@ public class SharedPrefUtils {
     private static final String CURRENT_ROUNDID_KEY = "SharedPrefUtilsRoundIdCur";
     private static final String KEY_WIND_SPEED = "WindJobService.EXTRA_WIND_SPEED";
     private static final String KEY_WIND_DIRECTION = "WindJobService.EXTRA_WIND_DIRECTION";
+    private static final String KEY_COURSE_ID = "courseId";
+    private static final String KEY_ROUND_ID = "roundId";
 
     //Stores Current Lat Lon of Device
     public static void setUserLatLon(Context context, float lat, float lon) {
@@ -256,5 +258,41 @@ public class SharedPrefUtils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putFloat(KEY_WIND_DIRECTION, direction);
         editor.apply();
+    }
+
+    /**
+    * Set RoundActivity Course Id
+    */
+    public static void setCourseId(Context context, String courseId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_COURSE_ID, courseId);
+        editor.apply();
+    }
+
+    /**
+     * Get RoundActivity Course Id
+     */
+    public static String getCourseId(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(KEY_COURSE_ID, null);
+    }
+
+    /**
+     * Set RoundActivity Round Id
+     */
+    public static void setRoundId(Context context, String roundId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_ROUND_ID, roundId);
+        editor.apply();
+    }
+
+    /**
+     * Get RoundActivity Round Id
+     */
+    public static String getRoundId(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(KEY_ROUND_ID, null);
     }
 }

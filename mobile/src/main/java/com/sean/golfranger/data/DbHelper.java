@@ -87,6 +87,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayers.ROUND_ID + " INTEGER NOT NULL," +
               Contract.RoundPlayers.PLAYER_ID + " INTEGER ," +
               Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
+              " UNIQUE (" + Contract.RoundPlayers._ID + ") ON CONFLICT REPLACE " +
               " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")" +
               ");";
 
