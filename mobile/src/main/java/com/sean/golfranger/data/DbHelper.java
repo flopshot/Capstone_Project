@@ -176,6 +176,76 @@ class DbHelper extends SQLiteOpenHelper {
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p4 " +
               " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 4; ";
 
+        final String SQL_CREATE_SCORECARD_VIEW = "CREATE VIEW " +
+            "scorecardView AS SELECT " +
+            "ch.holeNumber" +
+            ",ch.holePar" +
+            ",rph1.score AS p1Score" +
+            ",rph2.score AS p2Score" +
+            ",rph3.score AS p3Score" +
+            ",rph4.score AS p4Score" +
+            ",substr(p1.firstName,0,1) || substr(p1.lastName,0,1) AS p1Initials" +
+            ",substr(p2.firstName,0,1) || substr(p2.lastName,0,1) AS p2Initials" +
+            ",substr(p3.firstName,0,1) || substr(p3.lastName,0,1) AS p3Initials" +
+            ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials" +
+            ",rt1.p1Total" +
+            ",rt2.p2Total" +
+            ",rt2.p3Total" +
+            ",rt4.p4Total " +
+            "FROM rounds AS r " +
+            "LEFT JOIN CourseHoles AS ch " +
+            "ON ch.courseId = r.courseId " +
+            "LEFT JOIN roundPlayerHoles AS rph1 " +
+            "ON rph1.roundId = r._id " +
+            "AND ch.holeNumber = rph1.holeNumber " +
+            "AND ltrim(rph1.roundPlayerId, r._id) = '1' " +
+            "LEFT JOIN roundPlayerHoles AS rph2 " +
+            "ON rph2.roundId = r._id " +
+            "AND ch.holeNumber = rph2.holeNumber " +
+            "AND ltrim(rph2.roundPlayerId, r._id) = '2' " +
+            "LEFT JOIN roundPlayerHoles AS rph3 " +
+            "ON rph3.roundId = r._id " +
+            "AND ch.holeNumber = rph3.holeNumber " +
+            "AND ltrim(rph3.roundPlayerId, r._id) = '3' " +
+            "LEFT JOIN roundPlayerHoles AS rph4 " +
+            "ON rph4.roundId = r._id " +
+            "AND ch.holeNumber = rph4.holeNumber " +
+            "AND ltrim(rph4.roundPlayerId, r._id) = '4' " +
+
+            "LEFT JOIN roundPlayers AS rp1 ON r._id = rp1.roundId AND ltrim(rp1._id, rp1.roundId) = '1' " +
+            "LEFT JOIN players AS p1	ON rp1.playerId = p1._id " +
+            "LEFT JOIN roundPlayers AS rp2 ON r._id = rp2.roundId AND ltrim(rp2._id, rp2.roundId) = '2' " +
+            "LEFT JOIN players AS p2	ON rp2.playerId = p2._id " +
+            "LEFT JOIN roundPlayers AS rp3 ON r._id = rp3.roundId AND ltrim(rp3._id, rp3.roundId) = '3' " +
+            "LEFT JOIN players AS p3	ON rp3.playerId = p3._id " +
+            "LEFT JOIN roundPlayers AS rp4 ON r._id = rp4.roundId AND ltrim(rp4._id, rp4.roundId) = '4' " +
+            "LEFT JOIN players AS p4	ON rp4.playerId = p4._id " +
+            "LEFT JOIN ( " +
+            "SELECT roundId ,SUM(score) AS p1Total " +
+            "FROM roundPlayerHoles " +
+            "WHERE ltrim(roundPlayerId, roundId) = '1' " +
+            "GROUP BY roundPlayerId " +
+            ") AS rt1 ON rt1.roundId = r._id " +
+            "LEFT JOIN ( " +
+            "SELECT roundId ,SUM(score) AS p2Total " +
+            "FROM roundPlayerHoles " +
+            "WHERE ltrim(roundPlayerId, roundId) = '2' " +
+            "GROUP BY roundPlayerId " +
+            ") AS rt2 ON rt2.roundId = r._id " +
+            "LEFT JOIN ( " +
+            "SELECT roundId ,SUM(score) AS p3Total " +
+            "FROM roundPlayerHoles " +
+            "WHERE ltrim(roundPlayerId, roundId) = '3' " +
+            "GROUP BY roundPlayerId " +
+            ") AS rt3 ON rt3.roundId = r._id " +
+            "LEFT JOIN ( " +
+            "SELECT roundId ,SUM(score) AS p4Total " +
+            "FROM roundPlayerHoles " +
+            "WHERE ltrim(roundPlayerId, roundId) = '4' " +
+            "GROUP BY roundPlayerId " +
+            ") AS rt4 ON rt4.roundId = r._id;";
+
+
 //        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
 //        Contract.RoundCoursesPlayers.TABLE_NAME +
 //        " AS SELECT " +
@@ -309,6 +379,7 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_MARKER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW );
+        sqLiteDatabase.execSQL(SQL_CREATE_SCORECARD_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

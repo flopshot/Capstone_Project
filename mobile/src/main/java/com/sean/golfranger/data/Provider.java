@@ -437,7 +437,7 @@ public class Provider extends ContentProvider {
         return tsLong.toString();
     }
 
-    //Helper function for whereArgs concatination
+    //Helper function for whereArgs concatenation
     private String[] concat(String[] a, String[] b) {
         int aLen = a.length;
         int bLen = b.length;
