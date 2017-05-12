@@ -22,6 +22,7 @@ import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
 
+import static com.sean.golfranger.R.id.p1Total;
 import static com.sean.golfranger.R.id.p4Total;
 
 /**
@@ -30,8 +31,7 @@ import static com.sean.golfranger.R.id.p4Total;
  */
 public class ScorecardFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private  MyObserver myObserver;
-    private static final int HOLES_LOADER = 100;
-    private static final int TOTAL_LOADER = 101;
+    private static final int SCORECARD_LOADER = 100;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
     private ScorecardAdapter mScoreCardAdapter;
@@ -55,16 +55,15 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
         // Register ContentObserver in onCreate to catch changes in detail fragment
         getActivity()
               .getContentResolver()
-              .registerContentObserver(Contract.Rounds.buildDirUri(), true, myObserver);
+              .registerContentObserver(Contract.RoundPlayerHoles.buildDirUri(), true, myObserver);
         getActivity()
               .getContentResolver()
-              .registerContentObserver(Contract.Holes.buildDirUri(), true, myObserver);
+              .registerContentObserver(Contract.CourseHoles.buildDirUri(), true, myObserver);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        sLoaderManager.initLoader(HOLES_LOADER, null, sLoaderCallback);
-        sLoaderManager.initLoader(TOTAL_LOADER, null, sLoaderCallback);
+        sLoaderManager.initLoader(SCORECARD_LOADER, null, sLoaderCallback);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -74,7 +73,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
 
 
         View rootView = inflater.inflate(R.layout.fragmet_scorecard, container, false);
-        p1TotalView = (TextView) rootView.findViewById(R.id.p1Total);
+        p1TotalView = (TextView) rootView.findViewById(p1Total);
         p2TotalView = (TextView) rootView.findViewById(R.id.p2Total);
         p3TotalView = (TextView) rootView.findViewById(R.id.p3Total);
         p4TotalView = (TextView) rootView.findViewById(p4Total);
@@ -96,7 +95,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
             recyclerView.setLayoutManager(layMan);
         }
 
-        mScoreCardAdapter = new ScorecardAdapter(getActivity().getApplicationContext());
+        mScoreCardAdapter = new ScorecardAdapter();
         recyclerView.setAdapter(mScoreCardAdapter);
         return rootView;
     }
@@ -109,142 +108,56 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        switch (id) {
-            case HOLES_LOADER:
-                Timber.d("Creating Hole Data Loader");
-                return new CursorLoader(getActivity().getApplicationContext(),
-                      Contract.roundHolesUri(),
-                      null,
-                      Contract.Holes.ROUND_ID + "=?",
-                      new String[]{
-                            SharedPrefUtils.getCurrentRoundId(getActivity().getApplicationContext())
-                      },
-                      null);
-            case TOTAL_LOADER:
-                return new CursorLoader(getActivity().getApplicationContext(),
-                      Contract.PlayerRoundTotals.buildDirUri(),
-                      null,
-                      Contract.Holes.ROUND_ID + "=?",
-                      new String[] {
-                            SharedPrefUtils.getCurrentRoundId(getActivity().getApplicationContext())
-                      },
-                      null);
-            default:
-                return null;
-        }
+        Timber.d("Creating Hole Data Loader");
+        return new CursorLoader(getActivity().getApplicationContext(),
+              Contract.ScorecardView.buildDirUri(),
+              null,
+              Contract.ScorecardView.ROUND_ID + "=?",
+              new String[]{
+                    SharedPrefUtils.getCurrentRoundId(getActivity().getApplicationContext())
+              },
+              null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        switch(loader.getId()) {
-            case HOLES_LOADER:
-                mScoreCardAdapter.swapCursor(cursor);
-                if (cursor != null && cursor.moveToFirst()) {
+        mScoreCardAdapter.swapCursor(cursor);
+        if (cursor != null && cursor.moveToFirst()) {
 
-                    String p1FirstName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER1_FIRST_NAME));
-                    String p1LastName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER1_LAST_NAME));
-                    Timber.d("Player1 First Name "+p1FirstName);
-                    if (p1LastName != null && p1FirstName != null) {
-                        String initials = p1FirstName.substring(0,1) + p1LastName.substring(0,1);
-                        p1Initials.setText(initials);
-                    }
+            String p1Initial = cursor.getString(Contract.ScorecardView.P1INITIALS_POS);
+            Timber.d("Player1 Initials "+p1Initial);
+            if (p1Initial != null) {
+                p1Initials.setText(p1Initial);
+                p1TotalView.setText(String.valueOf(cursor.getLong(Contract.ScorecardView.P1TOTAL_POS)));
+            }
 
-                    String p2FirstName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER2_FIRST_NAME));
-                    String p2LastName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER2_LAST_NAME));
-                    if (p2LastName != null && p2FirstName != null) {
-                        String initials = p2FirstName.substring(0,1) + p2LastName.substring(0,1);
-                        p2Initials.setText(initials);
-                    }
+            String p2Initial = cursor.getString(Contract.ScorecardView.P2INITIALS_POS);
+            Timber.d("Player2 Initials "+p2Initial);
+            if (p2Initial != null) {
+                p2Initials.setText(p2Initial);
+                p2TotalView.setText(String.valueOf(cursor.getLong(Contract.ScorecardView.P2TOTAL_POS)));
+            }
 
-                    String p3FirstName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER3_FIRST_NAME));
-                    String p3LastName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER3_LAST_NAME));
-                    if (p3LastName != null && p3FirstName != null) {
-                        String initials = p3FirstName.substring(0,1) + p3LastName.substring(0,1);
-                        p3Initials.setText(initials);
-                    }
 
-                    String p4FirstName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER4_FIRST_NAME));
-                    String p4LastName = cursor.getString(
-                          cursor.getColumnIndex(
-                                Contract.Rounds.PLAYER4_LAST_NAME));
-                    if (p4LastName != null && p4FirstName != null) {
-                        String initials = p4FirstName.substring(0,1) + p4LastName.substring(0,1);
-                        p4Initials.setText(initials);
-                    }
-                }
-                break;
-            case TOTAL_LOADER:
-                if (cursor != null && cursor.moveToFirst()) {
-                    try {
-                        String p1Total;
-                        if (cursor.getLong(Contract.PlayerRoundTotals.P1_EXISTS_COL_INDEX) == 1) {
-                            p1Total = String.valueOf(cursor.getLong(Contract.PlayerRoundTotals.P1_TOTAL_COL_INDEX));
-                        } else {
-                            p1Total = null;
-                        }
-                        p1TotalView.setText(p1Total);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        String p2Total;
-                        if (cursor.getLong(Contract.PlayerRoundTotals.P2_EXISTS_COL_INDEX) == 1) {
-                            p2Total = String.valueOf(cursor.getLong(Contract.PlayerRoundTotals.P2_TOTAL_COL_INDEX));
-                        } else {
-                            p2Total = null;
-                        }
-                        p2TotalView.setText(p2Total);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        String p3Total;
-                        if (cursor.getLong(Contract.PlayerRoundTotals.P3_EXISTS_COL_INDEX) == 1) {
-                            p3Total = String.valueOf(cursor.getLong(Contract.PlayerRoundTotals.P3_TOTAL_COL_INDEX));
-                        } else {
-                            p3Total = null;
-                        }
-                        p3TotalView.setText(p3Total);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        String p4Total;
-                        if (cursor.getLong(Contract.PlayerRoundTotals.P4_EXISTS_COL_INDEX) == 1) {
-                            p4Total = String.valueOf(cursor.getLong(Contract.PlayerRoundTotals.P4_TOTAL_COL_INDEX));
-                        } else {
-                            p4Total = null;
-                        }
-                        p4TotalView.setText(p4Total);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-            default:
-                break;
+            String p3Initial = cursor.getString(Contract.ScorecardView.P3INITIALS_POS);
+            Timber.d("Player3 Initials "+p3Initial);
+            if (p3Initial != null) {
+                p3Initials.setText(p3Initial);
+                p3TotalView.setText(String.valueOf(cursor.getLong(Contract.ScorecardView.P3TOTAL_POS)));
+            }
+
+            String p4Initial = cursor.getString(Contract.ScorecardView.P4INITIALS_POS);
+            Timber.d("Player4 Initials "+p4Initial);
+            if (p4Initial != null) {
+                p4Initials.setText(p4Initial);
+                p4TotalView.setText(String.valueOf(cursor.getLong(Contract.ScorecardView.P4TOTAL_POS)));
+            }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        if (HOLES_LOADER == loader.getId()) {
-            mScoreCardAdapter.swapCursor(null);
-        }
+        mScoreCardAdapter.swapCursor(null);
     }
 
     private class MyObserver extends ContentObserver {
@@ -261,8 +174,7 @@ public class ScorecardFragment extends Fragment implements LoaderManager.LoaderC
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             Timber.d("Change in Hole of Round Observed and ReInit Loaders");
-            sLoaderManager.restartLoader(TOTAL_LOADER, null, sLoaderCallback);
-            sLoaderManager.restartLoader(HOLES_LOADER, null, sLoaderCallback);
+            sLoaderManager.restartLoader(SCORECARD_LOADER, null, sLoaderCallback);
         }
     }
 }

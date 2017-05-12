@@ -623,20 +623,22 @@ public class Contract {
 
     public static class ScorecardView {
         static final String TABLE_NAME = "scorecardView";
-        public static final int HOLENUMBER_POS = 0 ;
-        public static final int HOLEPAR_POS = 1;
-        public static final int P1SCORE_POS = 2;
-        public static final int P2SCORE_POS = 3;
-        public static final int P3SCORE_POS = 4;
-        public static final int P4SCORE_POS = 5;
-        public static final int P1INITIALS_POS = 6;
-        public static final int P2INITIALS_POS = 7;
-        public static final int P3INITIALS_POS = 8;
-        public static final int P4INITIALS_POS = 9;
-        public static final int P1TOTAL_POS = 10;
-        public static final int P2TOTAL_POS = 11;
-        public static final int P3TOTAL_POS = 12;
-        public static final int P4TOTAL_POS = 13;
+        public static final String ROUND_ID = "roundId";
+        public static final int ROUNDID_POS = 0;
+        public static final int HOLENUMBER_POS = 1 ;
+        public static final int HOLEPAR_POS = 2;
+        public static final int P1SCORE_POS = 3;
+        public static final int P2SCORE_POS = 4;
+        public static final int P3SCORE_POS = 5;
+        public static final int P4SCORE_POS = 6;
+        public static final int P1INITIALS_POS = 7;
+        public static final int P2INITIALS_POS = 8;
+        public static final int P3INITIALS_POS = 9;
+        public static final int P4INITIALS_POS = 10;
+        public static final int P1TOTAL_POS = 11;
+        public static final int P2TOTAL_POS = 12;
+        public static final int P3TOTAL_POS = 13;
+        public static final int P4TOTAL_POS = 14;
         public static Uri buildDirUri() {
             return BASE_URI.buildUpon()
                   .appendPath(TABLE_NAME)

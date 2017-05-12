@@ -178,7 +178,8 @@ class DbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_SCORECARD_VIEW = "CREATE VIEW " +
             "scorecardView AS SELECT " +
-            "ch.holeNumber" +
+            "r._id AS " + Contract.ScorecardView.ROUND_ID +
+            ",ch.holeNumber" +
             ",ch.holePar" +
             ",rph1.score AS p1Score" +
             ",rph2.score AS p2Score" +

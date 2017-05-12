@@ -1,6 +1,5 @@
 package com.sean.golfranger;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,11 +15,6 @@ import com.sean.golfranger.data.Contract;
 class ScorecardAdapter
       extends RecyclerView.Adapter<ScorecardAdapter.ScorecardAdapterViewHolder> {
     private Cursor mCursor;
-    private Context mContext;
-
-    ScorecardAdapter(Context context) {
-        mContext = context;
-    }
 
     class ScorecardAdapterViewHolder extends RecyclerView.ViewHolder {
         TextView holeNumber, parNumber, p1HoleScore, p2HoleScore, p3HoleScore, p4HoleScore;
@@ -52,25 +46,22 @@ class ScorecardAdapter
     public void onBindViewHolder(ScorecardAdapterViewHolder customViewHolder, int i) {
         mCursor.moveToPosition(i);
         customViewHolder.holeNumber.setText(
-              mCursor.getString(
-                    mCursor.getColumnIndex(
-                          Contract.Holes.HOLE_NUMBER
-                    )
-              ));
+              mCursor.getString(Contract.ScorecardView.HOLENUMBER_POS)
+              );
         customViewHolder.parNumber.setText(
-              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.HOLE_PAR)))
+              nullOutZeroScore(mCursor.getString(Contract.ScorecardView.HOLEPAR_POS))
         );
         customViewHolder.p1HoleScore.setText(
-              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P1_SCORE)))
+              nullOutZeroScore(mCursor.getString(Contract.ScorecardView.P1SCORE_POS))
         );
         customViewHolder.p2HoleScore.setText(
-              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P2_SCORE)))
+              nullOutZeroScore(mCursor.getString(Contract.ScorecardView.P2SCORE_POS))
         );
         customViewHolder.p3HoleScore.setText(
-              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P3_SCORE)))
+              nullOutZeroScore(mCursor.getString(Contract.ScorecardView.P3SCORE_POS))
         );
         customViewHolder.p4HoleScore.setText(
-              nullOutZeroScore(mCursor.getString(mCursor.getColumnIndex(Contract.Holes.P4_SCORE)))
+              nullOutZeroScore(mCursor.getString(Contract.ScorecardView.P4SCORE_POS))
         );
     }
 
