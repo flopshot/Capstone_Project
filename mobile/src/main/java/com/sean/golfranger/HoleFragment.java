@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -31,6 +32,8 @@ import com.sean.golfranger.utils.SharedPrefUtils;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
+import java.util.Locale;
+
 import timber.log.Timber;
 
 /**
@@ -52,21 +55,21 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                 R.id.p4Score, R.id.p1Putts, R.id.p2Putts, R.id.p3Putts, R.id.p4Putts,
                 R.id.p1Penalties, R.id.p2Penalties, R.id.p3Penalties, R.id.p4Penalties
                 ,R.id.p1Sand, R.id.p2Sand, R.id.p3Sand, R.id.p4Sand};
-    private static final String[] EDIT_TEXT_DB_COLUMNS =
-          new String[] {Contract.Holes.HOLE_DISTANCE, Contract.Holes.HOLE_PAR, Contract.Holes.P1_SCORE,
-                Contract.Holes.P2_SCORE, Contract.Holes.P3_SCORE, Contract.Holes.P4_SCORE,
-                Contract.Holes.P1_PUTTS, Contract.Holes.P2_PUTTS, Contract.Holes.P3_PUTTS,
-                Contract.Holes.P4_PUTTS, Contract.Holes.P1_PENALTIES, Contract.Holes.P2_PENALTIES,
-                Contract.Holes.P3_PENALTIES, Contract.Holes.P4_PENALTIES, Contract.Holes.P1_SAND,
-                Contract.Holes.P2_SAND, Contract.Holes.P3_SAND, Contract.Holes.P4_SAND};
+    private static final String[] EDIT_TEXT_DB_COLUMNS = // ((k - 2) % 4) + 1
+          new String[] {Contract.CourseHoles.HOLE_DISTANCE, Contract.CourseHoles.HOLE_PAR, Contract.RoundPlayerHoles.SCORE,
+                Contract.RoundPlayerHoles.SCORE, Contract.RoundPlayerHoles.SCORE, Contract.RoundPlayerHoles.SCORE,
+                Contract.RoundPlayerHoles.PUTTS, Contract.RoundPlayerHoles.PUTTS, Contract.RoundPlayerHoles.PUTTS,
+                Contract.RoundPlayerHoles.PUTTS, Contract.RoundPlayerHoles.PENALTIES, Contract.RoundPlayerHoles.PENALTIES,
+                Contract.RoundPlayerHoles.PENALTIES, Contract.RoundPlayerHoles.PENALTIES, Contract.RoundPlayerHoles.SAND_SHOTS,
+                Contract.RoundPlayerHoles.SAND_SHOTS, Contract.RoundPlayerHoles.SAND_SHOTS, Contract.RoundPlayerHoles.SAND_SHOTS};
 
     private static final int[] CHECKBOX_IDS =
           new int[] {R.id.p1Gir, R.id.p2Gir,R.id.p3Gir, R.id.p4Gir
                 ,R.id.p1Fir, R.id.p2Fir, R.id.p3Fir, R.id.p4Fir};
-    private static final String[] CHECKBOX_DB_COLUMNS =
-          new String[] {Contract.Holes.P1_GIR, Contract.Holes.P2_GIR,
-                Contract.Holes.P3_GIR, Contract.Holes.P4_GIR, Contract.Holes.P1_FIR,
-                Contract.Holes.P2_FIR, Contract.Holes.P3_FIR, Contract.Holes.P4_FIR};
+    private static final String[] CHECKBOX_DB_COLUMNS = // k % 4 + 1
+          new String[] {Contract.RoundPlayerHoles.GIR_FLAG, Contract.RoundPlayerHoles.GIR_FLAG,
+                Contract.RoundPlayerHoles.GIR_FLAG, Contract.RoundPlayerHoles.GIR_FLAG, Contract.RoundPlayerHoles.FIR_FLAG,
+                Contract.RoundPlayerHoles.FIR_FLAG, Contract.RoundPlayerHoles.FIR_FLAG, Contract.RoundPlayerHoles.FIR_FLAG};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,22 +92,35 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
               new KeyboardVisibilityEventListener() {
                   @Override
                   public void onVisibilityChanged(boolean isOpen) {
-                      if (!isOpen && mFocusedEditTextIndex != null) {
-                          ContentValues values = new ContentValues();
-                          values.put(EDIT_TEXT_DB_COLUMNS[mFocusedEditTextIndex],
-                                editTexts[mFocusedEditTextIndex].getText().toString().trim());
-                          String roundId = SharedPrefUtils.getCurrentRoundId(getActivity());
-                          String rawHoleNumber = holeButton.getText().toString().trim();
-                          String holeNum = rawHoleNumber.substring(0,rawHoleNumber.length()-1).trim();
-                          Timber.d("HoleNumber: " + holeNum);
-                          ContentResolver resolver = getActivity().getContentResolver();
-                          resolver.update(
-                                Contract.Holes.buildDirUri(),
-                                values,
-                                Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                                new String[] {roundId, holeNum}
-                          );
+                  if (!isOpen && mFocusedEditTextIndex != null) {
+                      String rawHoleNumber = holeButton.getText().toString().trim();
+                      Integer holeNum = Integer.valueOf(rawHoleNumber.substring(0,rawHoleNumber.length()-1).trim());
+                      Uri uri;
+                      String idColumn, id;
+                      ContentValues values = new ContentValues();
+                      values.put(EDIT_TEXT_DB_COLUMNS[mFocusedEditTextIndex],
+                            editTexts[mFocusedEditTextIndex].getText().toString().trim());
+                      if (mFocusedEditTextIndex >= 2) {
+                          uri = Contract.RoundPlayerHoles.buildDirUri();
+                          idColumn = Contract.RoundPlayerHoles._ID;
+                          id = SharedPrefUtils.getCurrentRoundId(getActivity()) +
+                                String.valueOf(((mFocusedEditTextIndex - 2) % 4) + 1) +
+                                String.format(Locale.getDefault(), "%02d", holeNum);
+                      } else {
+                          uri = Contract.CourseHoles.buildDirUri();
+                          idColumn = Contract.CourseHoles._ID;
+                          id = SharedPrefUtils.getCourseId(getActivity()) +
+                                String.format(Locale.getDefault(), "%02d", holeNum);
                       }
+                      Timber.d("HoleNumber: " + holeNum);
+                      ContentResolver resolver = getActivity().getContentResolver();
+                      resolver.update(
+                            uri,
+                            values,
+                            idColumn + "=?",
+                            new String[] {id}
+                      );
+                  }
                   }
               });
     }
@@ -117,17 +133,32 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         outState.putString(HOLE_NUMBER_EXTRA, number);
 
         if (mFocusedEditTextIndex != null){
+            String rawHoleNumber = holeButton.getText().toString().trim();
+            Integer holeNum = Integer.valueOf(rawHoleNumber.substring(0,rawHoleNumber.length()-1).trim());
+            Uri uri;
+            String idColumn, id;
             ContentValues values = new ContentValues();
             values.put(EDIT_TEXT_DB_COLUMNS[mFocusedEditTextIndex],
                   editTexts[mFocusedEditTextIndex].getText().toString().trim());
-            String roundId = SharedPrefUtils.getCurrentRoundId(getActivity());
-            Timber.d("HoleNumber: " + number);
+            if (mFocusedEditTextIndex >= 2) {
+                uri = Contract.RoundPlayerHoles.buildDirUri();
+                idColumn = Contract.RoundPlayerHoles._ID;
+                id = SharedPrefUtils.getCurrentRoundId(getActivity()) +
+                      String.valueOf(((mFocusedEditTextIndex - 2) % 4) + 1) +
+                      String.format(Locale.getDefault(), "%02d", holeNum);
+            } else {
+                uri = Contract.CourseHoles.buildDirUri();
+                idColumn = Contract.CourseHoles._ID;
+                id = SharedPrefUtils.getCourseId(getActivity()) +
+                      String.format(Locale.getDefault(), "%02d", holeNum);
+            }
+            Timber.d("HoleNumber: " + holeNum);
             ContentResolver resolver = getActivity().getContentResolver();
             resolver.update(
-                  Contract.Holes.buildDirUri(),
+                  uri,
                   values,
-                  Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                  new String[] {roundId, number}
+                  idColumn + "=?",
+                  new String[] {id}
             );
         }
     }
@@ -184,11 +215,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
               loaderBundle.putString(HOLE_NUMBER_EXTRA, holeNum);
         sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
         super.onResume();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -268,7 +294,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                             String holeNumViewText = (holeNum + getString(R.string.dropDownIcon)).trim();
                             holeButton.setText(holeNumViewText);
                             sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
-
                             setCheckBoxAndEditTextListeners(holeNum);
                         }
                     }
@@ -279,6 +304,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
     };
 
     private void setCheckBoxAndEditTextListeners(final String holeNumber) {
+        final Integer holeNum = Integer.valueOf(holeNumber);
         for (int j = 0; j < editTexts.length; j++) {
             final int k = j;
             editTexts[j].setOnFocusChangeListener(null);
@@ -286,16 +312,30 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
                     if (!hasFocus) {
+                        Uri uri;
+                        String idColumn, id;
                         ContentValues values = new ContentValues();
-                        values.put(EDIT_TEXT_DB_COLUMNS[k], editTexts[k].getText().toString().trim());
-                        String roundId = SharedPrefUtils.getCurrentRoundId(getActivity());
-                        Timber.d("HoleNumber: " + holeNumber);
+                        values.put(EDIT_TEXT_DB_COLUMNS[k],
+                              editTexts[k].getText().toString().trim());
+                        if (k >= 2) {
+                            uri = Contract.RoundPlayerHoles.buildDirUri();
+                            idColumn = Contract.RoundPlayerHoles._ID;
+                            id = SharedPrefUtils.getCurrentRoundId(getActivity()) +
+                                  String.valueOf(((k - 2) % 4) + 1) +
+                                  String.format(Locale.getDefault(), "%02d", holeNum);
+                        } else {
+                            uri = Contract.CourseHoles.buildDirUri();
+                            idColumn = Contract.CourseHoles._ID;
+                            id = SharedPrefUtils.getCourseId(getActivity()) +
+                                  String.format(Locale.getDefault(), "%02d", holeNum);
+                        }
+                        Timber.d("HoleNumber: " + holeNum);
                         ContentResolver resolver = getActivity().getContentResolver();
                         resolver.update(
-                              Contract.Holes.buildDirUri(),
+                              uri,
                               values,
-                              Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                              new String[] {roundId, holeNumber}
+                              idColumn + "=?",
+                              new String[] {id}
                         );
                         values.clear();
                     }
@@ -313,12 +353,15 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                     int boolInt = (checkBoxes[n].isChecked()) ? 0 : 1;
                     values.put(CHECKBOX_DB_COLUMNS[n], String.valueOf(boolInt));
                     ContentResolver resolver = getActivity().getContentResolver();
+                    String id = SharedPrefUtils.getCurrentRoundId(getActivity()) +
+                          String.valueOf((n % 4) + 1) +
+                          String.format(Locale.getDefault(), "%02d", holeNum);
                     Timber.d("Saved a checkmark: " + String.valueOf(boolInt)+" for hole " + holeNumber);
                     resolver.update(
-                          Contract.Holes.buildDirUri(),
+                          Contract.RoundPlayerHoles.buildDirUri(),
                           values,
-                          Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                          new String[] {SharedPrefUtils.getCurrentRoundId(getActivity()), holeNumber}
+                          Contract.RoundPlayerHoles._ID + "=?",
+                          new String[] {id}
                     );
                     return false;
                 }

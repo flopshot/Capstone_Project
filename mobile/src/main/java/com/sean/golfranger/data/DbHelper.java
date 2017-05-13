@@ -101,7 +101,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayerHoles.ROUNDPLAYER_ID + " INTEGER NOT NULL," +
               Contract.RoundPlayerHoles.ROUND_ID + " INTEGER NOT NULL, " +
               Contract.RoundPlayerHoles.SCORE + " INTEGER," +
-              Contract.RoundPlayerHoles.PENALITES + " INTEGER," +
+              Contract.RoundPlayerHoles.PENALTIES + " INTEGER," +
               Contract.RoundPlayerHoles.PUTTS + " INTEGER," +
               Contract.RoundPlayerHoles.SAND_SHOTS + " INTEGER," +
               Contract.RoundPlayerHoles.SAND_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerHoles.SAND_FLAG+" IN (0,1))," +

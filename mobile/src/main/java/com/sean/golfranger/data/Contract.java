@@ -365,7 +365,7 @@ public class Contract {
         /**
          * Type: INT
          */
-        public static final String PENALITES = "penalties";
+        public static final String PENALTIES = "penalties";
         /**
          * Type: INT
          */
