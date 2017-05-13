@@ -177,7 +177,7 @@ class DbHelper extends SQLiteOpenHelper {
               " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 4; ";
 
         final String SQL_CREATE_SCORECARD_VIEW = "CREATE VIEW " +
-            "scorecardView AS SELECT " +
+            Contract.ScorecardView.TABLE_NAME + " AS SELECT " +
             "r._id AS " + Contract.ScorecardView.ROUND_ID +
             ",ch.holeNumber" +
             ",ch.holePar" +
@@ -213,14 +213,14 @@ class DbHelper extends SQLiteOpenHelper {
             "AND ch.holeNumber = rph4.holeNumber " +
             "AND ltrim(rph4.roundPlayerId, r._id) = '4' " +
 
-            "LEFT JOIN roundPlayers AS rp1 ON r._id = rp1.roundId AND ltrim(rp1._id, rp1.roundId) = '1' " +
-            "LEFT JOIN players AS p1	ON rp1.playerId = p1._id " +
-            "LEFT JOIN roundPlayers AS rp2 ON r._id = rp2.roundId AND ltrim(rp2._id, rp2.roundId) = '2' " +
-            "LEFT JOIN players AS p2	ON rp2.playerId = p2._id " +
-            "LEFT JOIN roundPlayers AS rp3 ON r._id = rp3.roundId AND ltrim(rp3._id, rp3.roundId) = '3' " +
-            "LEFT JOIN players AS p3	ON rp3.playerId = p3._id " +
-            "LEFT JOIN roundPlayers AS rp4 ON r._id = rp4.roundId AND ltrim(rp4._id, rp4.roundId) = '4' " +
-            "LEFT JOIN players AS p4	ON rp4.playerId = p4._id " +
+            "LEFT JOIN roundPlayers AS rp1 ON rp1._id = rph1.roundPlayerId " +
+            "LEFT JOIN players AS p1 ON rp1.playerId = p1._id " +
+            "LEFT JOIN roundPlayers AS rp2 ON rp2._id = rph2.roundPlayerId " +
+            "LEFT JOIN players AS p2 ON rp2.playerId = p2._id " +
+            "LEFT JOIN roundPlayers AS rp3 ON rp3._id = rph3.roundPlayerId " +
+            "LEFT JOIN players AS p3 ON rp3.playerId = p3._id " +
+            "LEFT JOIN roundPlayers AS rp4 ON rp4._id = rph4.roundPlayerId " +
+            "LEFT JOIN players AS p4 ON rp4.playerId = p4._id " +
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p1Total " +
             "FROM roundPlayerHoles " +
@@ -246,129 +246,69 @@ class DbHelper extends SQLiteOpenHelper {
             "GROUP BY roundPlayerId " +
             ") AS rt4 ON rt4.roundId = r._id;";
 
+        final String SQL_CREATE_HOLE_VIEW = "CREATE VIEW " +
+              Contract.HoleView.TABLE_NAME + " AS SELECT " +
+              "r._id AS " + Contract.HoleView.ROUND_ID +
+              ",ch.holeNumber" +
+              ",ch.holeDistance" +
+              ",ch.holePar" +
+              ",rph1.score AS p1Score" +
+              ",rph2.score AS p2Score" +
+              ",rph3.score AS p3Score" +
+              ",rph4.score AS p4Score" +
+              ",rph1.putts AS p1Putts" +
+              ",rph2.putts AS p2Putts" +
+              ",rph3.putts AS p3Putts" +
+              ",rph4.putts AS p4Putts" +
+              ",rph1.penalties AS p1Penalties" +
+              ",rph2.penalties AS p2Penalties" +
+              ",rph3.penalties AS p3Penalties" +
+              ",rph4.penalties AS p4Penalties" +
+              ",rph1.sand AS p1Sand" +
+              ",rph2.sand AS p2Sand" +
+              ",rph3.sand AS p3Sand" +
+              ",rph4.sand AS p4Sand" +
+              ",rph1.girFlag AS p1Gir" +
+              ",rph2.girFlag AS p2Gir" +
+              ",rph3.girFlag AS p3Gir" +
+              ",rph4.girFlag AS p4Gir" +
+              ",rph1.firFlag AS p1Fir" +
+              ",rph2.firFlag AS p2Fir" +
+              ",rph3.firFlag AS p3Fir" +
+              ",rph4.firFlag AS p4Fir" +
+              ",substr(p1.firstName,0,1) || substr(p1.lastName,0,1) AS p1Initials" +
+              ",substr(p2.firstName,0,1) || substr(p2.lastName,0,1) AS p2Initials" +
+              ",substr(p3.firstName,0,1) || substr(p3.lastName,0,1) AS p3Initials" +
+              ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials" +
 
-//        final String SQL_CREATE_PLAYER_COURSE_ROUND_VIEW = "CREATE VIEW " +
-//        Contract.RoundCoursesPlayers.TABLE_NAME +
-//        " AS SELECT " +
-//        "r._id AS _id, " +
-//        "CASE WHEN c._id IS NULL THEN r.clubName ELSE c.clubName END AS clubName, " +
-//        "CASE WHEN c._id IS NULL THEN r.courseName ELSE c.courseName END AS courseName, " +
-//        "CASE WHEN p1._id IS NULL THEN r.playerOneFirstName ELSE p1.firstName END AS p1FirstName, " +
-//        "CASE WHEN p1._id IS NULL THEN r.playerOneLastName ELSE p1.lastName END AS p1LastName, " +
-//        "CASE WHEN p2._id IS NULL THEN r.playerTwoFirstName ELSE p2.firstName END AS p2FirstName, " +
-//        "CASE WHEN p2._id IS NULL THEN r.playerTwoLastName ELSE p2.lastName END AS p2LastName, " +
-//        "CASE WHEN p3._id IS NULL THEN r.playerThreeFirstName ELSE p3.firstName END AS p3FirstName, " +
-//        "CASE WHEN p3._id IS NULL THEN r.playerThreeLastName ELSE p3.lastName END AS p3LastName, " +
-//        "CASE WHEN p4._id IS NULL THEN r.playerFourFirstName ELSE p4.firstName END AS p4FirstName, " +
-//        "CASE WHEN p4._id IS NULL THEN r.playerFourLastName ELSE p4.lastName END AS p4LastName " +
-//        "FROM rounds AS r " +
-//        "LEFT JOIN courses AS c " +
-//        "ON r.courseId = c._id " +
-//        "LEFT JOIN players AS p1 " +
-//        "ON r.playerOneId = p1._id " +
-//        "LEFT JOIN players AS p2 " +
-//        "ON r.playerTwoId = p2._id " +
-//        "LEFT JOIN players AS p3 " +
-//        "ON r.playerThreeId = p3._id " +
-//        "LEFT JOIN players AS p4 " +
-//        "ON r.playerFourId = p4._id;";
-//
-//        final String SQL_CREATE_PLAYERS_TOTAL_SCORE_VIEW ="CREATE VIEW " +
-//              Contract.PlayerRoundTotals.TABLE_NAME + " AS " +
-//              "SELECT "+
-//                "roundId, " +
-//                "SUM(p1Score) AS p1Total, "+
-//                "SUM(p2Score) AS p2Total, "+
-//                "SUM(p3Score) AS p3Total, "+
-//                "SUM(p4Score) AS P4Total, "+
-//                "COUNT(DISTINCT playerOneFirstName) AS p1Exists, " +
-//                "COUNT(DISTINCT playerTwoFirstName) AS p2Exists, " +
-//                "COUNT(DISTINCT playerThreeFirstName) AS p3Exists, " +
-//                "COUNT(DISTINCT playerFourFirstName) AS p4Exists " +
-//
-//              "FROM holes "+
-//              "LEFT JOIN rounds ON rounds._id = holes.roundId " +
-//              "GROUP BY roundId; ";
-//
-//        //For the freakin Widget
-//        final String SQL_CREATE_PLAYER_TOTALS_VIEW="CREATE VIEW " +
-//              Contract.PlayerTotals.TABLE_NAME + " AS " +
-//              "SELECT p._id AS playerId "+
-//              ",p.firstName AS firstName " +
-//              ",p.lastName AS lastName " +
-//              ",COUNT(DISTINCT playerScoreTotals.rID) AS gameCount "+
-//              ",SUM(playerScoreTotals.score) / SUM(playerScoreTotals.completedHoles) AS meanScore "+
-//              ",MIN(CASE  "+
-//              "WHEN playerScoreTotals.completedGame = 1 "+
-//              "THEN playerScoreTotals.score "+
-//              "ELSE NULL "+
-//              "END) AS lowScore "+
-//              "FROM players as p" +
-//              " LEFT JOIN" +
-//              "( "+
-//              "SELECT r._id AS rId "+
-//              ",r.playerOneId AS playerId "+
-//              ",ifNull(sum(ifNull(p1.p1Score, 0)), 0) AS score "+
-//              ",COUNT(nullif(p1.p1Score, 0)) AS completedHoles "+
-//              ",CASE  "+
-//              "WHEN COUNT(nullif(p1.p1Score, 0)) = 18 "+
-//              "THEN 1 "+
-//              "ELSE 0 "+
-//              "END AS completedGame "+
-//              "FROM rounds AS r "+
-//              "LEFT JOIN holes AS p1 "+
-//              "ON r._id = p1.roundId "+
-//              "GROUP BY r.playerOneId "+
-//              ",r._id "+
-//              "UNION ALL "+
-//              "SELECT r._id AS rId "+
-//              ",r.playerTwoId AS playerId "+
-//              ",ifNull(sum(ifNull(p2.p2Score, 0)), 0) AS score "+
-//              ",COUNT(nullif(p2.p2Score, 0)) AS completedHoles "+
-//              ",CASE  "+
-//              "WHEN COUNT(nullif(p2.p2Score, 0)) = 18 "+
-//              "THEN 1 "+
-//              "ELSE 0 "+
-//              "END AS completedGame "+
-//              "FROM rounds AS r "+
-//              "LEFT JOIN holes AS p2 "+
-//              "ON r._id = p2.roundId "+
-//              "GROUP BY r.playerTwoId "+
-//              ",r._id "+
-//              "UNION ALL "+
-//              "SELECT r._id AS rId "+
-//              ",r.playerThreeId AS playerId "+
-//              ",ifNull(sum(ifNull(p3.p3Score, 0)), 0) AS score "+
-//              ",COUNT(nullif(p3.p3Score, 0)) AS completedHoles "+
-//              ",CASE  "+
-//              "WHEN COUNT(nullif(p3.p3Score, 0)) = 18 "+
-//              "THEN 1 "+
-//              "ELSE 0 "+
-//              "END AS completedGame "+
-//              "FROM rounds AS r "+
-//              "LEFT JOIN holes AS p3 "+
-//              "ON r._id = p3.roundId "+
-//              "GROUP BY r.playerThreeId "+
-//              ",r._id "+
-//              "UNION ALL "+
-//              "SELECT r._id AS rId "+
-//              ",r.playerFourId AS playerId "+
-//              ",ifNull(sum(ifNull(p4.p4Score, 0)), 0) AS score "+
-//              ",COUNT(nullif(p4.p4Score, 0)) AS completedHoles "+
-//              ",CASE  "+
-//              "WHEN COUNT(nullif(p4.p4Score, 0)) = 18 "+
-//              "THEN 1 "+
-//              "ELSE 0 "+
-//              "END AS completedGame "+
-//              "FROM rounds AS r "+
-//              "LEFT JOIN holes AS p4 "+
-//              "ON r._id = p4.roundId "+
-//              "GROUP BY r.playerFourId "+
-//              ",r._id "+
-//              ") AS playerScoreTotals "+
-//              "ON p._id = playerScoreTotals.playerId " +
-//              "GROUP BY p._id" +
-//                ";";
+              "FROM rounds AS r " +
+              "LEFT JOIN CourseHoles AS ch " +
+              "ON ch.courseId = r.courseId " +
+              "LEFT JOIN roundPlayerHoles AS rph1 " +
+              "ON rph1.roundId = r._id " +
+              "AND ch.holeNumber = rph1.holeNumber " +
+              "AND ltrim(rph1.roundPlayerId, r._id) = '1' " +
+              "LEFT JOIN roundPlayerHoles AS rph2 " +
+              "ON rph2.roundId = r._id " +
+              "AND ch.holeNumber = rph2.holeNumber " +
+              "AND ltrim(rph2.roundPlayerId, r._id) = '2' " +
+              "LEFT JOIN roundPlayerHoles AS rph3 " +
+              "ON rph3.roundId = r._id " +
+              "AND ch.holeNumber = rph3.holeNumber " +
+              "AND ltrim(rph3.roundPlayerId, r._id) = '3' " +
+              "LEFT JOIN roundPlayerHoles AS rph4 " +
+              "ON rph4.roundId = r._id " +
+              "AND ch.holeNumber = rph4.holeNumber " +
+              "AND ltrim(rph4.roundPlayerId, r._id) = '4' " +
+
+              "LEFT JOIN roundPlayers AS rp1 ON rp1._id = rph1.roundPlayerId " +
+              "LEFT JOIN players AS p1 ON rp1.playerId = p1._id " +
+              "LEFT JOIN roundPlayers AS rp2 ON rp2._id = rph2.roundPlayerId " +
+              "LEFT JOIN players AS p2 ON rp2.playerId = p2._id " +
+              "LEFT JOIN roundPlayers AS rp3 ON rp3._id = rph3.roundPlayerId " +
+              "LEFT JOIN players AS p3 ON rp3.playerId = p3._id " +
+              "LEFT JOIN roundPlayers AS rp4 ON rp4._id = rph4.roundPlayerId " +
+              "LEFT JOIN players AS p4 ON rp4.playerId = p4._id ;";
 
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
@@ -381,6 +321,7 @@ class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW );
         sqLiteDatabase.execSQL(SQL_CREATE_SCORECARD_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_HOLE_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

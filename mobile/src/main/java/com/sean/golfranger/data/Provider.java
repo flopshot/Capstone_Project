@@ -34,6 +34,7 @@ public class Provider extends ContentProvider {
     private static final int WIND = 109;
     private static final int MATCHES = 110;
     private static final int SCORECARD = 111;
+    private static final int HOLE = 112;
 
     private static UriMatcher buildUriMatcher() {
         // All paths added to the UriMatcher have a corresponding code to return when a match is
@@ -54,6 +55,7 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority, Contract.Wind.TABLE_NAME, WIND);
         matcher.addURI(authority, Contract.MatchesView.TABLE_NAME, MATCHES);
         matcher.addURI(authority, Contract.ScorecardView.TABLE_NAME, SCORECARD);
+        matcher.addURI(authority, Contract.HoleView.TABLE_NAME, HOLE);
         return matcher;
     }
 
@@ -147,6 +149,11 @@ public class Provider extends ContentProvider {
             case SCORECARD:
                 return mDb.query(
                       Contract.ScorecardView.TABLE_NAME, columns, whereClause,
+                      whereArgs, null, null, sortOrder
+                );
+            case HOLE:
+                return mDb.query(
+                      Contract.HoleView.TABLE_NAME, columns, whereClause,
                       whereArgs, null, null, sortOrder
                 );
             default:

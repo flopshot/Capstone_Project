@@ -97,7 +97,7 @@
     <string name="thePenaltiesLabel">Penalties</string>
     <string name="girLabel">Green in Reg.</string>
     <string name="fwyInRegLabel">Fwy in Reg.</string>
-    <string name="sandLabel">Sand</string>
+    <string name="sandLabel">Sand Shots</string>
     
     <!--SCORECARD FRAGMENT-->
     <string name="scorecardHoleLabel">Hole</string>

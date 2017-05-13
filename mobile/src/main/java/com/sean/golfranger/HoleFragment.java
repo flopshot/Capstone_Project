@@ -34,8 +34,7 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventList
 import timber.log.Timber;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * UI displays and updates data of each hole
  */
 public class HoleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     EditText[] editTexts;
@@ -45,29 +44,29 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
     TextView p1Initials, p2Initials, p3Initials, p4Initials;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
-
     private static final String HOLE_NUMBER_EXTRA = "HoleFragmentHoleNumExtra";
     private static final int HOLE_LOADER = 101;
-    private static final int ROUND_LOADER = 102;
+
     private static final int[] EDIT_TEXT_IDS =
           new int[] {R.id.distanceValue,R.id.parValue,R.id.p1Score, R.id.p2Score, R.id.p3Score,
                 R.id.p4Score, R.id.p1Putts, R.id.p2Putts, R.id.p3Putts, R.id.p4Putts,
-                R.id.p1Penalties, R.id.p2Penalties, R.id.p3Penalties, R.id.p4Penalties};
+                R.id.p1Penalties, R.id.p2Penalties, R.id.p3Penalties, R.id.p4Penalties
+                ,R.id.p1Sand, R.id.p2Sand, R.id.p3Sand, R.id.p4Sand};
     private static final String[] EDIT_TEXT_DB_COLUMNS =
           new String[] {Contract.Holes.HOLE_DISTANCE, Contract.Holes.HOLE_PAR, Contract.Holes.P1_SCORE,
                 Contract.Holes.P2_SCORE, Contract.Holes.P3_SCORE, Contract.Holes.P4_SCORE,
                 Contract.Holes.P1_PUTTS, Contract.Holes.P2_PUTTS, Contract.Holes.P3_PUTTS,
                 Contract.Holes.P4_PUTTS, Contract.Holes.P1_PENALTIES, Contract.Holes.P2_PENALTIES,
-                Contract.Holes.P3_PENALTIES, Contract.Holes.P4_PENALTIES};
+                Contract.Holes.P3_PENALTIES, Contract.Holes.P4_PENALTIES, Contract.Holes.P1_SAND,
+                Contract.Holes.P2_SAND, Contract.Holes.P3_SAND, Contract.Holes.P4_SAND};
 
     private static final int[] CHECKBOX_IDS =
-          new int[] {R.id.p1Fir, R.id.p2Fir, R.id.p3Fir, R.id.p4Fir, R.id.p1Gir, R.id.p2Gir,
-                R.id.p3Gir, R.id.p4Gir, R.id.p1Sand, R.id.p2Sand, R.id.p3Sand, R.id.p4Sand};
+          new int[] {R.id.p1Gir, R.id.p2Gir,R.id.p3Gir, R.id.p4Gir
+                ,R.id.p1Fir, R.id.p2Fir, R.id.p3Fir, R.id.p4Fir};
     private static final String[] CHECKBOX_DB_COLUMNS =
-          new String[] {Contract.Holes.P1_FIR, Contract.Holes.P2_FIR, Contract.Holes.P3_FIR,
-                Contract.Holes.P4_FIR, Contract.Holes.P1_GIR, Contract.Holes.P2_GIR,
-                Contract.Holes.P3_GIR, Contract.Holes.P4_GIR, Contract.Holes.P1_SAND,
-                Contract.Holes.P2_SAND, Contract.Holes.P3_SAND, Contract.Holes.P4_SAND};
+          new String[] {Contract.Holes.P1_GIR, Contract.Holes.P2_GIR,
+                Contract.Holes.P3_GIR, Contract.Holes.P4_GIR, Contract.Holes.P1_FIR,
+                Contract.Holes.P2_FIR, Contract.Holes.P3_FIR, Contract.Holes.P4_FIR};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,13 +77,12 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (savedInstanceState == null) {
             savedInstanceState = new Bundle();
             savedInstanceState.putString(HOLE_NUMBER_EXTRA, "1");
         }
         sLoaderManager.initLoader(HOLE_LOADER, savedInstanceState, sLoaderCallback);
-        sLoaderManager.initLoader(ROUND_LOADER, null, sLoaderCallback);
-        super.onActivityCreated(savedInstanceState);
 
         KeyboardVisibilityEvent.registerEventListener(
               getActivity(),
@@ -113,6 +111,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         String rawNumber = holeButton.getText().toString();
         String number = rawNumber.substring(0, rawNumber.length()-1);
         outState.putString(HOLE_NUMBER_EXTRA, number);
@@ -131,7 +130,6 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                   new String[] {roundId, number}
             );
         }
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -164,8 +162,8 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
             editTexts[i].setSelectAllOnFocus(true);
             editTexts[i].setOnTouchListener(new View.OnTouchListener(){
                 public boolean onTouch(View v, MotionEvent me) {
-                    mFocusedEditTextIndex = k;
-                    return false;
+                mFocusedEditTextIndex = k;
+                return false;
                 }
             });
         }
@@ -196,82 +194,52 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         Context context = getActivity().getApplicationContext();
-        switch (i) {
-            case HOLE_LOADER:
-                String holeNumber = bundle.getString(HOLE_NUMBER_EXTRA);
-                Timber.d("Hole Number in Loader: " + holeNumber);
-                return new CursorLoader(context,
-                      Contract.Holes.buildDirUri(),
-                      null,
-                      Contract.Holes.ROUND_ID + "=? AND " + Contract.Holes.HOLE_NUMBER + "=?",
-                      new String[] {SharedPrefUtils.getCurrentRoundId(context), holeNumber},
-                      null);
-            case ROUND_LOADER:
-                return new CursorLoader(context,
-                      Contract.Rounds.buildDirUri(),
-                      null,
-                      Contract.Rounds._ID + "=?",
-                      new String[] {SharedPrefUtils.getCurrentRoundId(context)},
-                      null);
-            default:
-                return null;
-        }
+            String holeNumber = bundle.getString(HOLE_NUMBER_EXTRA);
+            Timber.d("Hole Number in Loader: " + holeNumber);
+            return new CursorLoader(context,
+                  Contract.HoleView.buildDirUri(),
+                  null,
+                  Contract.HoleView.ROUND_ID + "=? AND " + Contract.HoleView.HOLE_NUM + "=?",
+                  new String[] {SharedPrefUtils.getCurrentRoundId(context), holeNumber},
+                  null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        switch(loader.getId()) {
-            case HOLE_LOADER:
-                if (cursor != null && cursor.moveToFirst()){
-                    for (int i = 0; i < editTexts.length; i++) {
-                        String str =
-                              String.valueOf(cursor.getLong(cursor.getColumnIndex(EDIT_TEXT_DB_COLUMNS[i])));
-                        editTexts[i].setText(str);
-                    }
-                    for (int j = 0; j < checkBoxes.length; j++) {
-                        long bool = cursor.getLong(cursor.getColumnIndex(CHECKBOX_DB_COLUMNS[j]));
-                        checkBoxes[j].setChecked(bool == 1);
-                    }
-                }
-                break;
-            case ROUND_LOADER:
-                String firstName, lastName, initials;
-                if (cursor != null && cursor.moveToFirst()) {
-                    firstName = cursor.getString(Contract.RoundColumnPosition.P1_FIRST_NAME);
-                    if (firstName != null) {
-                        lastName = cursor.getString(Contract.RoundColumnPosition.P1_LAST_NAME);
-                        initials = firstName.substring(0,1) + lastName.substring(0,1);
-                        p1Initials.setText(initials);
-                    }
-                    firstName = cursor.getString(Contract.RoundColumnPosition.P2_FIRST_NAME);
-                    if (firstName != null){
-                        lastName = cursor.getString(Contract.RoundColumnPosition.P2_LAST_NAME);
-                        initials = firstName.substring(0,1) + lastName.substring(0,1);
-                        p2Initials.setText(initials);
-                    }
-                    firstName = cursor.getString(Contract.RoundColumnPosition.P3_FIRST_NAME);
-                    if (firstName != null) {
-                        lastName = cursor.getString(Contract.RoundColumnPosition.P3_LAST_NAME);
-                        initials = firstName.substring(0,1) + lastName.substring(0,1);
-                        p3Initials.setText(initials);
-                    }
-                    firstName = cursor.getString(Contract.RoundColumnPosition.P4_FIRST_NAME);
-                    if (firstName != null) {
-                        firstName = cursor.getString(Contract.RoundColumnPosition.P4_FIRST_NAME);
-                        lastName = cursor.getString(Contract.RoundColumnPosition.P4_LAST_NAME);
-                        initials = firstName.substring(0,1) + lastName.substring(0,1);
-                        p4Initials.setText(initials);
-                    }
-                }
-                break;
-            default:
-                break;
+        if (cursor != null && cursor.moveToFirst()){
+            for (int i = 0; i < editTexts.length; i++) {
+                //Cursor/View Logic is Highly Coupled with Column Indices of HoleView
+                String str = String.valueOf(cursor.getLong(i+Contract.HoleView.HOLEDISTANCE_POS));
+                editTexts[i].setText(str);
+            }
+            for (int j = 0; j < checkBoxes.length; j++) {
+                //Cursor/View Logic is Highly Coupled with Column Indices of HoleView
+                long bool = cursor.getLong(j+Contract.HoleView.P1GIR_POS);
+                checkBoxes[j].setChecked(bool == 1);
+            }
+
+            String initials;
+            initials = cursor.getString(Contract.HoleView.P1INITIALS_POS);
+            if (initials != null) {
+                p1Initials.setText(initials);
+            }
+            initials = cursor.getString(Contract.HoleView.P2INITIALS_POS);
+            if (initials != null) {
+                p2Initials.setText(initials);
+            }
+            initials = cursor.getString(Contract.HoleView.P3INITIALS_POS);
+            if (initials != null) {
+                p3Initials.setText(initials);
+            }
+            initials = cursor.getString(Contract.HoleView.P4INITIALS_POS);
+            if (initials != null) {
+                p4Initials.setText(initials);
+            }
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
     }
 
     private OnClickListener mButtonClickListener = new OnClickListener() {

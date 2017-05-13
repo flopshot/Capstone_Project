@@ -645,4 +645,48 @@ public class Contract {
                   .build();
         }
     }
+
+    public static class HoleView {
+        static final String TABLE_NAME = "holeView";
+        public static final String ROUND_ID = "roundId";
+        public static final String HOLE_NUM = "holeNumber";
+        public static final int ROUNDID_POS = 0;
+        public static final int HOLENUMBER_POS = 1 ;
+        public static final int HOLEDISTANCE_POS = 2;
+        public static final int HOLEPAR_POS = 3;
+        public static final int P1SCORE_POS = 4;
+        public static final int P2SCORE_POS = 5;
+        public static final int P3SCORE_POS = 6;
+        public static final int P4SCORE_POS = 7;
+        public static final int P1PUTTS_POS = 8;
+        public static final int P2PUTTS_POS = 9;
+        public static final int P3PUTTS_POS = 10;
+        public static final int P4PUTTS_POS = 11;
+        public static final int P1PENALTIES_POS = 12;
+        public static final int P2PENALTIES_POS = 13;
+        public static final int P3PENALTIES_POS = 14;
+        public static final int P4PENALTIES_POS = 15;
+        public static final int P1SAND_POS = 16;
+        public static final int P2SAND_POS = 17;
+        public static final int P3SAND_POS = 18;
+        public static final int P4SAND_POS = 19;
+        public static final int P1GIR_POS = 20;
+        public static final int P2GIR_POS = 21;
+        public static final int P3GIR_POS = 22;
+        public static final int P4GIR_POS = 23;
+        public static final int P1FIR_POS = 24;
+        public static final int P2FIR_POS = 25;
+        public static final int P3FIR_POS = 26;
+        public static final int P4FIR_POS = 27;
+        public static final int P1INITIALS_POS = 28;
+        public static final int P2INITIALS_POS = 29;
+        public static final int P3INITIALS_POS = 30;
+        public static final int P4INITIALS_POS = 31;
+
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon()
+                  .appendPath(TABLE_NAME)
+                  .build();
+        }
+    }
 }
