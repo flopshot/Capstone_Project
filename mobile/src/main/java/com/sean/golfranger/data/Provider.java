@@ -35,6 +35,7 @@ public class Provider extends ContentProvider {
     private static final int MATCHES = 110;
     private static final int SCORECARD = 111;
     private static final int HOLE = 112;
+    private static final int WIDGET = 113;
 
     private static UriMatcher buildUriMatcher() {
         // All paths added to the UriMatcher have a corresponding code to return when a match is
@@ -56,6 +57,7 @@ public class Provider extends ContentProvider {
         matcher.addURI(authority, Contract.MatchesView.TABLE_NAME, MATCHES);
         matcher.addURI(authority, Contract.ScorecardView.TABLE_NAME, SCORECARD);
         matcher.addURI(authority, Contract.HoleView.TABLE_NAME, HOLE);
+        matcher.addURI(authority, Contract.WidgetView.TABLE_NAME, WIDGET);
         return matcher;
     }
 
@@ -156,6 +158,11 @@ public class Provider extends ContentProvider {
                       Contract.HoleView.TABLE_NAME, columns, whereClause,
                       whereArgs, null, null, sortOrder
                 );
+            case WIDGET:
+                return mDb.query(
+                      Contract.WidgetView.TABLE_NAME, columns, whereClause,
+                      whereArgs, null, null, sortOrder
+                );
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -241,7 +248,14 @@ public class Provider extends ContentProvider {
                 if ( _id > 0) {
                     returnUri = Contract.RoundPlayers.buildItemUri(_id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert row into" + uri);
+                    String id = contentValues.getAsString(Contract.RoundPlayers._ID);
+                    mDb.update(Contract.RoundPlayers.TABLE_NAME,
+                          contentValues,
+                          Contract.RoundPlayers._ID + "=?",
+                          new String[]{id}
+                    );
+                    returnUri = null;
+//                    throw new android.database.SQLException("Failed to insert row into" + uri);
                 }
                 break;
             }
@@ -353,8 +367,10 @@ public class Provider extends ContentProvider {
                 values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Courses.TABLE_NAME,
                       values, whereClause, whereArgs);
-                int holeCount = values.getAsInteger(Contract.Courses.HOLE_CNT);
-                bulkInsertCourseHoles(whereArgs[0], holeCount);
+                if (values.getAsInteger(Contract.Courses.COURSE_ENABLED) != 0) {
+                    int holeCount = values.getAsInteger(Contract.Courses.HOLE_CNT);
+                    bulkInsertCourseHoles(whereArgs[0], holeCount);
+                }
                 break;
             case ROUND:
                 values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
@@ -362,17 +378,17 @@ public class Provider extends ContentProvider {
                       values, whereClause, whereArgs);
                 break;
             case COURSE_HOLE:
-                values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
+//                values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.CourseHoles.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
             case ROUND_PLAYER:
-                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
+//                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.RoundPlayers.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;
             case ROUND_PLAYER_HOLE:
-                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
+//                values.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.RoundPlayerHoles.TABLE_NAME,
                       values, whereClause, whereArgs);
                 break;

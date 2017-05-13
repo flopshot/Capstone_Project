@@ -91,7 +91,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
             }
         }
 
-        Timber.d("RoundId Initialized: " + String.valueOf(mRoundId!=null));
+        Timber.d("RoundId Initialized: " + String.valueOf(mRoundId));
         Timber.d("mDoSave: " + String.valueOf(mDoSave));
         sLoaderManager.initLoader(0, roundIdBundle, sLoaderCallback);
     }
@@ -147,6 +147,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.moveToFirst()) {
+            Timber.d("Cursor Is Not Null and not Empty");
             String str = cursor.getString(Contract.MatchesView.CLUBNAME_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
@@ -382,7 +383,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
                     values.put(Contract.RoundPlayers._ID, mRoundId + "1");
                     values.put(Contract.RoundPlayers.PLAYER_ORDER, "1");
-                    resolver.insert(Contract.Rounds.buildDirUri(),values);
+                    Timber.d("PlayerId: " + playerId + " RoundId: " + mRoundId + " RoundPlayersId: " + mRoundId + "1 PlayerOrder: 1");
+                    resolver.insert(Contract.RoundPlayers.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P2:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -390,7 +392,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
                     values.put(Contract.RoundPlayers._ID, mRoundId + "2");
                     values.put(Contract.RoundPlayers.PLAYER_ORDER, "2");
-                    resolver.insert(Contract.Rounds.buildDirUri(),values);
+                    resolver.insert(Contract.RoundPlayers.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P3:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -398,7 +400,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
                     values.put(Contract.RoundPlayers._ID, mRoundId + "3");
                     values.put(Contract.RoundPlayers.PLAYER_ORDER, "3");
-                    resolver.insert(Contract.Rounds.buildDirUri(),values);
+                    resolver.insert(Contract.RoundPlayers.buildDirUri(),values);
                     break;
                 case REQUEST_CODE_P4:
                     playerId = data.getStringExtra(EXTRA_RETURN_ID);
@@ -406,7 +408,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
                     values.put(Contract.RoundPlayers.ROUND_ID, mRoundId);
                     values.put(Contract.RoundPlayers._ID, mRoundId + "4");
                     values.put(Contract.RoundPlayers.PLAYER_ORDER, "4");
-                    resolver.insert(Contract.Rounds.buildDirUri(),values);
+                    resolver.insert(Contract.RoundPlayers.buildDirUri(),values);
                     break;
             }
         }

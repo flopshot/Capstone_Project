@@ -24,7 +24,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
 
             @Override
             public void onCreate() {
-                Timber.d("Widget SErvice Created");
+                Timber.d("Widget Service Created");
                 // Nothing to do
             }
 
@@ -40,7 +40,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 final long identityToken = Binder.clearCallingIdentity();
                 Timber.d("We queried the data");
                 data = getContentResolver().query(
-                      Contract.PlayerTotals.buildDirUri(),
+                      Contract.WidgetView.buildDirUri(),
                       null,
                       null,
                       null,
@@ -48,12 +48,12 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 Binder.restoreCallingIdentity(identityToken);
 
                 if (data.getCount() != 0 && data.moveToFirst()) {
-                    String name = data.getString(Contract.PlayerTotals.PLAYER_FIRST) +
-                          data.getString(Contract.PlayerTotals.PLAYER_LAST);
-                    Long gamesPlayed = data.getLong(Contract.PlayerTotals.PLAYER_GAME_COUNT);
-                    Float meanScore = data.getFloat(Contract.PlayerTotals.PLAYER_MEAN_SCORE);
-                    Long minScore = data.getLong(Contract.PlayerTotals.PLAYER_MIN_SCORE);
-                    String formattedMinScore = (minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
+                    String name = data.getString(Contract.WidgetView.PLAYERFIRST_POS) +"\n"+
+                          data.getString(Contract.WidgetView.PLAYERLAST_POS);
+                    Long gamesPlayed = data.getLong(Contract.WidgetView.GAMECNT_POS);
+                    Integer meanScore = data.getInt(Contract.WidgetView.AVGSCORE_POS);
+                    Long minScore = data.getLong(Contract.WidgetView.LOWSCORE_POS);
+                    String formattedMinScore = String.valueOf(minScore); //(minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
                     Timber.d("Name: " + name + " GamesPlayed: " + gamesPlayed + " meanScore: " + meanScore + "minScore: " + formattedMinScore);
                 } else {
                     Timber.d("Data is null");
@@ -82,12 +82,12 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 }
                 RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_list_item);
 
-                String name = data.getString(Contract.PlayerTotals.PLAYER_FIRST) + " " +
-                      data.getString(Contract.PlayerTotals.PLAYER_LAST);
-                Long gamesPlayed = data.getLong(Contract.PlayerTotals.PLAYER_GAME_COUNT);
-                Float meanScore = data.getFloat(Contract.PlayerTotals.PLAYER_MEAN_SCORE);
-                Long minScore = data.getLong(Contract.PlayerTotals.PLAYER_MIN_SCORE);
-                String formattedMinScore = (minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
+                String name = data.getString(Contract.WidgetView.PLAYERFIRST_POS) + "\n " +
+                      data.getString(Contract.WidgetView.PLAYERLAST_POS);
+                Long gamesPlayed = data.getLong(Contract.WidgetView.GAMECNT_POS);
+                Integer meanScore = data.getInt(Contract.WidgetView.AVGSCORE_POS);
+                Long minScore = data.getLong(Contract.WidgetView.LOWSCORE_POS);
+                String formattedMinScore = String.valueOf(minScore); //(minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
 
                 views.setTextViewText(R.id.widgetPlayerName, name);
                 views.setTextViewText(R.id.widgetGames, String.valueOf(gamesPlayed));
@@ -111,7 +111,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
             @Override
             public long getItemId(int position) {
                 if (data.moveToPosition(position))
-                    return data.getLong(Contract.PlayerTotals.PLAYER_ID);
+                    return data.getLong(Contract.WidgetView.PLAYERID_POS);
                 return position;
             }
 

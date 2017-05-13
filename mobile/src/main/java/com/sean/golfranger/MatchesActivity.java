@@ -31,7 +31,9 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
         getContentResolver()
-              .registerContentObserver(Contract.MatchesView.buildDirUri(), true, mMyObserver);
+              .registerContentObserver(Contract.Rounds.buildDirUri(), true, mMyObserver);
+        getContentResolver()
+              .registerContentObserver(Contract.RoundPlayers.buildDirUri(), true, mMyObserver);
         sLoaderCallback = this;
         sLoaderManager.initLoader(0, null, sLoaderCallback);
 

@@ -91,11 +91,11 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayers.PLAYER_ORDER + " INTEGER, " +
               " UNIQUE (" + Contract.RoundPlayers._ID + ") ON CONFLICT REPLACE, " +
               " FOREIGN KEY (" + Contract.RoundPlayers.PLAYER_ID + ") REFERENCES " + Contract.Players.TABLE_NAME + " (" + Contract.Players._ID + ")," +
-              " FOREIGN KEY (" + Contract.RoundPlayers.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON CASCADE DELETE" +
+              " FOREIGN KEY (" + Contract.RoundPlayers.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON DELETE CASCADE" +
               ");";
 
         // String to create a table to hold ROUND/PLAYER/HOLES data
-        final String SQL_CREATE_ROUND_PLAYER_COURSE_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
+        final String SQL_CREATE_ROUND_PLAYER_HOLES_TABLE = "CREATE TABLE IF NOT EXISTS " +
               Contract.RoundPlayerHoles.TABLE_NAME + " (" +
               Contract.RoundPlayerHoles._ID + " INTEGER PRIMARY KEY," + //Concatenation of RoundId, player position,  and hole number
               Contract.RoundPlayerHoles.ROUNDPLAYER_ID + " INTEGER NOT NULL," +
@@ -110,7 +110,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayerHoles.HOLE_NUM + " INTEGER NOT NULL, " +
               " UNIQUE (" + Contract.RoundPlayerHoles._ID + ") ON CONFLICT IGNORE, " +
               " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + "), " +
-              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON CASCADE DELETE" +
+              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON DELETE CASCADE" +
               ");";
 
         // String to create a table to hold Player Location data
@@ -164,17 +164,24 @@ class DbHelper extends SQLiteOpenHelper {
 
               " FROM " + Contract.Rounds.TABLE_NAME + " AS r " +
               " LEFT JOIN " + Contract.Courses.TABLE_NAME + " AS c " +
-              " ON c." + Contract.Courses._ID + " = r." + Contract.Rounds.COURSE_ID + " AND r." + Contract.Rounds.ROUND_ENABLED + " = 1 " +
-              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp " +
-              " ON r." + Contract.Rounds._ID + " = rp." + Contract.RoundPlayers.ROUND_ID +
+              " ON c." + Contract.Courses._ID + " = r." + Contract.Rounds.COURSE_ID +
+              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp1 " +
+              " ON r." + Contract.Rounds._ID + " = rp1." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp1._id, r._id) = '1' " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p1 " +
-              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p1." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 1 " +
+              " ON rp1." + Contract.RoundPlayers.PLAYER_ID + " = p1." + Contract.Players._ID + " AND rp1." + Contract.RoundPlayers.PLAYER_ORDER + " = 1 " +
+              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp2 " +
+              " ON r." + Contract.Rounds._ID + " = rp2." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp2._id, r._id) = '2' " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p2 " +
-              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p2." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 2 " +
+              " ON rp2." + Contract.RoundPlayers.PLAYER_ID + " = p2." + Contract.Players._ID + " AND rp2." + Contract.RoundPlayers.PLAYER_ORDER + " = 2 " +
+              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp3 " +
+              " ON r." + Contract.Rounds._ID + " = rp3." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp3._id, r._id) = '3' " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p3 " +
-              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p3." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 3 " +
+              " ON rp3." + Contract.RoundPlayers.PLAYER_ID + " = p3." + Contract.Players._ID + " AND rp3." + Contract.RoundPlayers.PLAYER_ORDER + " = 3 " +
+              " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp4 " +
+              " ON r." + Contract.Rounds._ID + " = rp4." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp4._id, r._id) = '4' " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p4 " +
-              " ON rp." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + "AND rp." + Contract.RoundPlayers.PLAYER_ORDER + " = 4; ";
+              " ON rp4." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + " AND rp4." + Contract.RoundPlayers.PLAYER_ORDER + " = 4" +
+              " WHERE r." + Contract.Rounds.ROUND_ENABLED + " = 1; ";
 
         final String SQL_CREATE_SCORECARD_VIEW = "CREATE VIEW " +
             Contract.ScorecardView.TABLE_NAME + " AS SELECT " +
@@ -191,7 +198,7 @@ class DbHelper extends SQLiteOpenHelper {
             ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials" +
             ",rt1.p1Total" +
             ",rt2.p2Total" +
-            ",rt2.p3Total" +
+            ",rt3.p3Total" +
             ",rt4.p4Total " +
             "FROM rounds AS r " +
             "LEFT JOIN CourseHoles AS ch " +
@@ -264,10 +271,10 @@ class DbHelper extends SQLiteOpenHelper {
               ",rph2.penalties AS p2Penalties" +
               ",rph3.penalties AS p3Penalties" +
               ",rph4.penalties AS p4Penalties" +
-              ",rph1.sand AS p1Sand" +
-              ",rph2.sand AS p2Sand" +
-              ",rph3.sand AS p3Sand" +
-              ",rph4.sand AS p4Sand" +
+              ",rph1.sandShots AS p1Sand" +
+              ",rph2.sandShots AS p2Sand" +
+              ",rph3.sandShots AS p3Sand" +
+              ",rph4.sandShots AS p4Sand" +
               ",rph1.girFlag AS p1Gir" +
               ",rph2.girFlag AS p2Gir" +
               ",rph3.girFlag AS p3Gir" +
@@ -279,7 +286,7 @@ class DbHelper extends SQLiteOpenHelper {
               ",substr(p1.firstName,0,1) || substr(p1.lastName,0,1) AS p1Initials" +
               ",substr(p2.firstName,0,1) || substr(p2.lastName,0,1) AS p2Initials" +
               ",substr(p3.firstName,0,1) || substr(p3.lastName,0,1) AS p3Initials" +
-              ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials" +
+              ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials " +
 
               "FROM rounds AS r " +
               "LEFT JOIN CourseHoles AS ch " +
@@ -310,18 +317,39 @@ class DbHelper extends SQLiteOpenHelper {
               "LEFT JOIN roundPlayers AS rp4 ON rp4._id = rph4.roundPlayerId " +
               "LEFT JOIN players AS p4 ON rp4.playerId = p4._id ;";
 
+        final String SQL_CREATE_WIDGET_VIEW = "CREATE VIEW " +
+              Contract.WidgetView.TABLE_NAME + " AS SELECT " +
+              "p._id AS playerId" +
+              ",p.firstName" +
+              ",p.lastName" +
+              ",COUNT(r._id) AS gameCount" +
+              ",SUM(rph.score) - SUM(ch.holePar) AS avgScore" +
+              ",'N/A' AS lowScore " +
+              "FROM players AS p " +
+              "INNER JOIN roundPlayers AS rp " +
+              "ON rp.playerId = p._id " +
+              "LEFT JOIN rounds AS r " +
+              "ON r._id = rp.roundId " +
+              "LEFT JOIN courseHoles AS ch " +
+              "ON ch.courseId = r.courseId " +
+              "INNER JOIN roundPlayerHoles AS rph " +
+              "ON rph.roundPlayerId = rp._id " +
+              "AND rph.holeNumber = ch.holeNumber " +
+              "AND rph.score IS NOT NULL;";
+
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUNDS_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_COURSE_HOLES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_ROUND_PLAYERS_TABLE);
-        sqLiteDatabase.execSQL(SQL_CREATE_ROUND_PLAYER_COURSE_HOLES_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_ROUND_PLAYER_HOLES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MARKER_LOCATION_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_WIND_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_MATCHES_ADAPTER_VIEW );
         sqLiteDatabase.execSQL(SQL_CREATE_SCORECARD_VIEW);
         sqLiteDatabase.execSQL(SQL_CREATE_HOLE_VIEW);
+        sqLiteDatabase.execSQL(SQL_CREATE_WIDGET_VIEW);
     }
 
     // OVERRIDDEN TO ENFORCE FOREIGN KEY CONSTRAINT OF DB

@@ -347,7 +347,7 @@ public class Contract {
 
 
         // TABLE NAME FOR DB
-        static final String TABLE_NAME = "gamePlayerCourseHoles";
+        static final String TABLE_NAME = "roundPlayerHoles";
 
         // COLUMN NAMES
         /**
@@ -682,6 +682,22 @@ public class Contract {
         public static final int P2INITIALS_POS = 29;
         public static final int P3INITIALS_POS = 30;
         public static final int P4INITIALS_POS = 31;
+
+        public static Uri buildDirUri() {
+            return BASE_URI.buildUpon()
+                  .appendPath(TABLE_NAME)
+                  .build();
+        }
+    }
+
+    public static class WidgetView {
+        static final String TABLE_NAME = "widgetView";
+        public static final int PLAYERID_POS = 0;
+        public static final int PLAYERFIRST_POS = 1;
+        public static final int PLAYERLAST_POS= 2;
+        public static final int GAMECNT_POS = 3;
+        public static final int AVGSCORE_POS= 4;
+        public static final int LOWSCORE_POS = 5;
 
         public static Uri buildDirUri() {
             return BASE_URI.buildUpon()
