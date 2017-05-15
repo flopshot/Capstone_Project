@@ -166,19 +166,19 @@ class DbHelper extends SQLiteOpenHelper {
               " LEFT JOIN " + Contract.Courses.TABLE_NAME + " AS c " +
               " ON c." + Contract.Courses._ID + " = r." + Contract.Rounds.COURSE_ID +
               " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp1 " +
-              " ON r." + Contract.Rounds._ID + " = rp1." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp1._id, r._id) = '1' " +
+              " ON r." + Contract.Rounds._ID + " = rp1." + Contract.RoundPlayers.ROUND_ID + " AND  rp1." + Contract.RoundPlayers.PLAYER_ORDER + " = 1 " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p1 " +
               " ON rp1." + Contract.RoundPlayers.PLAYER_ID + " = p1." + Contract.Players._ID + " AND rp1." + Contract.RoundPlayers.PLAYER_ORDER + " = 1 " +
               " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp2 " +
-              " ON r." + Contract.Rounds._ID + " = rp2." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp2._id, r._id) = '2' " +
+              " ON r." + Contract.Rounds._ID + " = rp2." + Contract.RoundPlayers.ROUND_ID + " AND rp2." + Contract.RoundPlayers.PLAYER_ORDER + " = 2 " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p2 " +
               " ON rp2." + Contract.RoundPlayers.PLAYER_ID + " = p2." + Contract.Players._ID + " AND rp2." + Contract.RoundPlayers.PLAYER_ORDER + " = 2 " +
               " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp3 " +
-              " ON r." + Contract.Rounds._ID + " = rp3." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp3._id, r._id) = '3' " +
+              " ON r." + Contract.Rounds._ID + " = rp3." + Contract.RoundPlayers.ROUND_ID + " AND rp3." + Contract.RoundPlayers.PLAYER_ORDER + " = 3 " +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p3 " +
               " ON rp3." + Contract.RoundPlayers.PLAYER_ID + " = p3." + Contract.Players._ID + " AND rp3." + Contract.RoundPlayers.PLAYER_ORDER + " = 3 " +
               " LEFT JOIN " + Contract.RoundPlayers.TABLE_NAME + " AS rp4 " +
-              " ON r." + Contract.Rounds._ID + " = rp4." + Contract.RoundPlayers.ROUND_ID + " AND  ltrim(rp4._id, r._id) = '4' " +
+              " ON r." + Contract.Rounds._ID + " = rp4." + Contract.RoundPlayers.ROUND_ID + " AND rp4." + Contract.RoundPlayers.PLAYER_ORDER + " = 4" +
               " LEFT JOIN " + Contract.Players.TABLE_NAME + " AS p4 " +
               " ON rp4." + Contract.RoundPlayers.PLAYER_ID + " = p4." + Contract.Players._ID + " AND rp4." + Contract.RoundPlayers.PLAYER_ORDER + " = 4" +
               " WHERE r." + Contract.Rounds.ROUND_ENABLED + " = 1; ";
@@ -203,31 +203,29 @@ class DbHelper extends SQLiteOpenHelper {
             "FROM rounds AS r " +
             "LEFT JOIN CourseHoles AS ch " +
             "ON ch.courseId = r.courseId " +
-            "LEFT JOIN roundPlayerHoles AS rph1 " +
-            "ON rph1.roundId = r._id " +
-            "AND ch.holeNumber = rph1.holeNumber " +
-            "AND ltrim(rph1.roundPlayerId, r._id) = '1' " +
-            "LEFT JOIN roundPlayerHoles AS rph2 " +
-            "ON rph2.roundId = r._id " +
-            "AND ch.holeNumber = rph2.holeNumber " +
-            "AND ltrim(rph2.roundPlayerId, r._id) = '2' " +
-            "LEFT JOIN roundPlayerHoles AS rph3 " +
-            "ON rph3.roundId = r._id " +
-            "AND ch.holeNumber = rph3.holeNumber " +
-            "AND ltrim(rph3.roundPlayerId, r._id) = '3' " +
-            "LEFT JOIN roundPlayerHoles AS rph4 " +
-            "ON rph4.roundId = r._id " +
-            "AND ch.holeNumber = rph4.holeNumber " +
-            "AND ltrim(rph4.roundPlayerId, r._id) = '4' " +
 
-            "LEFT JOIN roundPlayers AS rp1 ON rp1._id = rph1.roundPlayerId " +
+            "LEFT JOIN roundPlayers AS rp1 ON r._id = rp1.roundId AND rp1.playerOrder = 1 " +
             "LEFT JOIN players AS p1 ON rp1.playerId = p1._id " +
-            "LEFT JOIN roundPlayers AS rp2 ON rp2._id = rph2.roundPlayerId " +
+            "LEFT JOIN roundPlayers AS rp2 ON r._id = rp2.roundId AND rp2.playerOrder = 2 " +
             "LEFT JOIN players AS p2 ON rp2.playerId = p2._id " +
-            "LEFT JOIN roundPlayers AS rp3 ON rp3._id = rph3.roundPlayerId " +
+            "LEFT JOIN roundPlayers AS rp3 ON r._id = rp3.roundId AND rp3.playerOrder = 3 " +
             "LEFT JOIN players AS p3 ON rp3.playerId = p3._id " +
-            "LEFT JOIN roundPlayers AS rp4 ON rp4._id = rph4.roundPlayerId " +
+            "LEFT JOIN roundPlayers AS rp4 ON r._id = rp4.roundId AND rp4.playerOrder = 4 " +
             "LEFT JOIN players AS p4 ON rp4.playerId = p4._id " +
+
+            "LEFT JOIN roundPlayerHoles AS rph1 " +
+            "ON rph1.roundPlayerId = rp1._id " +
+            "AND ch.holeNumber = rph1.holeNumber " +
+            "LEFT JOIN roundPlayerHoles AS rph2 " +
+            "ON rph2.roundPlayerId = rp2._id " +
+            "AND ch.holeNumber = rph2.holeNumber " +
+            "LEFT JOIN roundPlayerHoles AS rph3 " +
+            "ON rph3.roundPlayerId = rp3._id " +
+            "AND ch.holeNumber = rph3.holeNumber " +
+            "LEFT JOIN roundPlayerHoles AS rph4 " +
+            "ON rph4.roundPlayerId = rp4._id " +
+            "AND ch.holeNumber = rph4.holeNumber " +
+
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p1Total " +
             "FROM roundPlayerHoles " +
@@ -291,31 +289,28 @@ class DbHelper extends SQLiteOpenHelper {
               "FROM rounds AS r " +
               "LEFT JOIN CourseHoles AS ch " +
               "ON ch.courseId = r.courseId " +
+
+              "LEFT JOIN roundPlayers AS rp1 ON r._id = rp1.roundId AND rp1.playerOrder = 1 " +
+              "LEFT JOIN players AS p1 ON rp1.playerId = p1._id " +
+              "LEFT JOIN roundPlayers AS rp2 ON r._id = rp2.roundId AND rp2.playerOrder = 2 " +
+              "LEFT JOIN players AS p2 ON rp2.playerId = p2._id " +
+              "LEFT JOIN roundPlayers AS rp3 ON r._id = rp3.roundId AND rp3.playerOrder = 3 " +
+              "LEFT JOIN players AS p3 ON rp3.playerId = p3._id " +
+              "LEFT JOIN roundPlayers AS rp4 ON r._id = rp4.roundId AND rp4.playerOrder = 4 " +
+              "LEFT JOIN players AS p4 ON rp4.playerId = p4._id " +
+
               "LEFT JOIN roundPlayerHoles AS rph1 " +
               "ON rph1.roundId = r._id " +
               "AND ch.holeNumber = rph1.holeNumber " +
-              "AND ltrim(rph1.roundPlayerId, r._id) = '1' " +
               "LEFT JOIN roundPlayerHoles AS rph2 " +
               "ON rph2.roundId = r._id " +
               "AND ch.holeNumber = rph2.holeNumber " +
-              "AND ltrim(rph2.roundPlayerId, r._id) = '2' " +
               "LEFT JOIN roundPlayerHoles AS rph3 " +
               "ON rph3.roundId = r._id " +
               "AND ch.holeNumber = rph3.holeNumber " +
-              "AND ltrim(rph3.roundPlayerId, r._id) = '3' " +
               "LEFT JOIN roundPlayerHoles AS rph4 " +
               "ON rph4.roundId = r._id " +
-              "AND ch.holeNumber = rph4.holeNumber " +
-              "AND ltrim(rph4.roundPlayerId, r._id) = '4' " +
-
-              "LEFT JOIN roundPlayers AS rp1 ON rp1._id = rph1.roundPlayerId " +
-              "LEFT JOIN players AS p1 ON rp1.playerId = p1._id " +
-              "LEFT JOIN roundPlayers AS rp2 ON rp2._id = rph2.roundPlayerId " +
-              "LEFT JOIN players AS p2 ON rp2.playerId = p2._id " +
-              "LEFT JOIN roundPlayers AS rp3 ON rp3._id = rph3.roundPlayerId " +
-              "LEFT JOIN players AS p3 ON rp3.playerId = p3._id " +
-              "LEFT JOIN roundPlayers AS rp4 ON rp4._id = rph4.roundPlayerId " +
-              "LEFT JOIN players AS p4 ON rp4.playerId = p4._id ;";
+              "AND ch.holeNumber = rph4.holeNumber;";
 
         final String SQL_CREATE_WIDGET_VIEW = "CREATE VIEW " +
               Contract.WidgetView.TABLE_NAME + " AS SELECT " +
