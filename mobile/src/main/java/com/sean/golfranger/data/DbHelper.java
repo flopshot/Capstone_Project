@@ -323,8 +323,9 @@ class DbHelper extends SQLiteOpenHelper {
               "FROM players AS p " +
               "INNER JOIN roundPlayers AS rp " +
               "ON rp.playerId = p._id " +
-              "LEFT JOIN rounds AS r " +
+              "INNER JOIN rounds AS r " +
               "ON r._id = rp.roundId " +
+              "AND r.roundEnabled = 1" +
               "LEFT JOIN courseHoles AS ch " +
               "ON ch.courseId = r.courseId " +
               "INNER JOIN roundPlayerHoles AS rph " +
