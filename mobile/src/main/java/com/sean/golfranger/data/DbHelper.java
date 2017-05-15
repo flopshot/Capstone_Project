@@ -192,10 +192,10 @@ class DbHelper extends SQLiteOpenHelper {
             ",rph2.score AS p2Score" +
             ",rph3.score AS p3Score" +
             ",rph4.score AS p4Score" +
-            ",substr(p1.firstName,0,1) || substr(p1.lastName,0,1) AS p1Initials" +
-            ",substr(p2.firstName,0,1) || substr(p2.lastName,0,1) AS p2Initials" +
-            ",substr(p3.firstName,0,1) || substr(p3.lastName,0,1) AS p3Initials" +
-            ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials" +
+            ",substr(p1.firstName,1,1) || substr(p1.lastName,1,1) AS p1Initials" +
+            ",substr(p2.firstName,1,1) || substr(p2.lastName,1,1) AS p2Initials" +
+            ",substr(p3.firstName,1,1) || substr(p3.lastName,1,1) AS p3Initials" +
+            ",substr(p4.firstName,1,1) || substr(p4.lastName,1,1) AS p4Initials" +
             ",rt1.p1Total" +
             ",rt2.p2Total" +
             ",rt3.p3Total" +
@@ -229,25 +229,25 @@ class DbHelper extends SQLiteOpenHelper {
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p1Total " +
             "FROM roundPlayerHoles " +
-            "WHERE ltrim(roundPlayerId, roundId) = '1' " +
+            "WHERE substr(roundPlayerId, -1) = '1' " +
             "GROUP BY roundPlayerId " +
             ") AS rt1 ON rt1.roundId = r._id " +
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p2Total " +
             "FROM roundPlayerHoles " +
-            "WHERE ltrim(roundPlayerId, roundId) = '2' " +
+            "WHERE substr(roundPlayerId, -1) = '2' " +
             "GROUP BY roundPlayerId " +
             ") AS rt2 ON rt2.roundId = r._id " +
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p3Total " +
             "FROM roundPlayerHoles " +
-            "WHERE ltrim(roundPlayerId, roundId) = '3' " +
+            "WHERE substr(roundPlayerId, -1) = '3' " +
             "GROUP BY roundPlayerId " +
             ") AS rt3 ON rt3.roundId = r._id " +
             "LEFT JOIN ( " +
             "SELECT roundId ,SUM(score) AS p4Total " +
             "FROM roundPlayerHoles " +
-            "WHERE ltrim(roundPlayerId, roundId) = '4' " +
+            "WHERE substr(roundPlayerId, -1) = '4' " +
             "GROUP BY roundPlayerId " +
             ") AS rt4 ON rt4.roundId = r._id;";
 
@@ -281,10 +281,10 @@ class DbHelper extends SQLiteOpenHelper {
               ",rph2.firFlag AS p2Fir" +
               ",rph3.firFlag AS p3Fir" +
               ",rph4.firFlag AS p4Fir" +
-              ",substr(p1.firstName,0,1) || substr(p1.lastName,0,1) AS p1Initials" +
-              ",substr(p2.firstName,0,1) || substr(p2.lastName,0,1) AS p2Initials" +
-              ",substr(p3.firstName,0,1) || substr(p3.lastName,0,1) AS p3Initials" +
-              ",substr(p4.firstName,0,1) || substr(p4.lastName,0,1) AS p4Initials " +
+              ",substr(p1.firstName,1,1) || substr(p1.lastName,1,1) AS p1Initials" +
+              ",substr(p2.firstName,1,1) || substr(p2.lastName,1,1) AS p2Initials" +
+              ",substr(p3.firstName,1,1) || substr(p3.lastName,1,1) AS p3Initials" +
+              ",substr(p4.firstName,1,1) || substr(p4.lastName,1,1) AS p4Initials " +
 
               "FROM rounds AS r " +
               "LEFT JOIN CourseHoles AS ch " +
@@ -300,16 +300,16 @@ class DbHelper extends SQLiteOpenHelper {
               "LEFT JOIN players AS p4 ON rp4.playerId = p4._id " +
 
               "LEFT JOIN roundPlayerHoles AS rph1 " +
-              "ON rph1.roundId = r._id " +
+              "ON rph1.roundPlayerId = rp1._id " +
               "AND ch.holeNumber = rph1.holeNumber " +
               "LEFT JOIN roundPlayerHoles AS rph2 " +
-              "ON rph2.roundId = r._id " +
+              "ON rph2.roundPlayerId = rp2._id " +
               "AND ch.holeNumber = rph2.holeNumber " +
               "LEFT JOIN roundPlayerHoles AS rph3 " +
-              "ON rph3.roundId = r._id " +
+              "ON rph3.roundPlayerId = rp3._id " +
               "AND ch.holeNumber = rph3.holeNumber " +
               "LEFT JOIN roundPlayerHoles AS rph4 " +
-              "ON rph4.roundId = r._id " +
+              "ON rph4.roundPlayerId = rp4._id " +
               "AND ch.holeNumber = rph4.holeNumber;";
 
         final String SQL_CREATE_WIDGET_VIEW = "CREATE VIEW " +
