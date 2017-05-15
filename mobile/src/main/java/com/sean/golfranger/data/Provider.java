@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 import static com.sean.golfranger.data.DbHelper.getHelper;
 
 /**
@@ -227,7 +229,6 @@ public class Provider extends ContentProvider {
                 contentValues.put(Contract.Rounds.DATE_UPDATED, getCurTimeStamp());
                 long _id = mDb.insert(Contract.Rounds.TABLE_NAME, null, contentValues);
                 if (_id > 0) {
-                    bulkInsertRoundPlayerHoles(String.valueOf(_id));
                     returnUri = Contract.Rounds.buildItemUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into" + uri);
@@ -246,6 +247,7 @@ public class Provider extends ContentProvider {
             case ROUND_PLAYER: {
                 long _id = mDb.insert(Contract.RoundPlayers.TABLE_NAME, null, contentValues);
                 if ( _id > 0) {
+                    bulkInsertRoundPlayerHoles(String.valueOf(_id));
                     returnUri = Contract.RoundPlayers.buildItemUri(_id);
                 } else {
                     String id = contentValues.getAsString(Contract.RoundPlayers._ID);
@@ -441,20 +443,23 @@ public class Provider extends ContentProvider {
         }
     }
 
-    private void bulkInsertRoundPlayerHoles(String roundId) {
+    private void bulkInsertRoundPlayerHoles(String roundPlayerId) {
         ContentValues values = new ContentValues();
         try {
-            for (int k = 1; k < 4; k++) {
-                for (int l = 1; l < 37; l++) {
-                    values.put(
-                          Contract.RoundPlayerHoles._ID,
-                          roundId + String.valueOf(k) + String.format(Locale.getDefault(), "%02d", l)
-                    );
-                    values.put(Contract.RoundPlayerHoles.ROUNDPLAYER_ID, roundId + String.valueOf(k));
-                    values.put(Contract.RoundPlayerHoles.HOLE_NUM, String.valueOf(l));
-                    mDb.insert(Contract.RoundPlayerHoles.TABLE_NAME, null, values);
-                    values.clear();
-                }
+            for (int l = 1; l < 37; l++) {
+                String roundPlayerHoleId = roundPlayerId + String.format(Locale.getDefault(), "%02d", l);
+                String roundId = roundPlayerId.substring(0, roundPlayerId.length() - 1);
+                String holeN = String.valueOf(l);
+                values.put(
+                      Contract.RoundPlayerHoles._ID,
+                      roundPlayerHoleId
+                );
+                values.put(Contract.RoundPlayerHoles.ROUND_ID, roundId);
+                values.put(Contract.RoundPlayerHoles.ROUNDPLAYER_ID, roundPlayerId);
+                values.put(Contract.RoundPlayerHoles.HOLE_NUM, holeN);
+                Timber.d("Inserted RoundPlayerHoleId: " + roundPlayerHoleId + " RoundPlayerId: " + roundPlayerId + " RoundId: " + roundId + " Hole Number: " + holeN);
+                mDb.insert(Contract.RoundPlayerHoles.TABLE_NAME, null, values);
+                values.clear();
             }
         } catch (Exception e) {
             e.printStackTrace();

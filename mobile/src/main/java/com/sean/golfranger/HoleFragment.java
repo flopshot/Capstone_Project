@@ -356,7 +356,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                     String id = SharedPrefUtils.getCurrentRoundId(getActivity()) +
                           String.valueOf((n % 4) + 1) +
                           String.format(Locale.getDefault(), "%02d", holeNum);
-                    Timber.d("Saved a checkmark: " + String.valueOf(boolInt)+" for hole " + holeNumber);
+                    Timber.d("Saved a checkmark: " + String.valueOf(boolInt)+" for roundPlayerHole " + id);
                     resolver.update(
                           Contract.RoundPlayerHoles.buildDirUri(),
                           values,
