@@ -325,13 +325,14 @@ class DbHelper extends SQLiteOpenHelper {
               "ON rp.playerId = p._id " +
               "INNER JOIN rounds AS r " +
               "ON r._id = rp.roundId " +
-              "AND r.roundEnabled = 1" +
+              "AND r.roundEnabled = 1 " +
               "LEFT JOIN courseHoles AS ch " +
               "ON ch.courseId = r.courseId " +
               "INNER JOIN roundPlayerHoles AS rph " +
               "ON rph.roundPlayerId = rp._id " +
               "AND rph.holeNumber = ch.holeNumber " +
-              "AND rph.score IS NOT NULL;";
+              "AND rph.score IS NOT NULL " +
+              "GROUP BY p._id;";
 
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
