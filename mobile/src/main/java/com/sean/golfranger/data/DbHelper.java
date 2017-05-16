@@ -317,9 +317,14 @@ class DbHelper extends SQLiteOpenHelper {
               "p._id AS playerId" +
               ",p.firstName" +
               ",p.lastName" +
-              ",COUNT(r._id) AS gameCount" +
-              ",SUM(rph.score) - SUM(ch.holePar) AS avgScore" +
-              ",'N/A' AS lowScore " +
+              ",COUNT(DISTINCT r._id) AS gameCount" +
+              ",CASE " +
+              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) > 0 " +
+              "         THEN '+'||CAST(ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) AS INTEGER) " +
+              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) = 0 THEN 'E'" +
+              "    ELSE ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) " +
+              "END AS avgScore" +
+              ",MIN(roundScore) AS lowScore " +
               "FROM players AS p " +
               "INNER JOIN roundPlayers AS rp " +
               "ON rp.playerId = p._id " +
@@ -331,7 +336,21 @@ class DbHelper extends SQLiteOpenHelper {
               "INNER JOIN roundPlayerHoles AS rph " +
               "ON rph.roundPlayerId = rp._id " +
               "AND rph.holeNumber = ch.holeNumber " +
-              "AND rph.score IS NOT NULL " +
+              "LEFT JOIN (" +
+              "    SELECT " +
+              "        rp.playerId AS pid" +
+              "        ,rp.roundId AS rid" +
+              "        ,CASE WHEN COUNT(ch.holeNumber) = COUNT(rph.score) AND COUNT(ch.holeNumber) = COUNT(ch.holePar)" +
+              "              THEN SUM(rph.score) - SUM(ch.holePar)" +
+              "              ELSE NULL END AS roundScore" +
+              "    FROM roundPlayers AS rp " +
+              "    LEFT JOIN rounds AS r ON r._id = rp.roundId " +
+              "    LEFT JOIN courses AS c ON c._id = r.courseId " +
+              "    LEFT JOIN courseHoles AS ch ON c._id = ch.courseId " +
+              "    LEFT JOIN roundPlayerHoles AS rph ON rp._id = rph.roundPlayerId AND ch.holeNumber = rph.holeNumber " +
+              "    GROUP BY rp.playerId, rp.roundId" +
+              ") AS rs ON p._id = rs.pid " +
+
               "GROUP BY p._id;";
 
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);

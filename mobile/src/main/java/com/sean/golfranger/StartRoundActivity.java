@@ -147,7 +147,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.moveToFirst()) {
-            Timber.d("Cursor Is Not Null and not Empty");
+            mCourseId = cursor.getString(Contract.Rounds.COURSEID_POS);
+
             String str = cursor.getString(Contract.MatchesView.CLUBNAME_COL_INDEX);
             if (!(str == null || str.isEmpty() || str.equalsIgnoreCase("null"))) {
                 club.setText(str);
@@ -429,6 +430,8 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
         SharedPrefUtils.setCurrentRoundId(getApplicationContext(), mRoundId);
         SharedPrefUtils.setCourseId(getApplicationContext(), mCourseId);
+
+        Timber.d("mCourseId: " + mCourseId);
 
         Intent intent = new Intent(getApplicationContext(), RoundActivity.class);
         intent.putExtra(EXTRA_ROUND_ID, mRoundId);

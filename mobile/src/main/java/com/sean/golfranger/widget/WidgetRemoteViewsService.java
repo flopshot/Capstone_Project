@@ -54,7 +54,7 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                     Integer meanScore = data.getInt(Contract.WidgetView.AVGSCORE_POS);
                     Long minScore = data.getLong(Contract.WidgetView.LOWSCORE_POS);
                     String formattedMinScore = String.valueOf(minScore); //(minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
-                    Timber.d("Name: " + name + " GamesPlayed: " + gamesPlayed + " meanScore: " + meanScore + "minScore: " + formattedMinScore);
+                    Timber.d("Name: " + name + " GamesPlayed: " + gamesPlayed + " meanScore: " + meanScore + " minScore: " + formattedMinScore);
                 } else {
                     Timber.d("Data is null");
                 }
@@ -82,17 +82,16 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 }
                 RemoteViews views = new RemoteViews(getPackageName(), R.layout.widget_list_item);
 
-                String name = data.getString(Contract.WidgetView.PLAYERFIRST_POS) + "\n " +
+                String name = data.getString(Contract.WidgetView.PLAYERFIRST_POS) + "\n" +
                       data.getString(Contract.WidgetView.PLAYERLAST_POS);
-                Long gamesPlayed = data.getLong(Contract.WidgetView.GAMECNT_POS);
-                Integer meanScore = data.getInt(Contract.WidgetView.AVGSCORE_POS);
-                Long minScore = data.getLong(Contract.WidgetView.LOWSCORE_POS);
-                String formattedMinScore = String.valueOf(minScore); //(minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
+                String gamesPlayed = data.getString(Contract.WidgetView.GAMECNT_POS);
+                String meanScore =data.getString(Contract.WidgetView.AVGSCORE_POS);
+                String minScore = data.getString(Contract.WidgetView.LOWSCORE_POS);//(minScore == 0) ? getString(R.string.widgetValNA) : String.valueOf(minScore);
 
                 views.setTextViewText(R.id.widgetPlayerName, name);
-                views.setTextViewText(R.id.widgetGames, String.valueOf(gamesPlayed));
-                views.setTextViewText(R.id.widgetAvgScore, String.valueOf(Math.round(meanScore)));
-                views.setTextViewText(R.id.widgetLowScore, formattedMinScore);
+                views.setTextViewText(R.id.widgetGames, gamesPlayed);
+                views.setTextViewText(R.id.widgetAvgScore, meanScore);
+                views.setTextViewText(R.id.widgetLowScore, minScore);
 
                 return views;
             }

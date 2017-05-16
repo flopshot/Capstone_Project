@@ -329,14 +329,14 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
                             id = SharedPrefUtils.getCourseId(getActivity()) +
                                   String.format(Locale.getDefault(), "%02d", holeNum);
                         }
-                        Timber.d("HoleNumber: " + holeNum);
                         ContentResolver resolver = getActivity().getContentResolver();
-                        resolver.update(
+                        int u = resolver.update(
                               uri,
                               values,
                               idColumn + "=?",
                               new String[] {id}
                         );
+                        Timber.d("Id: " + String.valueOf(id) + " Id Col: " + idColumn + " Rows Updated: " + String.valueOf(u));
                         values.clear();
                     }
                 }

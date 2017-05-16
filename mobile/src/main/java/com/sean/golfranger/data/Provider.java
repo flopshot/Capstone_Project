@@ -369,7 +369,8 @@ public class Provider extends ContentProvider {
                 values.put(Contract.Courses.DATE_UPDATED, getCurTimeStamp());
                 rowsUpdated = mDb.update(Contract.Courses.TABLE_NAME,
                       values, whereClause, whereArgs);
-                if (values.getAsInteger(Contract.Courses.COURSE_ENABLED) != 0) {
+                if (values.getAsInteger(Contract.Courses.COURSE_ENABLED) == null ||
+                    values.getAsInteger(Contract.Courses.COURSE_ENABLED) != 0 ) {
                     int holeCount = values.getAsInteger(Contract.Courses.HOLE_CNT);
                     bulkInsertCourseHoles(whereArgs[0], holeCount);
                 }
