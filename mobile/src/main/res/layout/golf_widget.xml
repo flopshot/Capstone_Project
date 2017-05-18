@@ -27,36 +27,27 @@
         android:background="?android:attr/colorBackground"
         android:text="@string/empty_widget_list"/>
 
-    <LinearLayout
+    <FrameLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:gravity="center"
         style="@style/WidgetBar"
         android:layout_height="@dimen/widgetTitleBarMargin">
 
         <ImageView
-            android:layout_width="@dimen/widgetImageWidth"
+            android:layout_width="wrap_content"
             android:contentDescription="@string/widgetTitleContentDescription"
             android:layout_height="match_parent"
-            android:paddingStart="17dp"
-            android:paddingEnd="17dp"
-            android:src="@drawable/icon_small"/>
+            android:layout_gravity="center"
+            android:src="@drawable/banner"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/widget"
             android:layout_width="wrap_content"
-            android:textSize="16sp"
-            android:paddingStart="@dimen/widgetPadding"
-            android:paddingEnd="@dimen/widgetPadding"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textStyle="bold"
+            android:layout_gravity="end"
             android:contentDescription="@string/widgetTitleContentDescription"
-            android:drawableEnd="@drawable/ic_sync_2"
-            android:drawablePadding="17dp"
-            style="@style/WidgetBar"
-            android:text="@string/app_name"/>
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_sync_2"/>
 
-    </LinearLayout>
+    </FrameLayout>
 
 </FrameLayout>

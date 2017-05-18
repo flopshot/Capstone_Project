@@ -23,7 +23,7 @@
     <style name="WidgetBar">
         <item name="android:textSize">21sp</item>
         <item name="android:textColor">@color/lt_gray</item>
-        <item name="android:background">@color/gray_800</item>
+        <item name="android:background">@color/gray_600</item>
     </style>
 
 </resources>
