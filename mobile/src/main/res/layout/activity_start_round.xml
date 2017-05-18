@@ -38,7 +38,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/logo3"
+                android:src="@drawable/banner"
                 android:contentDescription="@string/logoCD"
                 android:layout_gravity="center_horizontal"/>
 
