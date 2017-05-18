@@ -29,7 +29,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="scorecardRecyclerViewMarginTop">10dp</dimen>
 
     <!--WIDGET DIMS-->
-    <dimen name="widgetTitleBarMargin">85dp</dimen>
+    <dimen name="widgetTitleBarMargin">20dp</dimen>
     <dimen name="widgetImageWidth">50dp</dimen>
     <dimen name="widgetPadding">4dp</dimen>
 

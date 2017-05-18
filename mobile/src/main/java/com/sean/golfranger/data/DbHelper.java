@@ -40,7 +40,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Courses._ID + " INTEGER PRIMARY KEY," +
               Contract.Courses.CLUB_NAME + " TEXT NOT NULL," +
               Contract.Courses.COURSE_NAME + " TEXT, " +
-              Contract.Courses.COURSE_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Courses.COURSE_ENABLED +" IN (0,1))," +
+              Contract.Courses.COURSE_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Courses.COURSE_ENABLED +" IN (0,1)), " +
               Contract.Courses.DATE_CREATED + " INTEGER NOT NULL, " +
               Contract.Courses.DATE_UPDATED + " INTEGER NOT NULL, " +
               Contract.Courses.HOLE_CNT + " INTEGER " +
@@ -52,7 +52,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.Players._ID + " INTEGER PRIMARY KEY," +
               Contract.Players.FIRST_NAME + " TEXT NOT NULL," +
               Contract.Players.LAST_NAME + " TEXT NOT NULL," +
-              Contract.Players.PLAYER_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Players.PLAYER_ENABLED +" IN (0,1))," +
+              Contract.Players.PLAYER_ENABLED + " BOOLEAN DEFAULT 1 CHECK(" + Contract.Players.PLAYER_ENABLED +" IN (0,1)), " +
               Contract.Players.DATE_CREATED + " INTEGER NOT NULL, " +
               Contract.Players.DATE_UPDATED + " INTEGER NOT NULL, " +
               Contract.Players.HANDICAP + " INTEGER" +
@@ -314,7 +314,7 @@ class DbHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_WIDGET_VIEW = "CREATE VIEW " +
               Contract.WidgetView.TABLE_NAME + " AS SELECT " +
-              "p._id AS playerId" +
+              " p._id AS playerId " +
               ",p.firstName" +
               ",p.lastName" +
               ",COUNT(DISTINCT r._id) AS gameCount" +
@@ -326,14 +326,14 @@ class DbHelper extends SQLiteOpenHelper {
               "END AS avgScore" +
               ",MIN(roundScore) AS lowScore " +
               "FROM players AS p " +
-              "INNER JOIN roundPlayers AS rp " +
+              "LEFT JOIN roundPlayers AS rp " +
               "ON rp.playerId = p._id " +
-              "INNER JOIN rounds AS r " +
+              "LEFT JOIN rounds AS r " +
               "ON r._id = rp.roundId " +
               "AND r.roundEnabled = 1 " +
               "LEFT JOIN courseHoles AS ch " +
               "ON ch.courseId = r.courseId " +
-              "INNER JOIN roundPlayerHoles AS rph " +
+              "LEFT JOIN roundPlayerHoles AS rph " +
               "ON rph.roundPlayerId = rp._id " +
               "AND rph.holeNumber = ch.holeNumber " +
               "LEFT JOIN (" +

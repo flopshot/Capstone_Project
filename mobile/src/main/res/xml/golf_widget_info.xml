@@ -2,7 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     android:initialKeyguardLayout="@layout/golf_widget"
                     android:initialLayout="@layout/golf_widget"
-                    android:minHeight="110dp"
+                    android:minHeight="40dp"
                     android:minWidth="180dp"
                     android:updatePeriodMillis="0"
                     android:widgetCategory="home_screen">
