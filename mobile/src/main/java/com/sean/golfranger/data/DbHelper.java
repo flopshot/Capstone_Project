@@ -323,7 +323,7 @@ class DbHelper extends SQLiteOpenHelper {
               "         THEN '+'||CAST(ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) AS INTEGER) " +
               "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) = 0 THEN 'E'" +
               "    ELSE ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) " +
-              "END AS avgScore" +
+              "END AS avgScore " +
               ",MIN(roundScore) AS lowScore " +
               "FROM players AS p " +
               "LEFT JOIN roundPlayers AS rp " +
