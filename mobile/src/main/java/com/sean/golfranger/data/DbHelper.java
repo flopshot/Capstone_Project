@@ -319,10 +319,10 @@ class DbHelper extends SQLiteOpenHelper {
               ",p.lastName" +
               ",COUNT(DISTINCT r._id) AS gameCount" +
               ",CASE " +
-              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) > 0 " +
-              "         THEN '+'||CAST(ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) AS INTEGER) " +
-              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) = 0 THEN 'E'" +
-              "    ELSE ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN 0 ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN 0 ELSE ch.holePar END),0) " +
+              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN NULL ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN NULL ELSE ch.holePar END),0) > 0 " +
+              "         THEN '+'||CAST(ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN NULL ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN NULL ELSE ch.holePar END),0) AS INTEGER) " +
+              "    WHEN ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN NULL ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN NULL ELSE ch.holePar END),0) = 0 THEN 'E'" +
+              "    ELSE ROUND(AVG(CASE WHEN ch.holePar IS NULL THEN NULL ELSE rph.score END) - AVG(CASE WHEN rph.score IS NULL THEN NULL ELSE ch.holePar END),0) " +
               "END AS avgScore " +
               ",MIN(roundScore) AS lowScore " +
               "FROM players AS p " +
