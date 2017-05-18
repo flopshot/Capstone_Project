@@ -350,7 +350,7 @@ class DbHelper extends SQLiteOpenHelper {
               "    LEFT JOIN roundPlayerHoles AS rph ON rp._id = rph.roundPlayerId AND ch.holeNumber = rph.holeNumber " +
               "    GROUP BY rp.playerId, rp.roundId" +
               ") AS rs ON p._id = rs.pid " +
-
+              "WHERE p.playerEnabled = 1 " +
               "GROUP BY p._id;";
 
         sqLiteDatabase.execSQL(SQL_CREATE_COURSES_TABLE);
