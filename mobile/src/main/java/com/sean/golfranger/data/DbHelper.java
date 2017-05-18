@@ -284,7 +284,8 @@ class DbHelper extends SQLiteOpenHelper {
               ",substr(p1.firstName,1,1) || substr(p1.lastName,1,1) AS p1Initials" +
               ",substr(p2.firstName,1,1) || substr(p2.lastName,1,1) AS p2Initials" +
               ",substr(p3.firstName,1,1) || substr(p3.lastName,1,1) AS p3Initials" +
-              ",substr(p4.firstName,1,1) || substr(p4.lastName,1,1) AS p4Initials " +
+              ",substr(p4.firstName,1,1) || substr(p4.lastName,1,1) AS p4Initials" +
+              ",hc.holeCnt " +
 
               "FROM rounds AS r " +
               "LEFT JOIN CourseHoles AS ch " +
@@ -310,7 +311,11 @@ class DbHelper extends SQLiteOpenHelper {
               "AND ch.holeNumber = rph3.holeNumber " +
               "LEFT JOIN roundPlayerHoles AS rph4 " +
               "ON rph4.roundPlayerId = rp4._id " +
-              "AND ch.holeNumber = rph4.holeNumber;";
+              "AND ch.holeNumber = rph4.holeNumber " +
+              "LEFT JOIN ( " +
+              "    SELECT courseId, COUNT(DISTINCT holeNumber) AS holeCnt" +
+              "    FROM courseHoles GROUP BY courseId" +
+              ") AS hc ON hc.courseId = r.courseId;";
 
         final String SQL_CREATE_WIDGET_VIEW = "CREATE VIEW " +
               Contract.WidgetView.TABLE_NAME + " AS SELECT " +

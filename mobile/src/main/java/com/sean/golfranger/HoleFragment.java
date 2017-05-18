@@ -8,7 +8,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -182,7 +184,7 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
         p3Initials = (TextView) rootView.findViewById(R.id.p3Name);
         p4Initials = (TextView) rootView.findViewById(R.id.p4Name);
         holeButton.setText(holeNumberViewText);
-        holeButton.setOnClickListener(mButtonClickListener);
+
 
         editTexts = new EditText[EDIT_TEXT_IDS.length];
         checkBoxes = new CheckBox[CHECKBOX_IDS.length];
@@ -261,47 +263,14 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
             if (initials != null) {
                 p4Initials.setText(initials);
             }
+
+            holeButton.setOnClickListener(
+                  new MyOnClickListener(cursor.getInt(Contract.HoleView.HOLECNT_POS)));
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-    }
-
-    private OnClickListener mButtonClickListener = new OnClickListener() {
-        public void onClick(View v) {
-            // custom dialog
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.radio_button_holes);
-            RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group_hole);
-
-            dialog.show();
-            DialogUtils.doKeepDialog(dialog);
-            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    int childCount = group.getChildCount();
-                    for (int x = 0; x < childCount; x++) {
-                        RadioButton btn = (RadioButton) group.getChildAt(x);
-                        if (btn.getId() == checkedId) {
-                            String rawHoleNumber = btn.getText().toString();
-                            String holeNum = rawHoleNumber.substring(rawHoleNumber.length()-2).trim();
-                            Timber.d("selected Hole-> " + holeNum);
-                            Bundle loaderBundle = new Bundle();
-                            loaderBundle.putString(HOLE_NUMBER_EXTRA, holeNum);
-                            String holeNumViewText = (holeNum + getString(R.string.dropDownIcon)).trim();
-                            holeButton.setText(holeNumViewText);
-                            sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
-                            setCheckBoxAndEditTextListeners(holeNum);
-                        }
-                    }
-                    dialog.dismiss();
-                }
-            });
-        }
-    };
+    public void onLoaderReset(Loader<Cursor> loader) {}
 
     private void setCheckBoxAndEditTextListeners(final String holeNumber) {
         final Integer holeNum = Integer.valueOf(holeNumber);
@@ -379,6 +348,64 @@ public class HoleFragment extends Fragment implements LoaderManager.LoaderCallba
 //                          new String[] {SharedPrefUtils.getCurrentRoundId(getActivity()), holeNumber}
 //                    );
 //                }
+            });
+        }
+    }
+
+    private class MyOnClickListener implements OnClickListener {
+
+        int mHoleCnt;
+        MyOnClickListener(int holeCnt) {
+            this.mHoleCnt = holeCnt;
+        }
+
+        @Override
+        public void onClick(View v) {
+            // custom dialog
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.radio_button_holes);
+            RadioGroup rg = (RadioGroup) dialog.findViewById(R.id.radio_group_hole);
+
+            for(int i=1;i<mHoleCnt+1;i++){
+                RadioButton radioButton = new RadioButton(getActivity().getApplicationContext());
+                radioButton.setText(getString(R.string.radioButtonHoleLabel) + " " + String.valueOf(i));
+                radioButton.setButtonTintList(new ColorStateList(
+                      new int[][]{ new int[]{-android.R.attr.state_enabled}, //disabled
+                            new int[]{android.R.attr.state_enabled} //enabled
+                      },
+                      new int[] {Color.BLUE ,Color.BLACK
+                      }
+                ));
+                radioButton.setTextColor(Color.BLACK);
+                RadioGroup.LayoutParams rprms= new RadioGroup.LayoutParams(
+                      ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                rg.addView(radioButton, rprms);
+            }
+
+            dialog.show();
+            DialogUtils.doKeepDialog(dialog);
+            rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int childCount = group.getChildCount();
+                    for (int x = 0; x < childCount; x++) {
+                        RadioButton btn = (RadioButton) group.getChildAt(x);
+                        if (btn.getId() == checkedId) {
+                            String rawHoleNumber = btn.getText().toString();
+                            String holeNum = rawHoleNumber.substring(rawHoleNumber.length()-2).trim();
+                            Timber.d("selected Hole-> " + holeNum);
+                            Bundle loaderBundle = new Bundle();
+                            loaderBundle.putString(HOLE_NUMBER_EXTRA, holeNum);
+                            String holeNumViewText = (holeNum + getString(R.string.dropDownIcon)).trim();
+                            holeButton.setText(holeNumViewText);
+                            sLoaderManager.restartLoader(HOLE_LOADER, loaderBundle, sLoaderCallback);
+                            setCheckBoxAndEditTextListeners(holeNum);
+                        }
+                    }
+                    dialog.dismiss();
+                }
             });
         }
     }

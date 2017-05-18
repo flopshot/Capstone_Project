@@ -122,6 +122,7 @@
     <string name="hole16Label">Hole 16</string>
     <string name="hole17Label">Hole 17</string>
     <string name="hole18Label">Hole 18</string>
+    <string name="radioButtonHoleLabel">Hole</string>
     <string name="holeSelectCD">Select the hole from this group</string>
 
     <!--LIST CONTENT DESCRIPTION-->
@@ -168,4 +169,5 @@
     <string name="matchDeleteDialogTitle">Delete Round?</string>
     <string name="widgetValNA">N/A</string>
     <string name="CourseActivityDialogHoleCnt">Number of Holes</string>
+    <string name="radioButtonHoleId">radioButtonHole</string>
 </resources>

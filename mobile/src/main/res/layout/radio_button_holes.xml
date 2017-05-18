@@ -16,95 +16,95 @@
         android:contentDescription="@string/holeSelectCD"
         android:orientation="vertical">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole1"
-            android:text="@string/hole1Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole2"
-            android:text="@string/hole2Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole3"
-            android:text="@string/hole3Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole4"
-            android:text="@string/hole4Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole5"
-            android:text="@string/hole5Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole6"
-            android:text="@string/hole6Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole7"
-            android:text="@string/hole7Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole8"
-            android:text="@string/hole8Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole9"
-            android:text="@string/hole9Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole10"
-            android:text="@string/hole10Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole11"
-            android:text="@string/hole11Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole12"
-            android:text="@string/hole12Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole13"
-            android:text="@string/hole13Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole14"
-            android:text="@string/hole14Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole15"
-            android:text="@string/hole15Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole16"
-            android:text="@string/hole16Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole17"
-            android:text="@string/hole17Label" />
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hole18"
-            android:text="@string/hole18Label" />
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole1"-->
+            <!--android:text="@string/hole1Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole2"-->
+            <!--android:text="@string/hole2Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole3"-->
+            <!--android:text="@string/hole3Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole4"-->
+            <!--android:text="@string/hole4Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole5"-->
+            <!--android:text="@string/hole5Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole6"-->
+            <!--android:text="@string/hole6Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole7"-->
+            <!--android:text="@string/hole7Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole8"-->
+            <!--android:text="@string/hole8Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole9"-->
+            <!--android:text="@string/hole9Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole10"-->
+            <!--android:text="@string/hole10Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole11"-->
+            <!--android:text="@string/hole11Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole12"-->
+            <!--android:text="@string/hole12Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole13"-->
+            <!--android:text="@string/hole13Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole14"-->
+            <!--android:text="@string/hole14Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole15"-->
+            <!--android:text="@string/hole15Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole16"-->
+            <!--android:text="@string/hole16Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole17"-->
+            <!--android:text="@string/hole17Label" />-->
+        <!--<RadioButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/hole18"-->
+            <!--android:text="@string/hole18Label" />-->
     </RadioGroup>
 </ScrollView>

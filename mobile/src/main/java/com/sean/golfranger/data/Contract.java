@@ -682,6 +682,7 @@ public class Contract {
         public static final int P2INITIALS_POS = 29;
         public static final int P3INITIALS_POS = 30;
         public static final int P4INITIALS_POS = 31;
+        public static final int HOLECNT_POS = 32;
 
         public static Uri buildDirUri() {
             return BASE_URI.buildUpon()
