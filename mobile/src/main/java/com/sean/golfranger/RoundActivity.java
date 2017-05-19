@@ -89,7 +89,7 @@ public class RoundActivity extends FragmentActivity
     View mMarkerStats;
     MapFragment mMapFragment;
     Fragment mScorecardFragment, mHoleFragment;
-    TextView yardageView, windView, elevationView;
+    TextView yardageView, windView, elevationView, tutorialView;
     String elevationPrefix, yardagePrefix, windPrefix, elevationDefault, yardageDefault, windDefault;
     ImageView windArrow;
 
@@ -112,6 +112,7 @@ public class RoundActivity extends FragmentActivity
         elevationView = (TextView) findViewById(R.id.elevationView);
         yardageView = (TextView) findViewById(R.id.yardageView);
         windView = (TextView) findViewById(R.id.windView);
+        tutorialView = (TextView) findViewById(R.id.mapTutorial);
         yardagePrefix = getString(R.string.yardage_prefix);
         windPrefix = getString(R.string.wind_prefix);
         elevationPrefix = getString(R.string.elevation_prefix);
@@ -155,6 +156,7 @@ public class RoundActivity extends FragmentActivity
         if (mIsTablet) {
             // Set marker stats view to visible if in 8" tablet device
             mMarkerStats.setVisibility(View.VISIBLE);
+            tutorialView.setVisibility(View.VISIBLE);
         }
         mMapFragment.getMapAsync(this);
     }
@@ -173,7 +175,7 @@ public class RoundActivity extends FragmentActivity
                       .position(latLng));
                 distanceMarker.setTag(hash);
 
-                Double[] markerLatLng = new Double[] {latLng.latitude, latLng.longitude};
+                Double[] markerLatLng = new Double[]{latLng.latitude, latLng.longitude};
                 GolfMarker defaultMarkerInfo = new GolfMarker(markerLatLng);
                 defaultMarkerInfo.setElevationDelta(DEFAULT_ELEVATION);
                 defaultMarkerInfo.setElevation(DEFAULT_ELEVATION);
@@ -208,6 +210,14 @@ public class RoundActivity extends FragmentActivity
                 currentMarkerHash = null;
             }
         });
+
+        if (Build.VERSION.SDK_INT >= 23 &&
+              ContextCompat.checkSelfPermission(
+                    getApplicationContext(),
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+              ) == PackageManager.PERMISSION_GRANTED) {
+            gMap.setMyLocationEnabled(true);
+        }
     }
 
     @Override
@@ -225,7 +235,6 @@ public class RoundActivity extends FragmentActivity
         outState.putString(CURRENT_MARKER_KEY, currentMarkerHash);
         outState.putBoolean(MAP_FIRST_CENTERED_KEY, mapFirstCentered);
         outState.putSerializable(MAP_MARKER_INFO_KEY, golfMarkersInfo);
-
     }
 
     @Override
@@ -245,7 +254,7 @@ public class RoundActivity extends FragmentActivity
     @Override
     protected void onResume() {
         PermissionUtils.checkLocationPermission(getApplicationContext());
-        if (!NetworkUtils.isNetworkAvailable(getApplicationContext()) && !mapFirstCentered) {
+        if (!mapFirstCentered && !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             //On first resume, if connection is poor, notify user once and clear wind data
             SharedPrefUtils.setCurrentWindSpeed(getApplicationContext(), null);
             showBadConnectionDialog();
@@ -260,7 +269,7 @@ public class RoundActivity extends FragmentActivity
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             mLocationEnabled = false;
             SharedPrefUtils.setUserLatLon(getApplicationContext(), 0., 0.);
-            showLocationOffDialog();
+
             Timber.d("Location DISABLED");
         } else {
             Timber.d("Location ENABLED");
@@ -324,7 +333,8 @@ public class RoundActivity extends FragmentActivity
                       .hide(mHoleFragment)
                       .hide(mMapFragment)
                       .commit();
-                mMarkerStats.setVisibility(View.INVISIBLE);
+                mMarkerStats.setVisibility(View.GONE);
+                tutorialView.setVisibility(View.GONE);
                 applyPressedState(mScorecardViewButton, true);
                 applyPressedState(mMapViewButton, false);
                 applyPressedState(mHoleViewButton, false);
@@ -335,40 +345,27 @@ public class RoundActivity extends FragmentActivity
                       .hide(mScorecardFragment)
                       .hide(mMapFragment)
                       .commit();
-                mMarkerStats.setVisibility(View.INVISIBLE);
+                mMarkerStats.setVisibility(View.GONE);
+                tutorialView.setVisibility(View.GONE);
                 applyPressedState(mScorecardViewButton, false);
                 applyPressedState(mMapViewButton, false);
                 applyPressedState(mHoleViewButton, true);
                 break;
             case MAP_STATE:
+                if (mLocationEnabled) {
+                    fm.beginTransaction().show(mMapFragment).commit();
+                    mMarkerStats.setVisibility(View.VISIBLE);
+                    tutorialView.setVisibility(View.VISIBLE);
+                }
                 fm.beginTransaction()
-                      .show(mMapFragment)
                       .hide(mHoleFragment)
                       .hide(mScorecardFragment)
                       .commit();
-                mMarkerStats.setVisibility(View.VISIBLE);
                 applyPressedState(mScorecardViewButton, false);
                 applyPressedState(mMapViewButton, true);
                 applyPressedState(mHoleViewButton, false);
                 break;
         }
-    }
-
-    public void onTutorialClick(View view) {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RoundActivity.this);
-        alertDialog.setTitle(getString(R.string.tutorialButtonText));
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final TextView tutorialView = new TextView(this);
-        tutorialView.setText(R.string.mapTutorial);
-        tutorialView.setPaddingRelative(10,0,0,5);
-        tutorialView.setTextSize(20);
-        layout.addView(tutorialView);
-        alertDialog.setView(layout);
-        Dialog d = alertDialog.show();
-        DialogUtils.doKeepDialog(d);
     }
 
     @Override
@@ -377,20 +374,14 @@ public class RoundActivity extends FragmentActivity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(2000); //Update user Location Every 2 seconds
 
-        if ( Build.VERSION.SDK_INT >= 23 &&
+        if (Build.VERSION.SDK_INT >= 23 &&
               ContextCompat.checkSelfPermission(
                     getApplicationContext(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION
-              ) != PackageManager.PERMISSION_GRANTED
-           )
-        {
-            Timber.i("Runtime Location Permission Disabled");
-        } else {
-            Timber.i("Runtime Location Permission Enabled");
+              ) == PackageManager.PERMISSION_GRANTED) {
             LocationServices
                   .FusedLocationApi
                   .requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            gMap.setMyLocationEnabled(true);
         }
     }
 
@@ -544,7 +535,7 @@ public class RoundActivity extends FragmentActivity
         }
         String curWindSpeed = SharedPrefUtils.getCurrentWindSpeed(getApplicationContext());
         Float curWindDir = SharedPrefUtils.getCurrentWindDirection(getApplicationContext());
-        if (curWindSpeed != null) {
+        if (curWindSpeed != null & mLocationEnabled) {
             windViewString = windPrefix + " " + viewFormatter(Double.valueOf(curWindSpeed));
             windView.setText(windViewString);
             if (curWindDir >= 0) {
@@ -555,7 +546,7 @@ public class RoundActivity extends FragmentActivity
             }
         } else {
             windView.setText(windPrefix);
-            windArrow.setVisibility(View.INVISIBLE);
+            windArrow.setVisibility(View.GONE);
         }
     }
 
@@ -578,39 +569,30 @@ public class RoundActivity extends FragmentActivity
         }
     }
 
-    private void showLocationOffDialog() {
+    public void onTutorialClick(View view) {
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(RoundActivity.this);
-        alertDialog.setTitle(R.string.gpsOffDialogTitle);
+        alertDialog.setTitle(getString(R.string.tutorialButtonText));
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         final TextView tutorialView = new TextView(this);
-        tutorialView.setText(R.string.gpsOffMsg);
-        tutorialView.setPaddingRelative(40,0,0,5);
+        tutorialView.setText(R.string.mapTutorial);
+        tutorialView.setPaddingRelative(40,0,0,20);
         tutorialView.setTextSize(20);
         layout.addView(tutorialView);
         alertDialog.setView(layout);
-        alertDialog.setPositiveButton(R.string.gpsEnableButtonText,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
-                          |Intent.FLAG_ACTIVITY_NEW_TASK
-                          |Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                    startActivity(intent);
-              }
-        });
-
-        alertDialog.setNeutralButton(getString(R.string.gpsOffDialogDismiss),
-              new DialogInterface.OnClickListener() {
-                  public void onClick(DialogInterface dialog, int which) {
-                      dialog.cancel();
-                  }});
-
         Dialog d = alertDialog.show();
         DialogUtils.doKeepDialog(d);
+    }
+
+    public void onLocationEnable(View v) {
+        setFragmentViewState(SCORECARD_STATE);
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
+              |Intent.FLAG_ACTIVITY_NEW_TASK
+              |Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startActivity(intent);
     }
 
     private void showBadConnectionDialog() {
@@ -622,7 +604,7 @@ public class RoundActivity extends FragmentActivity
 
         final TextView tutorialView = new TextView(this);
         tutorialView.setText(R.string.badConnectionDialogMsg);
-        tutorialView.setPaddingRelative(40,0,0,5);
+        tutorialView.setPaddingRelative(40, 0, 10, 20);
         tutorialView.setTextSize(20);
         layout.addView(tutorialView);
         alertDialog.setView(layout);
@@ -631,7 +613,8 @@ public class RoundActivity extends FragmentActivity
               new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
                       dialog.cancel();
-                  }});
+                  }
+              });
 
         Dialog d = alertDialog.show();
         DialogUtils.doKeepDialog(d);

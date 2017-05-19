@@ -48,6 +48,18 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
 
+        <TextView
+            android:id="@+id/locationDisabledText"
+            android:contentDescription="@string/turn_on_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/maroon"
+            android:textSize="22sp"
+            android:clickable="true"
+            android:onClick="onLocationEnable"
+            android:text="@string/location_gps_is_disabled"/>
+
         <fragment
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -77,7 +89,7 @@
                       android:layout_gravity="center_horizontal"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:visibility="invisible">
+                      android:visibility="gone">
 
             <TextView
                 android:id="@+id/yardageView"
@@ -105,6 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/arrowCD"
+                    android:visibility="gone"
                     android:src="@drawable/arrow_up_float"/>
 
             </LinearLayout>
@@ -120,6 +133,8 @@
                 tools:text="Target Elevation: 5ft"/>
 
             <TextView
+                android:id="@+id/mapTutorial"
+                android:contentDescription="@string/show_map_tutorial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -127,8 +142,10 @@
                 android:textColor="@color/lt_gray"
                 android:textSize="14sp"
                 android:text="@string/tutorialButtonText"
+                android:visibility="gone"
                 android:clickable="true"
                 android:onClick="onTutorialClick"/>
+
         </LinearLayout>
 
     </FrameLayout>

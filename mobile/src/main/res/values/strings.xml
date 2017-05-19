@@ -170,4 +170,7 @@
     <string name="widgetValNA">N/A</string>
     <string name="CourseActivityDialogHoleCnt">Number of Holes</string>
     <string name="radioButtonHoleId">radioButtonHole</string>
+    <string name="location_gps_is_disabled">Click Here To Turn \n On Location/GPS</string>
+    <string name="show_map_tutorial">Show Map Tutorial</string>
+    <string name="turn_on_location">turn on location</string>
 </resources>
