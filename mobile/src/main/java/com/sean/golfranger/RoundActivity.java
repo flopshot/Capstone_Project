@@ -89,7 +89,7 @@ public class RoundActivity extends FragmentActivity
     View mMarkerStats;
     MapFragment mMapFragment;
     Fragment mScorecardFragment, mHoleFragment;
-    TextView yardageView, windView, elevationView, tutorialView;
+    TextView yardageView, windView, elevationView, tutorialView, locationEnableText;
     String elevationPrefix, yardagePrefix, windPrefix, elevationDefault, yardageDefault, windDefault;
     ImageView windArrow;
 
@@ -113,6 +113,7 @@ public class RoundActivity extends FragmentActivity
         yardageView = (TextView) findViewById(R.id.yardageView);
         windView = (TextView) findViewById(R.id.windView);
         tutorialView = (TextView) findViewById(R.id.mapTutorial);
+        locationEnableText = (TextView) findViewById(R.id.locationDisabledText);
         yardagePrefix = getString(R.string.yardage_prefix);
         windPrefix = getString(R.string.wind_prefix);
         elevationPrefix = getString(R.string.elevation_prefix);
@@ -151,12 +152,6 @@ public class RoundActivity extends FragmentActivity
         if (savedInstanceState == null & !mIsTablet) {
             mFragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
             setFragmentViewState(SCORECARD_STATE);
-        }
-
-        if (mIsTablet) {
-            // Set marker stats view to visible if in 8" tablet device
-            mMarkerStats.setVisibility(View.VISIBLE);
-            tutorialView.setVisibility(View.VISIBLE);
         }
         mMapFragment.getMapAsync(this);
     }
@@ -269,10 +264,24 @@ public class RoundActivity extends FragmentActivity
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             mLocationEnabled = false;
             SharedPrefUtils.setUserLatLon(getApplicationContext(), 0., 0.);
-
+            if (mIsTablet) {
+                // Set marker stats view to invisible if in 8" tablet device if location off
+                locationEnableText.setVisibility(View.VISIBLE);
+                mMarkerStats.setVisibility(View.GONE);
+                tutorialView.setVisibility(View.GONE);
+                getFragmentManager().beginTransaction().hide(mMapFragment).commit();
+            }
             Timber.d("Location DISABLED");
         } else {
             Timber.d("Location ENABLED");
+            if (mIsTablet) {
+                // Set marker stats view to visible if in 8" tablet device
+                mMarkerStats.setVisibility(View.VISIBLE);
+                tutorialView.setVisibility(View.VISIBLE);
+                getFragmentManager().beginTransaction().show(mMapFragment).commit();
+                locationEnableText.setVisibility(View.GONE);
+            }
+
             mLocationEnabled = true;
             IntentFilter windFilter = new IntentFilter();
             windFilter.addAction(ACTION_WIND_UPDATED);
@@ -356,6 +365,8 @@ public class RoundActivity extends FragmentActivity
                     fm.beginTransaction().show(mMapFragment).commit();
                     mMarkerStats.setVisibility(View.VISIBLE);
                     tutorialView.setVisibility(View.VISIBLE);
+                } else {
+                    locationEnableText.setVisibility(View.VISIBLE);
                 }
                 fm.beginTransaction()
                       .hide(mHoleFragment)
@@ -587,7 +598,9 @@ public class RoundActivity extends FragmentActivity
     }
 
     public void onLocationEnable(View v) {
-        setFragmentViewState(SCORECARD_STATE);
+        if (!mIsTablet) {
+            setFragmentViewState(SCORECARD_STATE);
+        }
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
               |Intent.FLAG_ACTIVITY_NEW_TASK
@@ -617,6 +630,5 @@ public class RoundActivity extends FragmentActivity
               });
 
         Dialog d = alertDialog.show();
-        DialogUtils.doKeepDialog(d);
     }
 }
