@@ -295,7 +295,6 @@ public class RoundActivity extends FragmentActivity
             WindJobInfo.initialize(getApplicationContext());
             ElevationJobInfo.initialize(getApplicationContext());
         }
-
         super.onStart();
     }
 

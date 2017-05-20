@@ -40,11 +40,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     public void startNewRound(View v) {
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(), StartRoundActivity.class);

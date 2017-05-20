@@ -45,4 +45,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!--START ROUND ACTIVITY-->
     <dimen name="dividerMargin">50dp</dimen>
 
+    <!--HOME SCREEN-->
+    <dimen name="buttonParentMargins">0dp</dimen>
+
 </resources>

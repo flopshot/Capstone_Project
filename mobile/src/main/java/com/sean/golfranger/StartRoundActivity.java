@@ -230,9 +230,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
+    public void onLoaderReset(Loader<Cursor> loader) {}
 
     private class MyObserver extends ContentObserver {
         // Consider Refactor to new class

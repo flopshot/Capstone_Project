@@ -173,4 +173,9 @@
     <string name="location_gps_is_disabled">Click Here To Turn \n On Location/GPS</string>
     <string name="show_map_tutorial">Show Map Tutorial</string>
     <string name="turn_on_location">turn on location</string>
+    <string name="banner_logo">Banner Logo</string>
+    <string name="copyrightNotice">© Sean Najera 2017. All rights reserved.</string>
+    <string name="yahoo_weather_attribution">Yahoo Weather Attribution</string>
+    <string name="playersHomeButtonText">\u0020\u0020\u0020\u0020Players\u0020\u0020\u0020</string>
+    <string name="coursesHomeButtonText">\u0020\u0020\u0020Courses\u0020\u0020\u0020</string>
 </resources>

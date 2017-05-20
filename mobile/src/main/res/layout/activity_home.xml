@@ -1,68 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:id="@+id/main_layout">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/homeBanner"
+        android:contentDescription="@string/banner_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/appIconCD"
-        app:srcCompat="@drawable/icon"/>
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/banner_home"/>
 
-    <TextView
+    <ImageView
+        android:id="@+id/yahooLogo"
+        android:contentDescription="@string/yahoo_weather_attribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/yahoo_logo"/>
+
+    <Button
         android:id="@+id/startNewRound"
         style="@style/AppTheme.HomeButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableBottom="@drawable/ic_menu_add"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/homeBanner"
+        android:drawableTop="@drawable/ic_menu_add"
+        android:layout_marginStart="@dimen/buttonParentMargins"
         android:gravity="center"
         android:text="@string/newRound"
         android:contentDescription="@string/newRoundContentDescription"
-        android:onClick="startNewRound"
-        android:clickable="true"
-        />
+        android:onClick="startNewRound"/>
 
-    <TextView
+    <Button
         android:id="@+id/viewOldRound"
         style="@style/AppTheme.HomeButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableBottom="@drawable/ic_menu_find_holo_light"
-        android:gravity="center"
-        android:text="@string/oldRound"
+        android:layout_above="@id/homeBanner"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/buttonParentMargins"
         android:contentDescription="@string/oldRoundContentDescription"
+        android:drawableTop="@android:drawable/ic_input_get"
+        android:drawablePadding="4dp"
+        android:gravity="center"
         android:onClick="viewOldRound"
-        android:clickable="true"
-        />
+        android:text="@string/oldRound"/>
 
-    <TextView
+    <Button
         android:id="@+id/viewPlayers"
         style="@style/AppTheme.HomeButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="@dimen/buttonParentMargins"
+        android:layout_below="@id/homeBanner"
         android:clickable="true"
-        android:drawableBottom="@drawable/ic_menu_myplaces"
+        android:drawableTop="@drawable/ic_menu_myplaces"
         android:gravity="center"
         android:onClick="viewPlayers"
-        android:text="@string/players_string"
+        android:text="@string/playersHomeButtonText"
         android:contentDescription="@string/the_playersContentDescription"/>
 
-    <TextView
+    <Button
         android:id="@+id/viewCourses"
         style="@style/AppTheme.HomeButtons"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableBottom="@drawable/ic_menu_gallery"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/buttonParentMargins"
+        android:layout_below="@id/homeBanner"
+        android:drawableTop="@drawable/ic_menu_gallery"
         android:gravity="center"
-        android:text="@string/theCourses"
+        android:text="@string/coursesHomeButtonText"
         android:contentDescription="@string/theCoursesContentDescription"
-        android:onClick="viewCourses"
-        android:clickable="true"/>
-</LinearLayout>
+        android:onClick="viewCourses"/>
+
+    <TextView
+        android:id="@+id/copyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/copyrightNotice"/>
+
+</RelativeLayout>

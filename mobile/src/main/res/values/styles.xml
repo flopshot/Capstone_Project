@@ -8,9 +8,9 @@
         <item name="colorAccent">@color/maroon</item>
     </style>
 
-    <style name="AppTheme.HomeButtons">
-        <item name="android:textSize">30sp</item>
-        <item name="android:textColor">@color/maroon</item>
+    <style name="AppTheme.HomeButtons" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textSize">25sp</item>
+        <item name="android:fontFamily">times new roman</item>
         <item name="android:textStyle">bold|italic</item>
     </style>
 
