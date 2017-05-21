@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
@@ -73,6 +74,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
             }
         });
         recyclerView.setAdapter(mCourseAdapter);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -249,4 +251,30 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         Dialog d = alertDialog.show();
         DialogUtils.doKeepDialog(d);
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+          0, ItemTouchHelper.RIGHT) {
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            long courseId = mCourseAdapter.getItemId(viewHolder.getAdapterPosition());
+            String id = String.valueOf(courseId);
+            ContentResolver resolver = getContentResolver();
+            ContentValues v = new ContentValues();
+
+            Timber.d("courseId: " + id);
+            v.put(Contract.Courses.COURSE_ENABLED, "0");
+            resolver.update(Contract.Courses.buildDirUri(),
+                  v,
+                  Contract.Courses._ID + "=?",
+                  new String[]{id});
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                              RecyclerView.ViewHolder target) {
+            return false;
+        }
+    };
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 }

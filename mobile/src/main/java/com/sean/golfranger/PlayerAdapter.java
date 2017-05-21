@@ -94,6 +94,15 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         notifyDataSetChanged();
     }
 
+    @Override
+    public long getItemId(int position) {
+        if (mCursor.moveToPosition(position)) {
+            return mCursor.getLong(Contract.Players.PLAYERID_POS);
+        } else {
+            return -1;
+        }
+    }
+
     public Cursor getCursor() {
         return mCursor;
     }

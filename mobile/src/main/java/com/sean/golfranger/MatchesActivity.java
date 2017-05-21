@@ -1,5 +1,7 @@
 package com.sean.golfranger;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -13,9 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.sean.golfranger.data.Contract;
+
+import timber.log.Timber;
 
 public class MatchesActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private MatchAdapter mMatchAdapter;
@@ -44,6 +49,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         recyclerView.addItemDecoration(dividerItemDecoration);
         mMatchAdapter = new MatchAdapter(this);
         recyclerView.setAdapter(mMatchAdapter);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -93,4 +99,30 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         Intent intent = new Intent(getApplicationContext(), StartRoundActivity.class);
         startActivity(intent);
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+          0, ItemTouchHelper.RIGHT) {
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            long roundId = mMatchAdapter.getItemId(viewHolder.getAdapterPosition());
+            String id = String.valueOf(roundId);
+            ContentResolver resolver = getContentResolver();
+            ContentValues v = new ContentValues();
+
+            Timber.d("roundId: " + id);
+            v.put(Contract.Rounds.ROUND_ENABLED, "0");
+            resolver.update(Contract.Rounds.buildDirUri(),
+                  v,
+                  Contract.Rounds._ID + "=?",
+                  new String[]{id});
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                              RecyclerView.ViewHolder target) {
+            return false;
+        }
+    };
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 }

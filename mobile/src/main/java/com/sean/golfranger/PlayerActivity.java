@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -72,6 +73,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
             }
         });
         recyclerView.setAdapter(mPlayerAdapter);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 
@@ -231,4 +233,29 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         Dialog d = alertDialog.show();
         DialogUtils.doKeepDialog(d);
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(
+          0, ItemTouchHelper.RIGHT) {
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            long playerId = mPlayerAdapter.getItemId(viewHolder.getAdapterPosition());
+            String id = String.valueOf(playerId);
+            ContentResolver resolver = getContentResolver();
+            ContentValues v = new ContentValues();
+
+            Timber.d("playerId: " + id);
+            v.put(Contract.Players.PLAYER_ENABLED, "0");
+            resolver.update(Contract.Rounds.buildDirUri(),
+                  v,
+                  Contract.Players._ID + "=?",
+                  new String[]{id});
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                              RecyclerView.ViewHolder target) {
+            return false;
+        }
+    };
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 }

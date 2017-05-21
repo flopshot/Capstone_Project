@@ -113,6 +113,15 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
         notifyDataSetChanged();
     }
 
+    @Override
+    public long getItemId(int position) {
+        if (mCursor.moveToPosition(position)) {
+            return mCursor.getLong(Contract.MatchesView.ROUNDID_COL_INDEX);
+        } else {
+            return -1;
+        }
+    }
+
     public Cursor getCursor() {
         return mCursor;
     }

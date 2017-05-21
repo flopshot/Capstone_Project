@@ -63,6 +63,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
             view.setOnLongClickListener(this);
         }
 
+
+
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
@@ -95,6 +97,15 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        if (mCursor.moveToPosition(position)) {
+            return mCursor.getLong(Contract.Courses.COURSEID_POS);
+        } else {
+            return -1;
+        }
     }
 
     public Cursor getCursor() {
