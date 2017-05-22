@@ -7,17 +7,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.EditText;
@@ -34,18 +38,32 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     private ContentObserver mMyObserver;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
+    View mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        mLayout = findViewById(R.id.player_layout);
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
         getContentResolver()
               .registerContentObserver(Contract.Players.buildDirUri(), true, mMyObserver);
         sLoaderCallback = this;
         sLoaderManager.initLoader(0, null, sLoaderCallback);
+
+        // my_child_toolbar is defined in the layout file
+        Toolbar myToolbar =
+              (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false);
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_players);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,9 +84,9 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                     Timber.d("Some Activity DID call this activity");
                 }
             }
-        }, new PlayerAdapter.PlayerAdapterLongClickHandler() {
+        }, new PlayerAdapter.PlayerAdapterEditClickHandler() {
             @Override
-            public void onLongClick(Long playerId, String firstName, String lastName) {
+            public void onEditClick(Long playerId, String firstName, String lastName) {
                 showEditPlayerDialog(playerId, firstName, lastName);
             }
         });
@@ -120,7 +138,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
-    public void addPlayer(View v){
+    public void onFabClick(View v){
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(PlayerActivity.this);
         alertDialog.setTitle(getString(R.string.playerPlaceHolder));
 
@@ -239,23 +257,40 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             long playerId = mPlayerAdapter.getItemId(viewHolder.getAdapterPosition());
-            String id = String.valueOf(playerId);
+            final String id = String.valueOf(playerId);
             ContentResolver resolver = getContentResolver();
             ContentValues v = new ContentValues();
 
             Timber.d("playerId: " + id);
             v.put(Contract.Players.PLAYER_ENABLED, "0");
-            resolver.update(Contract.Rounds.buildDirUri(),
+            resolver.update(Contract.Players.buildDirUri(),
                   v,
                   Contract.Players._ID + "=?",
                   new String[]{id});
+            v.clear();
+
+            Snackbar snackbar = Snackbar.make(mLayout,
+                        R.string.playerSnackBarDelete,
+                  Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.snackbarUndo,
+                  new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          ContentValues values = new ContentValues();
+                          values.put(Contract.Players.PLAYER_ENABLED, "1");
+                          getContentResolver().update(Contract.Players.buildDirUri(),
+                                values,
+                                Contract.Players._ID + "=?",
+                                new String[]{id});
+                      }
+                  })
+                  .setActionTextColor(Color.GREEN);
+            snackbar.show();
         }
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                              RecyclerView.ViewHolder target) {
-            return false;
-        }
+                              RecyclerView.ViewHolder target) { return false; }
     };
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 }

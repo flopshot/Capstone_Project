@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
@@ -18,18 +19,18 @@ import com.sean.golfranger.data.Contract;
 class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder>{
     private Cursor mCursor;
     final private PlayerAdapterOnClickHandler mClickHandler;
-    final private PlayerAdapterLongClickHandler mLongClickHandler;
+    final private PlayerAdapterEditClickHandler mLongClickHandler;
 
     PlayerAdapter(
           PlayerAdapterOnClickHandler clickHandler,
-          PlayerAdapterLongClickHandler longClickHandler) {
+          PlayerAdapterEditClickHandler longClickHandler) {
         this.mClickHandler = clickHandler;
         this.mLongClickHandler = longClickHandler;
     }
 
     @Override
     public PlayerAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_list_item, null, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_list_item1, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new PlayerAdapterViewHolder(view);
@@ -52,31 +53,38 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
           implements View.OnClickListener, View.OnLongClickListener{
         TextView firstNameView;
         TextView lastNameView;
+        ImageButton editButton;
 
         PlayerAdapterViewHolder(View view) {
             super(view);
             this.firstNameView = (TextView) view.findViewById(R.id.firstNameLabel);
             this.lastNameView = (TextView) view.findViewById(R.id.lastNameLabel);
+            this.editButton = (ImageButton) view.findViewById(R.id.editButton);
             view.setOnClickListener(this);
+            editButton.setOnClickListener(this);
             view.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
-            mClickHandler.onClick(playerId);
+            if (v.getId() == editButton.getId()) {
+                int adapterPosition = getAdapterPosition();
+                mCursor.moveToPosition(adapterPosition);
+                long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
+                String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
+                String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
+                mLongClickHandler.onEditClick(playerId, firstName, lastName);
+            } else {
+                int adapterPosition = getAdapterPosition();
+                mCursor.moveToPosition(adapterPosition);
+                long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
+                mClickHandler.onClick(playerId);
+            }
         }
 
         @Override
         public boolean onLongClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
-            String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
-            String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
-            mLongClickHandler.onLongClick(playerId, firstName, lastName);
+
             return true;
         }
     }
@@ -85,8 +93,8 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         void onClick(Long courseId);
     }
 
-    interface PlayerAdapterLongClickHandler {
-        void onLongClick(Long courseId, String firstName, String lastName);
+    interface PlayerAdapterEditClickHandler {
+        void onEditClick(Long courseId, String firstName, String lastName);
     }
 
     void swapCursor(Cursor newCursor) {

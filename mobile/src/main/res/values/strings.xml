@@ -178,4 +178,6 @@
     <string name="yahoo_weather_attribution">Yahoo Weather Attribution</string>
     <string name="playersHomeButtonText">\u0020\u0020\u0020\u0020Players\u0020\u0020\u0020</string>
     <string name="coursesHomeButtonText">\u0020\u0020\u0020Courses\u0020\u0020\u0020</string>
+    <string name="playerSnackBarDelete">Deleted Player</string>
+    <string name="snackbarUndo">UNDO</string>
 </resources>

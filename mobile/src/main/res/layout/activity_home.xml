@@ -47,7 +47,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/buttonParentMargins"
         android:contentDescription="@string/oldRoundContentDescription"
-        android:drawableTop="@android:drawable/ic_input_get"
+        android:drawableTop="@drawable/ic_input_get"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:onClick="viewOldRound"
@@ -78,6 +78,7 @@
         android:layout_below="@id/homeBanner"
         android:drawableTop="@drawable/ic_menu_gallery"
         android:gravity="center"
+        android:paddingStart="16dp"
         android:text="@string/coursesHomeButtonText"
         android:contentDescription="@string/theCoursesContentDescription"
         android:onClick="viewCourses"/>

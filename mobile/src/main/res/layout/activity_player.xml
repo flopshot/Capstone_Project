@@ -2,7 +2,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/article_list_activity_coord_layout"
+    android:id="@+id/player_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:outlineProvider="paddedBounds"
+        android:layout_marginTop="?actionBarSize"
         android:paddingBottom="@dimen/recyclerViewPaddingBottom"
         android:paddingLeft="@dimen/list_side_margin"
         android:paddingRight="@dimen/list_side_margin"
@@ -41,8 +42,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
+                android:layout_gravity="center|end"
                 android:gravity="center"
+                android:layout_marginEnd="4dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:text="@string/playerTitle"/>
 
@@ -53,18 +55,21 @@
                 android:src="@drawable/banner"
                 android:layout_gravity="center_horizontal"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:gravity="center"
-                android:drawableStart="@drawable/ic_menu_add"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:clickable="true"
-                android:onClick="addPlayer"
-                android:contentDescription="@string/playerContentDescription"
-                android:text="@string/addPlayerButton"/>
+
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:elevation="6dp"
+        android:onClick="onFabClick"
+        android:src="@drawable/ic_add_player"
+        app:layout_anchor="@+id/recycler_view_players"
+        app:layout_anchorGravity="bottom|right|end"/>
+
 </android.support.design.widget.CoordinatorLayout>

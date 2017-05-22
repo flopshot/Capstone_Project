@@ -15,8 +15,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_margin">0dp</dimen>
 
     <!--COURSES AND PLAYERS SCREENS-->
-    <dimen name="recyclerViewPaddingTop">75dp</dimen>
-    <dimen name="recyclerViewPaddingBottom">28dp</dimen>
+    <dimen name="recyclerViewPaddingTop">6dp</dimen>
+    <dimen name="recyclerViewPaddingBottom">6dp</dimen>
 
     <!--COURSE LIST ITEM-->
     <dimen name="itemHeight">60dp</dimen>
@@ -31,7 +31,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <!--WIDGET DIMS-->
     <dimen name="widgetTitleBarMargin">20dp</dimen>
     <dimen name="widgetImageWidth">50dp</dimen>
-    <dimen name="widgetPadding">4dp</dimen>
+    <dimen name="widgetPadding">2dp</dimen>
 
     <!--HOLE RADIO DIALOG-->
     <dimen name="radioHeight">190dp</dimen>

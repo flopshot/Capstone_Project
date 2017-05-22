@@ -51,11 +51,14 @@
         <activity android:name=".RoundActivity"
                   android:windowSoftInputMode="stateUnchanged|adjustResize">
         </activity>
-        <activity android:name=".CoursesActivity">
+        <activity android:name=".CoursesActivity"
+                  android:parentActivityName="com.sean.golfranger.HomeActivity">
         </activity>
-        <activity android:name=".PlayerActivity">
+        <activity android:name=".PlayerActivity"
+                  android:parentActivityName="com.sean.golfranger.HomeActivity">
         </activity>
-        <activity android:name=".MatchesActivity">
+        <activity android:name=".MatchesActivity"
+                  android:parentActivityName="com.sean.golfranger.HomeActivity">
         </activity>
         <activity android:name=".StartRoundActivity">
         </activity>
