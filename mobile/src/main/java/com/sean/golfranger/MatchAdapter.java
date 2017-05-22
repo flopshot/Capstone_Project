@@ -1,13 +1,8 @@
 package com.sean.golfranger;
 
-import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
-import com.sean.golfranger.utils.DialogUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,7 +29,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
 
     @Override
     public MatchAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.match_list_item, null, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.match_list_item1, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new MatchAdapterViewHolder(view);
@@ -48,7 +42,7 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
     }
 
     class MatchAdapterViewHolder extends RecyclerView.ViewHolder
-          implements View.OnClickListener, View.OnLongClickListener{
+          implements View.OnClickListener{
         TextView p1First, p2First, p3First, p4First, courseName, clubName, date;
 
         MatchAdapterViewHolder(View view) {
@@ -61,7 +55,6 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
             this.clubName = (TextView) view.findViewById(R.id.clubName);
             this.date = (TextView) view.findViewById(R.id.roundDate);
             view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
         }
 
         @Override
@@ -72,12 +65,6 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
             Intent intent = new Intent(mContext, StartRoundActivity.class);
             intent.putExtra(StartRoundActivity.EXTRA_ROUND_ID, String.valueOf(roundId));
             mContext.startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            deleteRoundDialog(getAdapterPosition());
-            return true;
         }
     }
 
@@ -134,35 +121,5 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(unixtime);
         return formatter.format(calendar.getTime());
-    }
-
-    private void deleteRoundDialog(final int adapterPosition) {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-        alertDialog.setTitle(R.string.matchDeleteDialogTitle);
-
-        alertDialog.setPositiveButton(R.string.mathDeletedialogYes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mCursor.moveToPosition(adapterPosition);
-                long roundId = mCursor.getLong(Contract.MatchesView.ROUNDID_COL_INDEX);
-                ContentValues values = new ContentValues();
-                values.put(Contract.Rounds.ROUND_ENABLED, "0");
-                ContentResolver resolver = mContext.getContentResolver();
-                resolver.update(
-                      Contract.Rounds.buildDirUri(),
-                      values,
-                      Contract.Rounds._ID + "=?",
-                      new String[]{String.valueOf(roundId)});
-            }
-        });
-
-        alertDialog.setNeutralButton(R.string.matchDeleteDialogNo,
-              new DialogInterface.OnClickListener() {
-                  public void onClick(DialogInterface dialog, int which) {
-                      dialog.cancel();
-                  }});
-
-        Dialog d = alertDialog.show();
-        DialogUtils.doKeepDialog(d);
     }
 }

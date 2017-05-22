@@ -5,16 +5,20 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
@@ -27,6 +31,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
     private ContentObserver mMyObserver;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
+    View mLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,20 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
               .registerContentObserver(Contract.RoundPlayers.buildDirUri(), true, mMyObserver);
         sLoaderCallback = this;
         sLoaderManager.initLoader(0, null, sLoaderCallback);
+
+        mLayout = findViewById(R.id.matches_layout);
+
+        // my_child_toolbar is defined in the layout file
+        Toolbar myToolbar =
+        (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false);
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_matches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -95,7 +114,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         }
     }
 
-    public void startNewRound(View v) {
+    public void onFabClick(View v) {
         Intent intent = new Intent(getApplicationContext(), StartRoundActivity.class);
         startActivity(intent);
     }
@@ -105,7 +124,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             long roundId = mMatchAdapter.getItemId(viewHolder.getAdapterPosition());
-            String id = String.valueOf(roundId);
+            final String id = String.valueOf(roundId);
             ContentResolver resolver = getContentResolver();
             ContentValues v = new ContentValues();
 
@@ -115,14 +134,30 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
                   v,
                   Contract.Rounds._ID + "=?",
                   new String[]{id});
+            v.clear();
+
+            Snackbar snackbar = Snackbar.make(mLayout,
+                  R.string.snackbarRoundDeleted,
+                  Snackbar.LENGTH_LONG);
+            snackbar.setAction(R.string.snackbarUndo,
+                  new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                          ContentValues values = new ContentValues();
+                          values.put(Contract.Rounds.ROUND_ENABLED, "1");
+                          getContentResolver().update(Contract.Rounds.buildDirUri(),
+                                values,
+                                Contract.Rounds._ID + "=?",
+                                new String[]{id});
+                      }
+                  })
+                  .setActionTextColor(Color.GREEN);
+            snackbar.show();
         }
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                              RecyclerView.ViewHolder target) {
-            return false;
-        }
+                              RecyclerView.ViewHolder target) { return false; }
     };
-
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
 }

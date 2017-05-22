@@ -181,4 +181,9 @@
     <string name="playerSnackBarDelete">Deleted Player</string>
     <string name="snackbarUndo">UNDO</string>
     <string name="snackBarCourseDeleted">Course Deleted</string>
+    <string name="p1Symbol">1.</string>
+    <string name="p3Symbol">3.</string>
+    <string name="p2Symbol">2.</string>
+    <string name="p4Symbol">4.</string>
+    <string name="snackbarRoundDeleted">Round Deleted</string>
 </resources>
