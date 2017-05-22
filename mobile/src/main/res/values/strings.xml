@@ -180,4 +180,5 @@
     <string name="coursesHomeButtonText">\u0020\u0020\u0020Courses\u0020\u0020\u0020</string>
     <string name="playerSnackBarDelete">Deleted Player</string>
     <string name="snackbarUndo">UNDO</string>
+    <string name="snackBarCourseDeleted">Course Deleted</string>
 </resources>

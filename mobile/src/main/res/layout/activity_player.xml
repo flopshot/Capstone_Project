@@ -55,8 +55,6 @@
                 android:src="@drawable/banner"
                 android:layout_gravity="center_horizontal"/>
 
-
-
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
@@ -16,18 +17,18 @@ import com.sean.golfranger.data.Contract;
 class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterViewHolder> {
     private Cursor mCursor;
     final private CourseAdapterOnClickHandler mClickHandler;
-    final private CourseAdapterLongClickHandler mLongClickHandler;
+    final private CourseAdapterEditClickHandler mEditClickHandler;
 
     CourseAdapter(
           CourseAdapterOnClickHandler clickHandler,
-          CourseAdapterLongClickHandler longClickHandler) {
+          CourseAdapterEditClickHandler editClickHandler) {
         this.mClickHandler = clickHandler;
-        this.mLongClickHandler = longClickHandler;
+        this.mEditClickHandler = editClickHandler;
     }
 
     @Override
     public CourseAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_list_item, null, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_list_item1, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new CourseAdapterViewHolder(view);
@@ -51,38 +52,38 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     }
 
     class CourseAdapterViewHolder extends RecyclerView.ViewHolder
-          implements View.OnClickListener, View.OnLongClickListener{
+          implements View.OnClickListener{
         TextView clubNameView;
         TextView courseNameView;
+        ImageButton editButton;
 
         CourseAdapterViewHolder(View view) {
             super(view);
             this.clubNameView = (TextView) view.findViewById(R.id.clubNameLabel);
             this.courseNameView = (TextView) view.findViewById(R.id.courseNameLabel);
+            this.editButton = (ImageButton) view.findViewById(R.id.editButton);
             view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
+            editButton.setOnClickListener(this);
         }
 
 
 
         @Override
         public void onClick(View v) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
-            mClickHandler.onClick(courseId);
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-            int adapterPosition = getAdapterPosition();
-            mCursor.moveToPosition(adapterPosition);
-            long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
-            String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
-            String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
-            int holeCount = mCursor.getInt(Contract.Courses.HOLECNT_POS);
-            mLongClickHandler.onLongClick(courseId, courseName, clubName, holeCount);
-            return true;
+            if (v.getId() == editButton.getId()) {
+                int adapterPosition = getAdapterPosition();
+                mCursor.moveToPosition(adapterPosition);
+                long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
+                String courseName = mCursor.getString(Contract.Courses.COURSENAME_POS);
+                String clubName = mCursor.getString(Contract.Courses.CLUBNAME_POS);
+                int holeCount = mCursor.getInt(Contract.Courses.HOLECNT_POS);
+                mEditClickHandler.onEditClick(courseId, courseName, clubName, holeCount);
+            } else {
+                int adapterPosition = getAdapterPosition();
+                mCursor.moveToPosition(adapterPosition);
+                long courseId = mCursor.getLong(Contract.Courses.COURSEID_POS);
+                mClickHandler.onClick(courseId);
+            }
         }
     }
 
@@ -90,8 +91,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
         void onClick(Long courseId);
     }
 
-    interface CourseAdapterLongClickHandler {
-        void onLongClick(Long courseId, String clubName, String courseName, int holeCount);
+    interface CourseAdapterEditClickHandler {
+        void onEditClick(Long courseId, String clubName, String courseName, int holeCount);
     }
 
     void swapCursor(Cursor newCursor) {

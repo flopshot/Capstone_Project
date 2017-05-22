@@ -19,13 +19,13 @@ import com.sean.golfranger.data.Contract;
 class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder>{
     private Cursor mCursor;
     final private PlayerAdapterOnClickHandler mClickHandler;
-    final private PlayerAdapterEditClickHandler mLongClickHandler;
+    final private PlayerAdapterEditClickHandler mEditClickHandler;
 
     PlayerAdapter(
           PlayerAdapterOnClickHandler clickHandler,
-          PlayerAdapterEditClickHandler longClickHandler) {
+          PlayerAdapterEditClickHandler editClickHandler) {
         this.mClickHandler = clickHandler;
-        this.mLongClickHandler = longClickHandler;
+        this.mEditClickHandler = editClickHandler;
     }
 
     @Override
@@ -50,7 +50,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     }
 
     class PlayerAdapterViewHolder extends RecyclerView.ViewHolder
-          implements View.OnClickListener, View.OnLongClickListener{
+          implements View.OnClickListener{
         TextView firstNameView;
         TextView lastNameView;
         ImageButton editButton;
@@ -62,7 +62,6 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
             this.editButton = (ImageButton) view.findViewById(R.id.editButton);
             view.setOnClickListener(this);
             editButton.setOnClickListener(this);
-            view.setOnLongClickListener(this);
         }
 
         @Override
@@ -73,19 +72,13 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
                 long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
                 String firstName = mCursor.getString(Contract.Players.PLAYERFIRST_POS);
                 String lastName = mCursor.getString(Contract.Players.PLAYERLAST_POS);
-                mLongClickHandler.onEditClick(playerId, firstName, lastName);
+                mEditClickHandler.onEditClick(playerId, firstName, lastName);
             } else {
                 int adapterPosition = getAdapterPosition();
                 mCursor.moveToPosition(adapterPosition);
                 long playerId = mCursor.getLong(Contract.Players.PLAYERID_POS);
                 mClickHandler.onClick(playerId);
             }
-        }
-
-        @Override
-        public boolean onLongClick(View view) {
-
-            return true;
         }
     }
 
