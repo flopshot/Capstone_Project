@@ -1,6 +1,5 @@
 package com.sean.golfranger;
 
-
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,11 +11,12 @@ import android.widget.TextView;
 import com.sean.golfranger.data.Contract;
 
 
+
 /**
  * Player Adapter For Player Activity Layout. Will be fed Data from Player Table
  */
 
-class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder>{
+class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder> {
     private Cursor mCursor;
     final private PlayerAdapterOnClickHandler mClickHandler;
     final private PlayerAdapterEditClickHandler mEditClickHandler;
@@ -30,7 +30,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
 
     @Override
     public PlayerAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_list_item1, null, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.player_list_item, null, false);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new PlayerAdapterViewHolder(view);

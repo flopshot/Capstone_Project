@@ -20,7 +20,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -47,6 +46,7 @@ import com.sean.golfranger.utils.DialogUtils;
 import com.sean.golfranger.utils.GolfMarker;
 import com.sean.golfranger.utils.NetworkUtils;
 import com.sean.golfranger.utils.PermissionUtils;
+import com.sean.golfranger.utils.ScreenUtils;
 import com.sean.golfranger.utils.SharedPrefUtils;
 
 import java.math.BigInteger;
@@ -132,11 +132,9 @@ public class RoundActivity extends FragmentActivity
               .build();
 
         //Detect Weather Device is 8" tablet
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int widthPixels = metrics.widthPixels;
-        int heightPixels = metrics.heightPixels;
-        float scaleFactor = metrics.density;
+        int widthPixels = ScreenUtils.getScreenWidth();
+        int heightPixels = ScreenUtils.getScreenHeight();
+        float scaleFactor = ScreenUtils.getScreenDensity();
         float widthDp = widthPixels / scaleFactor;
         float heightDp = heightPixels / scaleFactor;
         float smallestWidth = Math.min(widthDp, heightDp);

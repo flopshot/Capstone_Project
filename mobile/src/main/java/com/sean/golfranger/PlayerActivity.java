@@ -94,7 +94,6 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
