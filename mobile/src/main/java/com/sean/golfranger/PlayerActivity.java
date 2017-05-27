@@ -39,6 +39,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
     View mLayout;
+    private static final String KEY_ANIMATE_RECYCLERVIEW = "keyAnimateRecyclerView";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,9 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        mPlayerAdapter = new PlayerAdapter(new PlayerAdapter.PlayerAdapterOnClickHandler() {
+        mPlayerAdapter = new PlayerAdapter( getApplicationContext(),
+              savedInstanceState.getBoolean(KEY_ANIMATE_RECYCLERVIEW),
+            new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
             public void onClick(Long playerId) {
                 if (getCallingActivity() == null) {
@@ -92,6 +95,12 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
         });
         recyclerView.setAdapter(mPlayerAdapter);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(KEY_ANIMATE_RECYCLERVIEW, isFinishing());
     }
 
     @Override

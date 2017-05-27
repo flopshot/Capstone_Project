@@ -4,7 +4,7 @@
     android:id="@+id/match_item"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/match_list_height">
 
     <TextView
         android:id="@+id/clubName"

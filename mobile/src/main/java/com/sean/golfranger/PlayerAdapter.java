@@ -1,15 +1,17 @@
 package com.sean.golfranger;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
-
+import com.sean.golfranger.utils.ScreenUtils;
 
 
 /**
@@ -18,12 +20,17 @@ import com.sean.golfranger.data.Contract;
 
 class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder> {
     private Cursor mCursor;
+    private Context mContext;
     final private PlayerAdapterOnClickHandler mClickHandler;
     final private PlayerAdapterEditClickHandler mEditClickHandler;
+    private Boolean doAnimation;
 
-    PlayerAdapter(
+    PlayerAdapter(Context context,
+          Boolean animationBoolean,
           PlayerAdapterOnClickHandler clickHandler,
           PlayerAdapterEditClickHandler editClickHandler) {
+        this.mContext = context;
+        this.doAnimation = animationBoolean;
         this.mClickHandler = clickHandler;
         this.mEditClickHandler = editClickHandler;
     }
@@ -41,6 +48,8 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         mCursor.moveToPosition(i);
         customViewHolder.firstNameView.setText(mCursor.getString(Contract.Players.PLAYERFIRST_POS));
         customViewHolder.lastNameView.setText(mCursor.getString(Contract.Players.PLAYERLAST_POS));
+
+        runEnterAnimation(customViewHolder.itemView, i);
     }
 
     @Override
@@ -107,4 +116,28 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     public Cursor getCursor() {
         return mCursor;
     }
+
+    private void runEnterAnimation(View view, int position) {
+        int maxItems = ScreenUtils.getMaxNumListItems(mContext, 0);
+
+        if (doAnimation && position <= maxItems) {
+            view.setTranslationX(ScreenUtils.getScreenWidth());
+            view.animate()
+                  .translationX(0)
+                  .setInterpolator(new DecelerateInterpolator(3.f))
+                  .setDuration(1400)
+                  .setStartDelay(position * 200)
+                  .start();
+
+            if (position == maxItems) {
+                doAnimation = false;
+            }
+        }
+    }
 }
+// Get Max number of items possible on screen (n)
+// Animate the first n items and trigger a global boolean to set to false after 1st animation
+// Define a global hash set of ids
+// in swapCursor, check if new ids have been added to cursor
+// Check new ids and animate if new ids exist
+// Scroll To Bottom in onLoadFinished to show newly animated item
