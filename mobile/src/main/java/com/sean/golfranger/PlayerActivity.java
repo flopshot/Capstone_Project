@@ -72,8 +72,14 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        mPlayerAdapter = new PlayerAdapter( getApplicationContext(),
-              savedInstanceState.getBoolean(KEY_ANIMATE_RECYCLERVIEW),
+        boolean doAnimation;
+        if (savedInstanceState != null) {
+            doAnimation = savedInstanceState.getBoolean(KEY_ANIMATE_RECYCLERVIEW);
+        } else {
+            doAnimation = true;
+        }
+
+        mPlayerAdapter = new PlayerAdapter( getApplicationContext(), doAnimation,
             new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
             public void onClick(Long playerId) {

@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.sean.golfranger.data.Contract;
 import com.sean.golfranger.utils.ScreenUtils;
 
+import timber.log.Timber;
+
 
 /**
  * Player Adapter For Player Activity Layout. Will be fed Data from Player Table
@@ -100,6 +102,9 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     }
 
     void swapCursor(Cursor newCursor) {
+//        cursorIdDiff(mCursor, newCursor);
+
+
         mCursor = newCursor;
         notifyDataSetChanged();
     }
@@ -120,6 +125,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     private void runEnterAnimation(View view, int position) {
         int maxItems = ScreenUtils.getMaxNumListItems(mContext, 0);
 
+        Timber.d("Do Animation: " + doAnimation + " position: " + position + " maxItems: " + maxItems);
         if (doAnimation && position <= maxItems) {
             view.setTranslationX(ScreenUtils.getScreenWidth());
             view.animate()

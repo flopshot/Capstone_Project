@@ -5,11 +5,15 @@ import android.content.res.Resources;
 
 import com.sean.golfranger.R;
 
+import timber.log.Timber;
+
 /**
  * Helper class to get screen dimensions
  */
 
 public class ScreenUtils {
+    private static final int ACTIONBAR_SIZE = 56;
+
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
@@ -26,10 +30,12 @@ public class ScreenUtils {
         float itemHeight;
         switch (type) {
             case 0:
-                itemHeight = context.getResources().getDimension(R.dimen.itemHeight);
+                itemHeight = context.getResources().getDimension(R.dimen.itemHeight)/
+                      Resources.getSystem().getDisplayMetrics().density;
                 break;
             case 1:
-                itemHeight = context.getResources().getDimension(R.dimen.match_list_height);
+                itemHeight = context.getResources().getDimension(R.dimen.match_list_height)/
+                      Resources.getSystem().getDisplayMetrics().density;
                 break;
             default:
                 itemHeight = 0f;
@@ -40,10 +46,11 @@ public class ScreenUtils {
               Resources.getSystem().getDisplayMetrics().density;
 
         float recyclerViewHeight = screenHeightDp -
-              android.R.attr.actionBarSize -
+              ACTIONBAR_SIZE -
               context.getResources().getDimension(R.dimen.recyclerViewPaddingTop);
 
-        double avgNumItems =(double) recyclerViewHeight / itemHeight;
+        Timber.d("RecyclerView Height: " + recyclerViewHeight + " itemHeight: " + itemHeight);
+        double avgNumItems = (double) recyclerViewHeight / itemHeight;
 
         return (int) Math.ceil(avgNumItems);
 
