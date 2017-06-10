@@ -1,5 +1,6 @@
 package com.sean.golfranger;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.AnimateUtils;
+
+import java.util.Set;
 
 /**
  * Course Adapter For Course Activity Layout. Will be fed Data from Course Table
@@ -16,12 +20,18 @@ import com.sean.golfranger.data.Contract;
 
 class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterViewHolder> {
     private Cursor mCursor;
+    private Context mContext;
     final private CourseAdapterOnClickHandler mClickHandler;
     final private CourseAdapterEditClickHandler mEditClickHandler;
+    private Boolean doAnimation;
+    private Set<String> mNewIds = null;
 
-    CourseAdapter(
+    CourseAdapter(Context context,
+                  Boolean animationBoolean,
           CourseAdapterOnClickHandler clickHandler,
           CourseAdapterEditClickHandler editClickHandler) {
+        this.mContext = context;
+        this.doAnimation = animationBoolean;
         this.mClickHandler = clickHandler;
         this.mEditClickHandler = editClickHandler;
     }
@@ -43,6 +53,11 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
         customViewHolder.clubNameView.setText(
               mCursor.getString(Contract.Courses.CLUBNAME_POS
         ));
+
+        AnimateUtils.runEnterAnimation(mContext, customViewHolder.itemView, doAnimation,
+              AnimateUtils.COURSE_TYPE, i, mCursor.getString(Contract.Courses.COURSEID_POS), mNewIds);
+
+        doAnimation = doAnimation && mCursor.getCount() != i + 1;
     }
 
     @Override
@@ -94,6 +109,8 @@ class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterView
     }
 
     void swapCursor(Cursor newCursor) {
+        mNewIds = AnimateUtils.newIdsFromCursor(mContext, newCursor);
+
         mCursor = newCursor;
         notifyDataSetChanged();
     }

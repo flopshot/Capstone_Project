@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
 import com.sean.golfranger.utils.DialogUtils;
+import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
 
@@ -41,6 +42,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
     View mLayout;
+    private static final String KEY_ANIMATE_RECYCLERVIEW = "keyAnimateRecyclerView";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +69,20 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        boolean doAnimation;
+        if (savedInstanceState != null) {
+            doAnimation = savedInstanceState.getBoolean(KEY_ANIMATE_RECYCLERVIEW);
+        } else {
+            doAnimation = true;
+        }
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_courses);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration =
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mCourseAdapter = new CourseAdapter(new CourseAdapter.CourseAdapterOnClickHandler() {
+        mCourseAdapter = new CourseAdapter(getApplicationContext(), doAnimation,
+              new CourseAdapter.CourseAdapterOnClickHandler() {
             @Override
             public void onClick(Long courseId) {
                 if (getCallingActivity() == null) {
@@ -93,6 +103,14 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         });
         recyclerView.setAdapter(mCourseAdapter);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isFinishing()) {
+            SharedPrefUtils.setAnimateIds(getApplicationContext(), null);
+        }
     }
 
     @Override
