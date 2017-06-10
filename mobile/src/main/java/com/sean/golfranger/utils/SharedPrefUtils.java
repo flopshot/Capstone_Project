@@ -24,6 +24,7 @@ public class SharedPrefUtils {
     private static final String KEY_WIND_DIRECTION = "WindJobService.EXTRA_WIND_DIRECTION";
     private static final String KEY_COURSE_ID = "courseId";
     private static final String KEY_ROUND_ID = "roundId";
+    private static final String KEY_ANIMATE_IDS = "animateIds";
 
     //Stores Current Lat Lon of Device
     public static void setUserLatLon(Context context, float lat, float lon) {
@@ -54,8 +55,8 @@ public class SharedPrefUtils {
     public static Double[] getUserLatLonDouble(Context context) {
         Double[] curLatLonD = new Double[2];
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Double latD = Double.valueOf(prefs.getFloat(KEY_USER_LAT,0f));
-        Double lonD = Double.valueOf(prefs.getFloat(KEY_USER_LON,0f));
+        Double latD = Double.valueOf(prefs.getFloat(KEY_USER_LAT, 0f));
+        Double lonD = Double.valueOf(prefs.getFloat(KEY_USER_LON, 0f));
 
         curLatLonD[0] = latD;
         curLatLonD[1] = lonD;
@@ -69,8 +70,8 @@ public class SharedPrefUtils {
     public static Float[] getUserLatLonFloat(Context context) {
         Float[] curLatLonF = new Float[2];
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        curLatLonF[0] = prefs.getFloat(KEY_USER_LAT,0f);
-        curLatLonF[1] = prefs.getFloat(KEY_USER_LON,0f);
+        curLatLonF[0] = prefs.getFloat(KEY_USER_LAT, 0f);
+        curLatLonF[1] = prefs.getFloat(KEY_USER_LON, 0f);
 
         return curLatLonF;
     }
@@ -124,8 +125,8 @@ public class SharedPrefUtils {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putFloat(hash+KEY_LAT, lat);
-        editor.putFloat(hash+KEY_LON, lon);
+        editor.putFloat(hash + KEY_LAT, lat);
+        editor.putFloat(hash + KEY_LON, lon);
         editor.apply();
     }
 
@@ -135,8 +136,8 @@ public class SharedPrefUtils {
     public static Double[] getPendingMarkerLatLon(Context context, String hash) {
         Double[] curLatLonD = new Double[2];
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Double latD = Double.valueOf(prefs.getFloat(hash+KEY_LAT,0f));
-        Double lonD = Double.valueOf(prefs.getFloat(hash+KEY_LON,0f));
+        Double latD = Double.valueOf(prefs.getFloat(hash + KEY_LAT, 0f));
+        Double lonD = Double.valueOf(prefs.getFloat(hash + KEY_LON, 0f));
 
         curLatLonD[0] = latD;
         curLatLonD[1] = lonD;
@@ -261,8 +262,8 @@ public class SharedPrefUtils {
     }
 
     /**
-    * Set RoundActivity Course Id
-    */
+     * Set RoundActivity Course Id
+     */
     public static void setCourseId(Context context, String courseId) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -276,5 +277,23 @@ public class SharedPrefUtils {
     public static String getCourseId(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString(KEY_COURSE_ID, null);
+    }
+
+    /**
+     * Set Animate Ids
+     */
+    public static void setAnimateIds(Context context, Set<String> animateIdsSet) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putStringSet(KEY_ANIMATE_IDS, animateIdsSet);
+        editor.apply();
+    }
+
+    /**
+     * Get Animate Ids
+     */
+    public static Set<String> getAnimateIds(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getStringSet(KEY_ANIMATE_IDS, new HashSet<String>());
     }
 }

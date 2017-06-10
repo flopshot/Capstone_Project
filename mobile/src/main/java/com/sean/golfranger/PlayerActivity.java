@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
 import com.sean.golfranger.utils.DialogUtils;
+import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
 
@@ -107,6 +108,14 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_ANIMATE_RECYCLERVIEW, isFinishing());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isFinishing()) {
+            SharedPrefUtils.setAnimateIds(getApplicationContext(), null);
+        }
     }
 
     @Override

@@ -29,11 +29,11 @@ public class ScreenUtils {
     public static int getMaxNumListItems(Context context, int type) {
         float itemHeight;
         switch (type) {
-            case 0:
+            case 0: //Player or Course Item Height
                 itemHeight = context.getResources().getDimension(R.dimen.itemHeight)/
                       Resources.getSystem().getDisplayMetrics().density;
                 break;
-            case 1:
+            case 1: //Round Item Height
                 itemHeight = context.getResources().getDimension(R.dimen.match_list_height)/
                       Resources.getSystem().getDisplayMetrics().density;
                 break;
@@ -53,6 +53,5 @@ public class ScreenUtils {
         double avgNumItems = (double) recyclerViewHeight / itemHeight;
 
         return (int) Math.ceil(avgNumItems);
-
     }
 }

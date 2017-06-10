@@ -6,26 +6,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
-import com.sean.golfranger.utils.ScreenUtils;
+import com.sean.golfranger.utils.AnimateUtils;
 
-import timber.log.Timber;
-
+import java.util.Set;
 
 /**
  * Player Adapter For Player Activity Layout. Will be fed Data from Player Table
  */
-
 class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterViewHolder> {
     private Cursor mCursor;
     private Context mContext;
     final private PlayerAdapterOnClickHandler mClickHandler;
     final private PlayerAdapterEditClickHandler mEditClickHandler;
     private Boolean doAnimation;
+    private Set<String> mNewIds = null;
 
     PlayerAdapter(Context context,
           Boolean animationBoolean,
@@ -51,7 +49,10 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         customViewHolder.firstNameView.setText(mCursor.getString(Contract.Players.PLAYERFIRST_POS));
         customViewHolder.lastNameView.setText(mCursor.getString(Contract.Players.PLAYERLAST_POS));
 
-        runEnterAnimation(customViewHolder.itemView, i);
+        AnimateUtils.runEnterAnimation(mContext, customViewHolder.itemView, doAnimation,
+              AnimateUtils.PLAYER_TYPE, i, mCursor.getString(Contract.Players.PLAYERID_POS), mNewIds);
+
+        doAnimation = doAnimation && mCursor.getCount() != i + 1;
     }
 
     @Override
@@ -102,8 +103,7 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
     }
 
     void swapCursor(Cursor newCursor) {
-//        cursorIdDiff(mCursor, newCursor);
-
+        mNewIds = AnimateUtils.newIdsFromCursor(mContext, newCursor);
 
         mCursor = newCursor;
         notifyDataSetChanged();
@@ -122,24 +122,51 @@ class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerAdapterView
         return mCursor;
     }
 
-    private void runEnterAnimation(View view, int position) {
-        int maxItems = ScreenUtils.getMaxNumListItems(mContext, 0);
-
-        Timber.d("Do Animation: " + doAnimation + " position: " + position + " maxItems: " + maxItems);
-        if (doAnimation && position <= maxItems) {
-            view.setTranslationX(ScreenUtils.getScreenWidth());
-            view.animate()
-                  .translationX(0)
-                  .setInterpolator(new DecelerateInterpolator(3.f))
-                  .setDuration(1400)
-                  .setStartDelay(position * 200)
-                  .start();
-
-            if (position == maxItems) {
-                doAnimation = false;
-            }
-        }
-    }
+//    private void runEnterAnimation(View view, int position, String id) {
+//        int maxItems = ScreenUtils.getMaxNumListItems(mContext, 0);
+//
+//        Timber.d("Do Animation: " + doAnimation + " position: " + position + " maxItems: " + maxItems);
+//        if ((doAnimation && position <= maxItems) | mNewIds.contains(id)) {
+//            view.setTranslationX(ScreenUtils.getScreenWidth());
+//            view.animate()
+//                  .translationX(0)
+//                  .setInterpolator(new DecelerateInterpolator(3.f))
+//                  .setDuration(1400)
+//                  .setStartDelay(position * 200)
+//                  .start();
+//
+//            if (position == maxItems) {
+//                doAnimation = false;
+//            }
+//        }
+//    }
+//
+//    private Set<Long> newIdsFromCursor(Cursor oldCursor, Cursor newCursor) {
+//        Set<Long> oldIds = new HashSet<>();
+//        Set<Long> newIds = new HashSet<>();
+//        int newCursorCount;
+//        int oldCursorCount;
+//
+//        try {newCursorCount = newCursor.getCount();} catch (NullPointerException e) {return newIds;}
+//        try {oldCursorCount = oldCursor.getCount();} catch (NullPointerException e) {oldCursorCount = 0;}
+//
+//        if (oldCursorCount < newCursorCount) {
+//            if (oldCursor != null && oldCursor.moveToFirst()) {
+//                do {
+//                    oldIds.add(oldCursor.getLong(Contract.Players.PLAYERID_POS));
+//                } while (oldCursor.moveToNext());
+//            }
+//
+//            if (newCursor.moveToFirst()) {
+//                do {
+//                    newIds.add(newCursor.getLong(Contract.Players.PLAYERID_POS));
+//                } while (newCursor.moveToNext());
+//            }
+//
+//            newIds.removeAll(oldIds);
+//        }
+//        return newIds;
+//    }
 }
 // Get Max number of items possible on screen (n)
 // Animate the first n items and trigger a global boolean to set to false after 1st animation
