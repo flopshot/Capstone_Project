@@ -20,7 +20,6 @@ import java.util.Set;
 /**
  * Match Adapter For Matches Activity Layout. Will be fed Data from Rounds Table
  */
-
 class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHolder>{
     private Cursor mCursor;
     private Context mContext;

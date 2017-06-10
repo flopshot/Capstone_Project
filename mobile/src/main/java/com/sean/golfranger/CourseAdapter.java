@@ -17,7 +17,6 @@ import java.util.Set;
 /**
  * Course Adapter For Course Activity Layout. Will be fed Data from Course Table
  */
-
 class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseAdapterViewHolder> {
     private Cursor mCursor;
     private Context mContext;
