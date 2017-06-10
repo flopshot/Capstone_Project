@@ -23,6 +23,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.SharedPrefUtils;
 
 import timber.log.Timber;
 
@@ -32,6 +33,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
     View mLayout;
+    private static final String KEY_ANIMATE_RECYCLERVIEW = "keyAnimateRecyclerView";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +63,29 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        boolean doAnimation;
+        if (savedInstanceState != null) {
+            doAnimation = savedInstanceState.getBoolean(KEY_ANIMATE_RECYCLERVIEW);
+        } else {
+            doAnimation = true;
+        }
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_matches);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerItemDecoration dividerItemDecoration =
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mMatchAdapter = new MatchAdapter(this);
+        mMatchAdapter = new MatchAdapter(getApplication(), doAnimation);
         recyclerView.setAdapter(mMatchAdapter);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isFinishing()) {
+            SharedPrefUtils.setAnimateIds(getApplicationContext(), null);
+        }
     }
 
     @Override

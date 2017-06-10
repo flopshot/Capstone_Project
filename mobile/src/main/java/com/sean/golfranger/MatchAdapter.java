@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sean.golfranger.data.Contract;
+import com.sean.golfranger.utils.AnimateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Match Adapter For Matches Activity Layout. Will be fed Data from Rounds Table
@@ -22,9 +24,12 @@ import java.util.Locale;
 class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHolder>{
     private Cursor mCursor;
     private Context mContext;
+    private Boolean doAnimation;
+    private Set<String> mNewIds = null;
 
-    MatchAdapter(Context context) {
+    MatchAdapter(Context context,Boolean animationBoolean) {
           this.mContext = context;
+          this.doAnimation = animationBoolean;
     }
 
     @Override
@@ -93,9 +98,16 @@ class MatchAdapter extends  RecyclerView.Adapter<MatchAdapter.MatchAdapterViewHo
               getReadableDate(
                 mCursor.getLong(Contract.MatchesView.START_DATE
               )));
+
+        AnimateUtils.runEnterAnimation(mContext, customViewHolder.itemView, doAnimation,
+              AnimateUtils.MATCH_TYPE, i, mCursor.getString(Contract.MatchesView.ROUNDID_COL_INDEX), mNewIds);
+
+        doAnimation = doAnimation && mCursor.getCount() != i + 1;
     }
 
     void swapCursor(Cursor newCursor) {
+        mNewIds = AnimateUtils.newIdsFromCursor(mContext, newCursor);
+
         mCursor = newCursor;
         notifyDataSetChanged();
     }
