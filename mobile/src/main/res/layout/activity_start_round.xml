@@ -137,14 +137,14 @@
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
-                android:gravity="center"/>
+                android:gravity="start"/>
 
             <TextView
                 android:id="@+id/p1Last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:gravity="center"
+                android:gravity="start"
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
@@ -183,14 +183,14 @@
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
-                android:gravity="center"/>
+                android:gravity="start"/>
 
             <TextView
                 android:id="@+id/p2Last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:gravity="center"
+                android:gravity="start"
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
@@ -229,14 +229,14 @@
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
-                android:gravity="center"/>
+                android:gravity="start"/>
 
             <TextView
                 android:id="@+id/p3Last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:gravity="center"
+                android:gravity="start"
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
@@ -271,7 +271,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:gravity="center"
+                android:gravity="start"
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
@@ -282,7 +282,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:gravity="center"
+                android:gravity="start"
                 android:ems="4"
                 android:lines="1"
                 android:ellipsize="end"
