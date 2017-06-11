@@ -23,7 +23,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sean.golfranger.data.Contract;
 import com.sean.golfranger.utils.DialogUtils;
@@ -44,8 +43,6 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
 
     public static final String EXTRA_ROUND_ID = "startRoundActivityRoundId";
     public static final String EXTRA_RETURN_ID = "RETURNID";
-    public static final String EXTRA_RETURN_FIRST_ITEM = "RETURNFIRSTITEM";
-    public static final String EXTRA_RETURN_SECOND_ITEM = "RETURNSECONDITEM";
     private static final String EXTRA_SAVE_STATE = "mDoSaveState4SaveInstanceArg";
 
     private String mRoundId, mCourseId;
@@ -462,21 +459,5 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
               Snackbar.LENGTH_LONG);
         snackbar.setActionTextColor(Color.GREEN);
         snackbar.show();
-    }
-
-    public void onSave(View view) {
-        String courseText = course.getText().toString();
-        if (courseText.equals(getString(R.string.coursePlaceHolder)) | courseText.equals("")) {
-            Toast.makeText(this, getString(R.string.noCourseErrorMsg), Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        String p1FirstText = p1First.getText().toString();
-        if (p1FirstText.equals(getString(R.string.playerPlaceHolder)) | p1FirstText.equals("")) {
-            Toast.makeText(this, getString(R.string.noPlayer1ErrorMsg), Toast.LENGTH_LONG).show();
-            return;
-        }
-        mDoSave = true;
-        Toast.makeText(getApplicationContext(), getString(R.string.safeRound), Toast.LENGTH_SHORT).show();
     }
 }

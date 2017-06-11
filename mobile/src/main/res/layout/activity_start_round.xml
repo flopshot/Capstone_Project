@@ -27,20 +27,6 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:gravity="center"
-                android:drawableStart="@drawable/ic_menu_play_clip"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:clickable="true"
-                android:layout_marginEnd="10dp"
-                android:onClick="startRoundDep"
-                android:contentDescription="@string/letsPlayContentDescription"
-                android:text="@string/letsPlay"
-                android:visibility="gone"/>
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -276,22 +262,6 @@
                 tools:text="Formica"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="20dp"
-            android:padding="11dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:background="@drawable/rounded_textbox_dark"
-            android:textColor="@color/maroon"
-            android:contentDescription="@string/saveRoundContentDescription"
-            android:text="@string/saveRound"
-            android:onClick="onSave"
-            android:visibility="gone"/>
 
     </LinearLayout>
 
