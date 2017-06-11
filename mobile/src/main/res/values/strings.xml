@@ -68,9 +68,9 @@
     <string name="hyphen">-</string>
     <string name="logoCD">Title Image</string>
     <string name="player1Title">Player 1:</string>
-    <string name="player2Title">Player 2:</string>
+    <string name="player2Title">:Player 2</string>
     <string name="player3Title">Player 3:</string>
-    <string name="player4Title">Player 4:</string>
+    <string name="player4Title">:Player 4</string>
     <string name="playerPlaceHolder">Add Player</string>
     <string name="saveRound">Save Card For Later</string>
     <string name="saveRoundContentDescription">This Button Saves the Round</string>

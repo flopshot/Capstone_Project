@@ -46,14 +46,12 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/round_info_holder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
         android:outlineProvider="paddedBounds"
+        android:layout_marginTop="?actionBarSize"
         android:paddingBottom="@dimen/recyclerViewPaddingBottom"
         android:paddingLeft="@dimen/list_side_margin"
         android:paddingRight="@dimen/list_side_margin"
@@ -61,18 +59,19 @@
 
         <LinearLayout
             android:id="@+id/courseHolder"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <ImageButton
                 android:id="@+id/courseLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/courseTitle"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:drawableStart="@drawable/ic_menu_edit"
-                android:clickable="true"
+                android:src="@drawable/ic_menu_edit"
+                android:layout_marginEnd="16dp"
                 android:contentDescription="@string/addCourseContentDescription"
                 android:onClick="getCourse"/>
 
@@ -80,10 +79,8 @@
                 android:id="@+id/clubName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="4"
-                android:lines="1"
-                android:ellipsize="end"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Angel Park"/>
 
             <TextView
                 android:id="@+id/hyphen"
@@ -98,27 +95,27 @@
                 android:id="@+id/courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ems="4"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 tools:text="Cloud 9"/>
-            
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/p1Holder"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_below="@id/courseHolder"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dividerMargin"
             android:gravity="start|center">
 
             <TextView
                 android:id="@+id/p1Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginStart="20dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:gravity="center"
@@ -133,8 +130,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 android:gravity="center"/>
@@ -145,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:gravity="center"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 tools:text="Formica"/>
@@ -155,24 +153,11 @@
         <LinearLayout
             android:id="@+id/p2Holder"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/dividerMargin"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/courseHolder"
+            android:layout_alignParentEnd="true"
             android:layout_height="wrap_content"
-            android:gravity="start|center">
-
-            <TextView
-                android:id="@+id/p2Label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:gravity="center"
-                android:clickable="true"
-                android:onClick="getP2"
-                android:drawableStart="@drawable/ic_menu_edit"
-                android:contentDescription="@string/playerContentDescription"
-                android:text="@string/player2Title"/>
+            android:gravity="end|center">
 
             <TextView
                 android:id="@+id/p2First"
@@ -180,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:layout_marginEnd="15dp"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 android:gravity="center"/>
@@ -191,18 +176,34 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:gravity="center"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 tools:text="Formica"/>
+
+            <TextView
+                android:id="@+id/p2Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="5dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="getP2"
+                android:drawableEnd="@drawable/ic_menu_edit"
+                android:contentDescription="@string/playerContentDescription"
+                android:text="@string/player2Title"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/p3Holder"
             android:orientation="horizontal"
+            android:layout_below="@id/p1Holder"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/dividerMargin"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start|center">
 
@@ -210,7 +211,6 @@
                 android:id="@+id/p3Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:gravity="center"
@@ -225,8 +225,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 android:gravity="center"/>
@@ -237,7 +238,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:gravity="center"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 tools:text="Formica"/>
@@ -247,24 +248,12 @@
         <LinearLayout
             android:id="@+id/p4Holder"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_marginTop="@dimen/dividerMargin"
-            android:gravity="start|center">
-
-            <TextView
-                android:id="@+id/p4Label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="20dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:gravity="center"
-                android:clickable="true"
-                android:onClick="getP4"
-                android:contentDescription="@string/playerContentDescription"
-                android:drawableStart="@drawable/ic_menu_edit"
-                android:text="@string/player4Title"/>
+            android:layout_below="@id/p2Holder"
+            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:gravity="end|center">
 
             <TextView
                 android:id="@+id/p4First"
@@ -272,7 +261,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
@@ -283,14 +272,28 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                 android:gravity="center"
-                android:ems="4"
+                android:ems="3"
                 android:lines="1"
                 android:ellipsize="end"
                 tools:text="Formica"/>
 
+            <TextView
+                android:id="@+id/p4Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="5dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:gravity="center"
+                android:clickable="true"
+                android:onClick="getP4"
+                android:contentDescription="@string/playerContentDescription"
+                android:drawableEnd="@drawable/ic_menu_edit"
+                android:text="@string/player4Title"/>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"

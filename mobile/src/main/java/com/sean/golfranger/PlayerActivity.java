@@ -80,7 +80,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
             doAnimation = true;
         }
 
-        mPlayerAdapter = new PlayerAdapter(getApplicationContext(), doAnimation,
+        mPlayerAdapter = new PlayerAdapter(this, doAnimation,
             new PlayerAdapter.PlayerAdapterOnClickHandler() {
             @Override
             public void onClick(Long playerId) {

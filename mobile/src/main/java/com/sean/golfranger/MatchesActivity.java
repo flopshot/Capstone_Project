@@ -75,7 +75,7 @@ public class MatchesActivity extends AppCompatActivity implements LoaderManager.
         DividerItemDecoration dividerItemDecoration =
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mMatchAdapter = new MatchAdapter(getApplication(), doAnimation);
+        mMatchAdapter = new MatchAdapter(this, doAnimation);
         recyclerView.setAdapter(mMatchAdapter);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }

@@ -81,7 +81,7 @@ public class CoursesActivity extends AppCompatActivity implements LoaderManager.
         DividerItemDecoration dividerItemDecoration =
               new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        mCourseAdapter = new CourseAdapter(getApplicationContext(), doAnimation,
+        mCourseAdapter = new CourseAdapter(this, doAnimation,
               new CourseAdapter.CourseAdapterOnClickHandler() {
             @Override
             public void onClick(Long courseId) {
