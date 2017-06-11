@@ -42,4 +42,7 @@ project.properties
 
 #Sensitive Info
 map_api_key.xml
-seanKeyStore.jks
+grks.jks
+captures/
+mobile/libs/
+keystore.properties

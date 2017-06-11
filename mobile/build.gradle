@@ -2,11 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            keyAlias 'udacity'
-            keyPassword 'password'
-            storeFile file("$rootDir/udacityKeyStore.jks")
-            storePassword 'password'
+        configR {
+            readKeystoreProperties()
         }
     }
     compileSdkVersion 25
@@ -23,7 +20,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+            signingConfig signingConfigs.configR
         }
     }
 }
@@ -44,4 +41,17 @@ dependencies {
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+}
+
+def readKeystoreProperties() {
+    def propsFile = rootProject.file('keystore.properties')
+    def configName = 'configR'
+    if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        android.signingConfigs[configName].storeFile = file(props['storeFile'])
+        android.signingConfigs[configName].storePassword = props['storePassword']
+        android.signingConfigs[configName].keyAlias = props['keyAlias']
+        android.signingConfigs[configName].keyPassword = props['keyPassword']
+    }
 }
