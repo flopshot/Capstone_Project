@@ -32,9 +32,9 @@ public class AnimateUtils {
             view.setTranslationX(ScreenUtils.getScreenWidth());
             view.animate()
                   .translationX(0)
-                  .setInterpolator(new DecelerateInterpolator(3.f))
-                  .setDuration(1400)
-                  .setStartDelay(position * 200)
+                  .setInterpolator(new DecelerateInterpolator(1.5f))
+                  .setDuration(700)
+                  .setStartDelay(position * 90)
                   .start();
         }
     }
