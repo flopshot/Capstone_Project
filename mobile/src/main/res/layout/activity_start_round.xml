@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/article_list_activity_coord_layout"
+    android:id="@+id/start_round_activity_coord_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -30,10 +30,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|start"
+                android:layout_gravity="center|end"
                 android:gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="@string/startRoundTitle"/>
+                android:drawableStart="@drawable/ic_menu_play_clip"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:clickable="true"
+                android:layout_marginEnd="10dp"
+                android:onClick="startRoundDep"
+                android:contentDescription="@string/letsPlayContentDescription"
+                android:text="@string/letsPlay"
+                android:visibility="gone"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -47,13 +53,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
                 android:gravity="center"
-                android:drawableStart="@drawable/ic_menu_play_clip"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:clickable="true"
                 android:layout_marginEnd="10dp"
-                android:onClick="startRound"
-                android:contentDescription="@string/letsPlayContentDescription"
-                android:text="@string/letsPlay"/>
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:text="@string/startRoundTitle"/>
 
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
@@ -288,8 +290,21 @@
             android:textColor="@color/maroon"
             android:contentDescription="@string/saveRoundContentDescription"
             android:text="@string/saveRound"
-            android:onClick="onSave"/>
+            android:onClick="onSave"
+            android:visibility="gone"/>
 
     </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="24dp"
+        android:elevation="6dp"
+        android:onClick="startRound"
+        android:src="@drawable/ic_menu_play_clip"
+        app:layout_anchor="@+id/round_info_holder"
+        app:layout_anchorGravity="bottom|right|end"/>
 
 </android.support.design.widget.CoordinatorLayout>

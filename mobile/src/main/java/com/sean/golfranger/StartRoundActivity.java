@@ -8,15 +8,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +53,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     private ContentObserver mMyObserver;
     private static LoaderManager sLoaderManager;
     private static LoaderManager.LoaderCallbacks sLoaderCallback;
+    View mLayout;
 
     private TextView club, course, p1First, p1Last, p2First, p2Last, p3First, p3Last, p4First, p4Last;
 
@@ -60,6 +65,7 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_round);
 
+        mLayout = findViewById(R.id.start_round_activity_coord_layout);
         club = (TextView) findViewById(clubName);
         course = (TextView) findViewById(courseName);
         p1First = (TextView) findViewById(R.id.p1First);
@@ -74,6 +80,19 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         mMyObserver = new MyObserver(new Handler());
         sLoaderManager = getSupportLoaderManager();
         sLoaderCallback = this;
+
+        // my_child_toolbar is defined in the layout file
+        Toolbar myToolbar =
+              (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false);
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
         getContentResolver()
               .registerContentObserver(Contract.Rounds.buildDirUri(), true, mMyObserver);
         getContentResolver()
@@ -416,13 +435,13 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
     public void startRound(View view) {
         String courseText = course.getText().toString();
         if (courseText.equals(getString(R.string.coursePlaceHolder)) | courseText.equals("")) {
-            Toast.makeText(this, getString(R.string.noCourseErrorMsg), Toast.LENGTH_LONG).show();
+            createSnackBarPrompt();
             return;
         }
 
         String p1FirstText = p1First.getText().toString();
         if (p1FirstText.equals(getString(R.string.playerPlaceHolder)) | p1FirstText.equals("")) {
-            Toast.makeText(this, getString(R.string.noPlayer1ErrorMsg), Toast.LENGTH_LONG).show();
+            createSnackBarPrompt();
             return;
         }
 
@@ -435,6 +454,14 @@ public class StartRoundActivity extends AppCompatActivity implements LoaderManag
         intent.putExtra(EXTRA_ROUND_ID, mRoundId);
         startActivity(intent);
         mDoSave = true;
+    }
+
+    private void createSnackBarPrompt() {
+        Snackbar snackbar = Snackbar.make(mLayout,
+              getString(R.string.noCourseErrorMsg),
+              Snackbar.LENGTH_LONG);
+        snackbar.setActionTextColor(Color.GREEN);
+        snackbar.show();
     }
 
     public void onSave(View view) {

@@ -60,7 +60,8 @@
         <activity android:name=".MatchesActivity"
                   android:parentActivityName="com.sean.golfranger.HomeActivity">
         </activity>
-        <activity android:name=".StartRoundActivity">
+        <activity android:name=".StartRoundActivity"
+                  android:parentActivityName="com.sean.golfranger.HomeActivity">
         </activity>
 
         <receiver android:name=".widget.GolfWidget"

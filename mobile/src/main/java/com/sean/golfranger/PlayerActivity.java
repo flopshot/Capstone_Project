@@ -306,8 +306,7 @@ public class PlayerActivity extends AppCompatActivity implements LoaderManager.L
                                 Contract.Players._ID + "=?",
                                 new String[]{id});
                       }
-                  })
-                  .setActionTextColor(Color.GREEN);
+                  }).setActionTextColor(Color.GREEN);
             snackbar.show();
         }
 
