@@ -109,7 +109,7 @@ class DbHelper extends SQLiteOpenHelper {
               Contract.RoundPlayerHoles.FIR_FLAG + "  BOOLEAN DEFAULT 0 CHECK(" + Contract.RoundPlayerHoles.FIR_FLAG+" IN (0,1))," +
               Contract.RoundPlayerHoles.HOLE_NUM + " INTEGER NOT NULL, " +
               " UNIQUE (" + Contract.RoundPlayerHoles._ID + ") ON CONFLICT IGNORE, " +
-              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + "), " +
+              " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUNDPLAYER_ID + ") REFERENCES " + Contract.RoundPlayers.TABLE_NAME + " (" + Contract.RoundPlayers._ID + ") ON DELETE CASCADE, " +
               " FOREIGN KEY (" + Contract.RoundPlayerHoles.ROUND_ID + ") REFERENCES " + Contract.Rounds.TABLE_NAME + " (" + Contract.Rounds._ID + ") ON DELETE CASCADE" +
               ");";
 
