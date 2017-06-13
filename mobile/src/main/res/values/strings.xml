@@ -147,7 +147,7 @@
     <string name="playerAlreadyMsg">This Player is Already Added To the Round</string>
 
     <!--DATE FORMAT-->
-    <string name="dateFormat" translatable="false">MM/dd/yy</string>
+    <string name="dateFormat" translatable="false">MMMM dd, yyyy</string>
 
     <!--START/SAVE ROUND-->
     <string name="noPlayer1ErrorMsg">You Must Add A First Player Before We Begin</string>
