@@ -47,5 +47,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <!--HOME SCREEN-->
     <dimen name="buttonParentMargins">0dp</dimen>
+    <dimen name="homeButtonWidths">300dp</dimen>
 
 </resources>
