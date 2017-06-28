@@ -24,12 +24,11 @@ import timber.log.Timber;
 
 /**
  * Job Service to get Elevation metrics of markers
- * every X minutes, depending on the job build schedule
+ * every X seconds, depending on the job build schedule
  */
-
 public class ElevationJobInfo {
     //Job Scheduling constants. Get elevation data from api every
-    private static final int PERIOD = 2000; //Every 5sec
+    private static final int PERIOD = 10000; //Every 10sec
     private static final int INITIAL_BACKOFF = 1000;
     private static final int PERIODIC_ID = 1;
 
@@ -107,11 +106,12 @@ public class ElevationJobInfo {
 
     private static synchronized void schedulePeriodic(Context context) {
         Timber.d("Scheduling Elevation Task");
-        JobInfo.Builder builder = new JobInfo
-              .Builder(PERIODIC_ID, new ComponentName(context, ElevationJobService.class));
+        JobInfo.Builder builder;
 
-        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-              .setPeriodic(PERIOD)
+        builder = new JobInfo
+              .Builder(PERIODIC_ID, new ComponentName(context, ElevationJobService.class))
+              .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+              .setMinimumLatency(PERIOD)
               .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
 
         JobScheduler scheduler = (JobScheduler) context
@@ -132,8 +132,6 @@ public class ElevationJobInfo {
             // Create the request to Server, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
-//            urlConnection.setConnectTimeout(CONNECTION_TIMEOUT);
-//            urlConnection.setReadTimeout(CONNECTION_TIMEOUT);
             urlConnection.connect();
 
             // Read the input stream into a String
@@ -165,8 +163,8 @@ public class ElevationJobInfo {
             return buffer.toString(); //Return JSON String of elevation for LatLon
         } catch (IOException e) {
             e.printStackTrace();
-            // If the code didn't successfully get the elevation data, there's no point in attempting
-            // to parse it.
+            // If the code didn't successfully get the elevation data,
+            // there's no point in attempting to parse it.
             return null;
         } finally{
             if (urlConnection != null) {

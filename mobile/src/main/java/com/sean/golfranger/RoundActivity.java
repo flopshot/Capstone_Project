@@ -400,13 +400,13 @@ public class RoundActivity extends FragmentActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Timber.v("Location Connection Init Failed");
+        Timber.w("Location Connection Init Failed");
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Timber.d(location.toString());
-        Timber.d("Meter Accuracy: " + String.valueOf(location.getAccuracy()));
+//        Timber.d(location.toString());
+//        Timber.d("Meter Accuracy: " + String.valueOf(location.getAccuracy()));
         double lat = location.getLatitude();
         double lng = location.getLongitude();
 
@@ -424,15 +424,26 @@ public class RoundActivity extends FragmentActivity
             mapFirstCentered = true;
         }
 
+        //Set Current Marker Distance if exists
+        if (currentMarkerHash != null) {
+            Double markerDistance = distance(
+                  lat,
+                  lng,
+                  golfMarkersInfo.get(currentMarkerHash).getLatLon()[0],
+                  golfMarkersInfo.get(currentMarkerHash).getLatLon()[1]);
+            golfMarkersInfo.get(currentMarkerHash).setDistance(markerDistance);
+        }
+
         //Update all established markers
         Set<String> establishedMarkers
               = new HashSet<>(SharedPrefUtils.getEstablishedMarkerHashes(getApplicationContext()));
 
         for (String hash : establishedMarkers) {
-            //Set Marker Distance from current user location
-            double[] markerLatLng;
+            //Set Marker Elevations from current user location
+            Double markerElevation;
             try {
-                markerLatLng = golfMarkersInfo.get(hash).getLatLon();
+                //Set Marker Elevation Delta from current user elevation
+                markerElevation = golfMarkersInfo.get(hash).getElevation();
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 //If system process ends unexpectedly, onDestroy may not get called.
@@ -441,10 +452,7 @@ public class RoundActivity extends FragmentActivity
                 SharedPrefUtils.removeEstablishedMarkerHash(getApplicationContext(), hash);
                 continue;
             }
-            golfMarkersInfo.get(hash).setDistance(
-                  distance(lat, lng, markerLatLng[0], markerLatLng[1]));
-            //Set Marker Elevation Delta from current user elevation
-            Double markerElevation = golfMarkersInfo.get(hash).getElevation();
+
             float userElevation = SharedPrefUtils.getUserElevation(getApplicationContext());
             golfMarkersInfo.get(hash).setElevationDelta(markerElevation - userElevation);
         }

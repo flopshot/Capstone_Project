@@ -30,6 +30,7 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
         if (latLon[0] == 0.) {
             Timber.d("User had bad Coordinates, ending Wind Job");
             jobFinished(jobParameters, false);
+            WindJobInfo.initialize(getApplicationContext());
         } else {
             YahooWeather yahooWeather = YahooWeather.getInstance(CONNECTION_TIMEOUT, true);
             yahooWeather.setNeedDownloadIcons(false);
@@ -43,6 +44,7 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         Timber.d("Wind Sync Job Finished UNEXPECTEDLY");
+        WindJobInfo.initialize(getApplicationContext());
         return false;
     }
 
@@ -56,17 +58,18 @@ public class WindJobService extends JobService implements YahooWeatherInfoListen
             //Save Results to Shared Prefs
             SharedPrefUtils.setCurrentWindSpeed(getApplicationContext(), speed);
             SharedPrefUtils.setCurrentWindDirection(getApplicationContext(), dir);
-
             Timber.d("Wind Saved to Shared Prefs");
-            jobFinished(mJobParams, false);
         } else {
             Timber.w("Weather Info was NULL, Saved to Shared Prefs");
             SharedPrefUtils.setCurrentWindSpeed(getApplicationContext(), null);
             SharedPrefUtils.setCurrentWindDirection(getApplicationContext(), -1f);
-            jobFinished(mJobParams, false);
         }
         // Update map of wind response
         sendBroadcast(new Intent(ACTION_WIND_UPDATED));
+
+        jobFinished(mJobParams, false);
+
+        WindJobInfo.initialize(getApplicationContext());
     }
 
     private String convertToMph(String windSpeed) {

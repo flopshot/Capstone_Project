@@ -17,12 +17,14 @@ public class ElevationJobService extends JobService{
         getApplicationContext().startService(intent);
         jobFinished(jobParameters, false);
         Timber.d("Elevation Job Ended OK");
+        ElevationJobInfo.initialize(getApplicationContext());
         return true;
     }
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
         Timber.d("Elevation Job Ended UNEXPECTEDLY");
+        ElevationJobInfo.initialize(getApplicationContext());
         return false;
     }
 }
