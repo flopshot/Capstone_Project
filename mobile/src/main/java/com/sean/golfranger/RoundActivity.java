@@ -12,7 +12,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -204,8 +203,7 @@ public class RoundActivity extends FragmentActivity
             }
         });
 
-        if (Build.VERSION.SDK_INT >= 23 &&
-              ContextCompat.checkSelfPermission(
+        if ( ContextCompat.checkSelfPermission(
                     getApplicationContext(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION
               ) == PackageManager.PERMISSION_GRANTED) {
@@ -382,8 +380,7 @@ public class RoundActivity extends FragmentActivity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(2000); //Update user Location Every 2 seconds
 
-        if (Build.VERSION.SDK_INT >= 23 &&
-              ContextCompat.checkSelfPermission(
+        if ( ContextCompat.checkSelfPermission(
                     getApplicationContext(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION
               ) == PackageManager.PERMISSION_GRANTED) {

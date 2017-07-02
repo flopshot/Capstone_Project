@@ -5,6 +5,7 @@ import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import com.sean.golfranger.sync.elevationapi.ApiContract;
 import com.sean.golfranger.sync.elevationapi.ApiJsonParser;
@@ -28,7 +29,7 @@ import timber.log.Timber;
  */
 public class ElevationJobInfo {
     //Job Scheduling constants. Get elevation data from api every
-    private static final int PERIOD = 10000; //Every 10sec
+    private static final int PERIOD = 5000;
     private static final int INITIAL_BACKOFF = 1000;
     private static final int PERIODIC_ID = 1;
 
@@ -106,13 +107,17 @@ public class ElevationJobInfo {
 
     private static synchronized void schedulePeriodic(Context context) {
         Timber.d("Scheduling Elevation Task");
-        JobInfo.Builder builder;
+        JobInfo.Builder builder = new JobInfo
+              .Builder(PERIODIC_ID, new ComponentName(context, ElevationJobService.class));
 
-        builder = new JobInfo
-              .Builder(PERIODIC_ID, new ComponentName(context, ElevationJobService.class))
-              .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-              .setMinimumLatency(PERIOD)
-              .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
+        if (Build.VERSION.SDK_INT < 24) {
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                  .setPeriodic(PERIOD)
+                  .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
+        } else {
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                  .setMinimumLatency(PERIOD);
+        }
 
         JobScheduler scheduler = (JobScheduler) context
               .getSystemService(Context.JOB_SCHEDULER_SERVICE);

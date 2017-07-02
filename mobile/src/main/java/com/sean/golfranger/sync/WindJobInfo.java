@@ -4,6 +4,7 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.os.Build;
 
 import timber.log.Timber;
 
@@ -15,7 +16,7 @@ import timber.log.Timber;
 public class WindJobInfo {
 
     //Job Scheduling constants. Get wind data from api every
-    private static final int PERIOD = 5*60000;
+    private static final int PERIOD = 60000;
     private static final int INITIAL_BACKOFF = 3000;
     private static final int PERIODIC_ID = 2;
 
@@ -25,13 +26,17 @@ public class WindJobInfo {
 
     private static synchronized void schedulePeriodic(Context context) {
         Timber.d("Scheduling Wind Task");
-        JobInfo.Builder builder;
+        JobInfo.Builder builder = new JobInfo
+              .Builder(PERIODIC_ID, new ComponentName(context, WindJobService.class));
 
-        builder = new JobInfo
-              .Builder(PERIODIC_ID, new ComponentName(context, WindJobService.class))
-              .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-              .setMinimumLatency(PERIOD)
-              .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
+        if (Build.VERSION.SDK_INT < 24) {
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                  .setPeriodic(PERIOD)
+                  .setBackoffCriteria(INITIAL_BACKOFF, JobInfo.BACKOFF_POLICY_EXPONENTIAL);
+        } else {
+            builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                  .setMinimumLatency(PERIOD);
+        }
 
         JobScheduler scheduler = (JobScheduler) context
               .getSystemService(Context.JOB_SCHEDULER_SERVICE);
